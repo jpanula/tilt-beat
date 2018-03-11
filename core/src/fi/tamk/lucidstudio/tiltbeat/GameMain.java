@@ -12,6 +12,8 @@ public class GameMain extends Game {
 	SpriteBatch batch;
 	OrthographicCamera camera;
 	GameScreen gameScreen;
+	public static final float SCREEN_WIDTH = 16;
+	public static final float SCREEN_HEIGHT = 9;
 
 	public SpriteBatch getBatch() {
 	    return batch;
@@ -21,11 +23,19 @@ public class GameMain extends Game {
 	    return camera;
     }
 
-	@Override
+    public static float getScreenWidth() {
+        return SCREEN_WIDTH;
+    }
+
+    public static float getScreenHeight() {
+        return SCREEN_HEIGHT;
+    }
+
+    @Override
 	public void create () {
 	    batch = new SpriteBatch();
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 16, 9);
+        camera.setToOrtho(false, SCREEN_WIDTH, SCREEN_HEIGHT);
         gameScreen = new GameScreen(this);
 	    setScreen(gameScreen);
 	}
