@@ -13,9 +13,31 @@ public class Player {
     Texture texture;
     float radius;
     float[] vertices;
+    Pointer pointer;
+
+    class Pointer {
+        Texture pointerTexture;
+        float originX;
+        float originY;
+        float posX;
+        float posY;
+        float radius;
+
+        public Pointer() {
+            pointerTexture = new Texture("pointer.png");
+            originX = GameMain.getScreenWidth() / 2;
+            originY = GameMain.getScreenHeight() / 2;
+            radius = 1;
+        }
+
+        public void draw(SpriteBatch batch) {
+            batch.draw(pointerTexture, originX + posX - radius / 2, originY + posY - radius / 2, radius, radius);
+        }
+    }
 
     public Player(int sides) throws IllegalArgumentException {
         radius = 5;
+
         if (sides == 10) {
             texture = new Texture("tenside.png");
             vertices = new float[] {
@@ -58,9 +80,8 @@ public class Player {
         return hitbox.getScaleY();
     }
 
-
-
     public void draw(SpriteBatch batch) {
         batch.draw(texture, hitbox.getX(), hitbox.getY(), hitbox.getScaleX(), hitbox.getScaleY());
+        pointer.draw(batch);
     }
 }
