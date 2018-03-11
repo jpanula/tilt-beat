@@ -27,8 +27,6 @@ public class GameScreen implements Screen {
         camera = host.getCamera();
         shapeRenderer = new ShapeRenderer();
         player = new Player(sides);
-        shapeRenderer.translate(player.getX(), player.getY(), 0);
-        shapeRenderer.scale(player.getScaleX(), player.getScaleY(), 0);
 
         useShapeRenderer = true;
     }

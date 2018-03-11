@@ -62,7 +62,7 @@ public class Player {
     }
 
     public float[] getVertices() {
-        return hitbox.getVertices();
+        return hitbox.getTransformedVertices();
     }
 
     public float getX() {
