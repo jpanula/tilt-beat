@@ -85,4 +85,8 @@ public class Player {
         batch.draw(texture, hitbox.getX(), hitbox.getY(), hitbox.getScaleX(), hitbox.getScaleY());
         pointer.draw(batch);
     }
+
+    public void move() {
+
+    }
 }
