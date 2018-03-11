@@ -27,7 +27,7 @@ public class Player {
             pointerTexture = new Texture("pointer.png");
             originX = GameMain.getScreenWidth() / 2;
             originY = GameMain.getScreenHeight() / 2;
-            radius = 1;
+            radius = 0.8f;
         }
 
         public void draw(SpriteBatch batch) {
@@ -37,6 +37,7 @@ public class Player {
 
     public Player(int sides) throws IllegalArgumentException {
         radius = 5;
+        pointer = new Pointer();
 
         if (sides == 10) {
             texture = new Texture("tenside.png");
