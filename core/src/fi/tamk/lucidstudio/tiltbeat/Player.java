@@ -12,6 +12,7 @@ public class Player {
     Polygon hitbox;
     Texture texture;
     float radius;
+    float inradius;
     float[] vertices;
     Pointer pointer;
 
@@ -37,6 +38,7 @@ public class Player {
 
     public Player(int sides) throws IllegalArgumentException {
         radius = 5;
+        inradius = (float) (radius * Math.cos(Math.PI/sides));
         pointer = new Pointer();
 
         if (sides == 10) {
