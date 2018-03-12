@@ -18,6 +18,7 @@ public class GameScreen implements Screen {
     OrthographicCamera camera;
     ShapeRenderer shapeRenderer;
     int sides = 10;
+    float speed = 3f;
     Player player;
     boolean useShapeRenderer;
 
@@ -50,9 +51,11 @@ public class GameScreen implements Screen {
         if (useShapeRenderer) {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
             shapeRenderer.setColor(1, 0, 1, 1);
-            shapeRenderer.polygon(player.getVertices());
+            player.draw(shapeRenderer);
             shapeRenderer.end();
         }
+
+        player.move();
     }
 
     @Override

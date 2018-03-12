@@ -1,8 +1,14 @@
 package fi.tamk.lucidstudio.tiltbeat;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Polygon;
+
+import static com.badlogic.gdx.Gdx.input;
 
 /**
  * Created by Jaakko on 11.3.2018.
@@ -18,21 +24,27 @@ public class Player {
 
     class Pointer {
         Texture pointerTexture;
-        float originX;
-        float originY;
-        float posX;
-        float posY;
+        Circle hitbox;
         float radius;
 
         public Pointer() {
-            pointerTexture = new Texture("pointer.png");
-            originX = GameMain.getScreenWidth() / 2;
-            originY = GameMain.getScreenHeight() / 2;
             radius = 0.8f;
+            pointerTexture = new Texture("pointer.png");
+            hitbox = new Circle(GameMain.getScreenWidth() / 2 - radius / 2, GameMain.getScreenHeight() / 2 - radius / 2, radius);
         }
 
         public void draw(SpriteBatch batch) {
-            batch.draw(pointerTexture, originX + posX - radius / 2, originY + posY - radius / 2, radius, radius);
+            batch.draw(pointerTexture, hitbox.x, hitbox.y, hitbox.radius, hitbox.radius);
+        }
+
+        public void draw(ShapeRenderer shapeRenderer) {
+            shapeRenderer.circle(hitbox.x + hitbox.radius / 2, hitbox.y + hitbox.radius / 2, hitbox.radius / 2, 100);
+        }
+
+        public void move(float inradius) {
+            if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT) && hitbox.x < GameMain.getScreenWidth() / 2 + inradius - hitbox.radius) {
+                hitbox.x += 2 * Gdx.graphics.getDeltaTime();
+            }
         }
     }
 
@@ -83,12 +95,21 @@ public class Player {
         return hitbox.getScaleY();
     }
 
+    public float getInradius() {
+        return inradius;
+    }
+
     public void draw(SpriteBatch batch) {
         batch.draw(texture, hitbox.getX(), hitbox.getY(), hitbox.getScaleX(), hitbox.getScaleY());
         pointer.draw(batch);
     }
 
-    public void move() {
+    public void draw(ShapeRenderer shapeRenderer) {
+        shapeRenderer.polygon(getVertices());
+        pointer.draw(shapeRenderer);
+    }
 
+    public void move() {
+        pointer.move(getInradius() / 2);
     }
 }
