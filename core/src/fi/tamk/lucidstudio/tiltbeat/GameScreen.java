@@ -87,9 +87,9 @@ public class GameScreen implements Screen {
             if (note.getDistance() <= 0) {
                 if (note.getSector() == player.getPointerSector()) {
                     iter.remove();
+                } else {
+                    System.out.println("FAIL!");
                 }
-            } else {
-                System.out.println("FAIL!");
             }
         }
     }
