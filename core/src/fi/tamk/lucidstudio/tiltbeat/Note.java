@@ -37,12 +37,11 @@ public abstract class Note {
     abstract void draw(SpriteBatch batch, int playerSides);
 }
 
-// TODO vähennä muuttujien pyörittelyn määrää
 class Point extends Note {
     private Texture texture;
-    Vector2 vector;
-    float diameter;
-    float radius;
+    private Vector2 vector;
+    private float diameter;
+    private float radius;
 
     public Point(int sector, float distance) {
         super(sector, distance);
@@ -59,6 +58,7 @@ class Point extends Note {
     }
 }
 
+// TODO implementoi hold-tyyppinen nuotti
 /* class Hold extends Note {
     float length;
 
@@ -72,6 +72,7 @@ class Point extends Note {
     }
 }*/
 
+// TODO implementoi slide-tyyppinen nuotti
 /*class Slide extends Note {
     @Override
     void draw(int playerSides) {
@@ -79,6 +80,7 @@ class Point extends Note {
     }
 }*/
 
+// TODO arvioi onko luokka tarpeellinen vai voiko käyttää suoraan arraylistiä
 class Song {
     ArrayList<Note> notes;
 

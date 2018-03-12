@@ -20,7 +20,6 @@ import static com.badlogic.gdx.Gdx.input;
  * Created by Jaakko on 11.3.2018.
  */
 
-// TODO vähennä muuttujien pyörittelyn määrää..
 public class Player {
     Polygon hitbox;
     ArrayList<Polygon> sectors;

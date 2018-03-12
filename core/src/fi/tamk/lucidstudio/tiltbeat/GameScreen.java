@@ -14,8 +14,6 @@ import java.util.Iterator;
  * Created by Jaakko on 11.3.2018.
  */
 
-
-// TODO vähennä muuttujien pyörittelyn määrää
 public class GameScreen implements Screen {
     private GameMain host;
     private SpriteBatch batch;
