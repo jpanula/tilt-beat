@@ -1,22 +1,28 @@
 package fi.tamk.lucidstudio.tiltbeat;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class GameMain extends Game {
-	SpriteBatch batch;
-	OrthographicCamera camera;
-	GameScreen gameScreen;
-	public static final float SCREEN_WIDTH = 16;
-	public static final float SCREEN_HEIGHT = 9;
+	private SpriteBatch batch;
+    private ShapeRenderer shapeRenderer;
+	private OrthographicCamera camera;
+	private GameScreen gameScreen;
+	private static final float SCREEN_WIDTH = 16;
+	private static final float SCREEN_HEIGHT = 9;
+	private static int playerSides = 10;
+	private static float noteSpeed = 4;
+	private static float playerDiameter = 3;
+	private static float playerInradius = (float) (playerDiameter * Math.cos(180/playerSides));
 
 	public SpriteBatch getBatch() {
 	    return batch;
+    }
+
+    public ShapeRenderer getShapeRenderer() {
+	    return shapeRenderer;
     }
 
     public OrthographicCamera getCamera() {
@@ -31,9 +37,26 @@ public class GameMain extends Game {
         return SCREEN_HEIGHT;
     }
 
+    public static int getPlayerSides() {
+		return playerSides;
+	}
+
+	public static float getNoteSpeed() {
+		return noteSpeed;
+	}
+
+	public static float getPlayerDiameter() {
+		return playerDiameter;
+	}
+
+	public static float getPlayerInradius() {
+		return playerInradius;
+	}
+
     @Override
 	public void create () {
 	    batch = new SpriteBatch();
+	    shapeRenderer = new ShapeRenderer();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, SCREEN_WIDTH, SCREEN_HEIGHT);
         gameScreen = new GameScreen(this);
