@@ -41,7 +41,7 @@ public class GameScreen implements Screen {
         song = new Song();
         for (int i = 0; i < 100 ; i++) {
             int random = MathUtils.random(0, 9);
-            song.addNote(new Point(random, 3.5f * i + 5));
+            song.addNote(new Point(random, 3.5f * i * noteSpeed / 6 + 5));
         }
 
         useShapeRenderer = true;
