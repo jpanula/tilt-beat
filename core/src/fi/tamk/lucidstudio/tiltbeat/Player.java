@@ -28,6 +28,7 @@ public class Player {
     float[] vertices;
     Pointer pointer;
 
+    // Osoittimen luokka
     class Pointer {
         Texture pointerTexture;
         Circle hitbox;
@@ -146,8 +147,8 @@ public class Player {
 
     public void draw(ShapeRenderer shapeRenderer) {
         shapeRenderer.polygon(getVertices());
-        for (int i = 0; i < sectors.size(); i++) {
-            shapeRenderer.polygon(getSectorVertices(i));
+        if (getPointerSector() > -1) {
+            shapeRenderer.polygon(getSectorVertices(getPointerSector()));
         }
         pointer.draw(shapeRenderer);
     }
