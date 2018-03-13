@@ -52,6 +52,8 @@ class Point extends Note {
     }
     @Override
     void draw(SpriteBatch batch, int playerSides) {
+        // Vektorilla lasketaan pelaajan kulmion kulmien perusteella nuottien liikerata kohti niiden
+        // sektoreita
         vector.setLength(getDistance() + GameMain.getPlayerInradius() - radius);
         vector.setAngle(90 - (360 / playerSides) * getSector() - (360 / playerSides) / 2);
         batch.draw(texture, GameMain.getScreenWidth() / 2 + vector.x - radius, GameMain.getScreenHeight() / 2 + vector.y - radius, diameter, diameter);
