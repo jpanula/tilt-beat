@@ -20,6 +20,9 @@ import static com.badlogic.gdx.Gdx.input;
  * Created by Jaakko on 11.3.2018.
  */
 
+/**
+ * Pelaajan kulmiosysteemin luokka
+ */
 public class Player {
     Polygon hitbox;
     ArrayList<Polygon> sectors;
@@ -28,7 +31,7 @@ public class Player {
     float[] vertices;
     Pointer pointer;
 
-    // Osoittimen luokka
+    // Pelaajan osoittimen luokka
     class Pointer {
         Texture pointerTexture;
         Circle hitbox;
@@ -42,15 +45,18 @@ public class Player {
             hitbox = new Circle(GameMain.getScreenWidth() / 2, GameMain.getScreenHeight() / 2, radius);
         }
 
+        // Piirtometodi SpriteBatchille, käyttää kuvia
         public void draw(SpriteBatch batch) {
             batch.draw(pointerTexture, hitbox.x - hitbox.radius, hitbox.y - hitbox.radius, hitbox.radius * 2, hitbox.radius * 2);
         }
 
+        // Piirtometodi ShapeRendererille, käyttää pisteitä / muotoja
         public void draw(ShapeRenderer shapeRenderer) {
             shapeRenderer.circle(hitbox.x, hitbox.y, hitbox.radius, 100);
         }
 
         public void move(OrthographicCamera camera) {
+            // Osoittimen ohjaus nuolinäppäimillä
             if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT) && hitbox.x < GameMain.getScreenWidth() / 2 + GameMain.getPlayerInradius() - radius * 2.5f) {
                 hitbox.x += speed * Gdx.graphics.getDeltaTime();
             } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT) && hitbox.x > GameMain.getScreenWidth() / 2 - GameMain.getPlayerInradius() + radius * 2.5f) {
@@ -60,6 +66,7 @@ public class Player {
             } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN) && hitbox.y > GameMain.getScreenHeight() / 2 - GameMain.getPlayerInradius() + radius * 2.5f) {
                 hitbox.y -= speed * Gdx.graphics.getDeltaTime();
             }
+            // Osoittimen ohjaus kosketuksella / hiirellä
             if (Gdx.input.isTouched()) {
                 Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
                 camera.unproject(touchPos);
@@ -69,6 +76,13 @@ public class Player {
                 }
             }
         }
+
+        /**
+         * Kertoo millä sektorilla pelaajan osoitin on, ensimmäisen sektorin indeksi on 0 ja numerot
+         * kasvavat myötäpäivään. Jos osoitin ei ole millään sektorilla, palautetaan -1
+         *
+         * @return sektorin indeksi int-numerona
+         */
         public int getSector() {
             for (Polygon sector : Player.this.sectors) {
                 if (sector.contains(hitbox.x, hitbox.y)) {
@@ -84,8 +98,10 @@ public class Player {
         pointer = new Pointer();
         sectors = new ArrayList<Polygon>();
 
+        // Pelaaja on 10-sivuinen
         if (playerSides == 10) {
             texture = new Texture("tenside.png");
+            // Tässä on 10-kulmion pisteet, joista hitbox Polygon muodostetaan
             vertices = new float[] {
                     0.5f,    1.0f,
                     0.795f,  0.905f,
@@ -98,12 +114,15 @@ public class Player {
                     0.0203f, 0.65f,
                     0.205f,  0.905f
             };
+            // Tehdään 10-kulmion pisteistä sektoreille omat kolmiot
             for (int i = 0; i < playerSides; i++) {
                 float[] triangleVerts = {
                         vertices[i * 2],               vertices[i * 2 + 1],
                         vertices[(i * 2 + 2) % 20],           vertices[(i * 2 + 3) % 20],
                         0.5f, 0.5f
                 };
+                // Muodostetaan kolmiot ja kerrotaan koko ja sijainti oikeiksi, että se vastaa
+                // keskellä olevaa kulmion kuvaa
                 sectors.add(new Polygon(triangleVerts));
                 sectors.get(i).setScale(playerDiameter, playerDiameter);
                 sectors.get(i).setPosition(GameMain.getScreenWidth() / 2 - radius, GameMain.getScreenHeight() / 2 - radius);
@@ -111,40 +130,49 @@ public class Player {
         } else {
             throw new IllegalArgumentException("Invalid number of playerSides");
         }
+        // Muodostetaan pelaajan kulmio, tehdään siitä oikean kokoinen ja siirretään se keskelle ruutua
         hitbox = new Polygon(vertices);
         hitbox.setScale(playerDiameter, playerDiameter);
         hitbox.setPosition(GameMain.getScreenWidth() / 2 - radius, GameMain.getScreenHeight() / 2 - radius);
     }
 
+    // Palauttaa kulmion pisteet
     public float[] getVertices() {
         return hitbox.getTransformedVertices();
     }
 
+    // Palauttaa annetun sektorin pisteet
     public float[] getSectorVertices(int sector) {
         return sectors.get(sector).getTransformedVertices();
     }
 
+    // Palauttaa pelaajan kulmion x-koordinaatin
     public float getX() {
         return hitbox.getX();
     }
 
+    // Palauttaa pelaajan kulmion y-koordinaatin
     public float getY() {
         return hitbox.getY();
     }
 
+    // Palauttaa pelaajan x-skaalan
     public float getScaleX() {
         return hitbox.getScaleX();
     }
 
+    // Palauttaa pelaajan y-skaalan
     public float getScaleY() {
         return hitbox.getScaleY();
     }
 
+    // Piirtometodi SpriteBatchille, käyttää kuvia
     public void draw(SpriteBatch batch) {
         batch.draw(texture, hitbox.getX(), hitbox.getY(), hitbox.getScaleX(), hitbox.getScaleY());
         pointer.draw(batch);
     }
 
+    // Piirtometodi ShapeRendererille, käyttää pisteitä / muotoja
     public void draw(ShapeRenderer shapeRenderer) {
         shapeRenderer.polygon(getVertices());
         if (getPointerSector() > -1) {

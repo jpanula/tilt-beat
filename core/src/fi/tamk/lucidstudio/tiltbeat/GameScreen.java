@@ -27,6 +27,10 @@ public class GameScreen implements Screen {
     private float playerDiameter;
     private float noteSpeed;
 
+    /**
+     * Peliruutu, asetukset haetaan GameMainistä, joka toimii "hostina"
+     * @param host pelin Main-metodi
+     */
     public GameScreen(GameMain host) {
         this.host = host;
         batch = host.getBatch();
@@ -54,11 +58,13 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        // Perus clearataan ruutu mustalla ja laitetaan renderereille kameran koordinaatit käyttöön
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.setProjectionMatrix(camera.combined);
         shapeRenderer.setProjectionMatrix(camera.combined);
 
+        // Normaali render
         batch.begin();
         player.draw(batch);
         for (Note note : song.notes) {
@@ -66,6 +72,7 @@ public class GameScreen implements Screen {
         }
         batch.end();
 
+        // ShapeRenderer render, piirtää annetuilla pisteillä muotoja
         if (useShapeRenderer) {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
             shapeRenderer.setColor(1, 0, 1, 1);
@@ -73,18 +80,26 @@ public class GameScreen implements Screen {
             shapeRenderer.end();
         }
 
+        // Printtaa konsoliin accelerometerin arvoja
         // System.out.println("X: " + Gdx.input.getAccelerometerX() + " Y: " + Gdx.input.getAccelerometerY() + " Z: " + Gdx.input.getAccelerometerZ());
 
+        // Pelaajan liike tarvitsee kameraa kosketus-/klikkausohjauksen unprojectia varten
+        // (Ruutukoordinaateista maailmakoordinaateiksi)
         player.move(camera);
 
+        // ArrayList pitää käydä läpi Iteratorilla, koska ArrayLististä ei voi poistaa elementtejä,
+        // kun sen läpi iteroidaan. Iteraattorissa tämän voi tehdä.
         Iterator<Note> iter = song.notes.iterator();
         while (iter.hasNext()) {
             Note note = iter.next();
             note.move(noteSpeed);
 
+            // Jos nuotin etäisyys keskikulmiosta on 0 tai vähemmän
             if (note.getDistance() <= 0) {
+                // Jos pelaajan osoitin on samalla sektorilla, poista nuotti
                 if (note.getSector() == player.getPointerSector()) {
                     iter.remove();
+                // Muuten FAIL
                 } else {
                     System.out.println("FAIL!");
                 }
