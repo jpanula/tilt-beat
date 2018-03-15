@@ -14,7 +14,8 @@ import java.util.Iterator;
  * Created by Jaakko on 11.3.2018.
  */
 
-public class GameScreen implements Screen {
+public class
+GameScreen implements Screen {
     private GameMain host;
     private SpriteBatch batch;
     private OrthographicCamera camera;
@@ -45,10 +46,20 @@ public class GameScreen implements Screen {
         song = new Song();
         for (int i = 0; i < 100 ; i++) {
             int random = MathUtils.random(0, 9);
+            while (!isSectorActive(random)) {
+                random = MathUtils.random(0, 9);
+            }
             song.addNote(new Point(random, 3.5f * i * noteSpeed / 6 + 5));
         }
 
         useShapeRenderer = true;
+    }
+
+    public boolean isSectorActive(int a) {
+        //tarkistaa onko sektori aktiivinen
+        if (Player.activeSectors[a] == true) {
+            return true;
+        } else { return false;}
     }
 
     @Override

@@ -30,6 +30,7 @@ public class Player {
     float radius;
     float[] vertices;
     Pointer pointer;
+    static boolean[] activeSectors;
 
     // Pelaajan osoittimen luokka
     class Pointer {
@@ -97,28 +98,29 @@ public class Player {
         this.radius = playerDiameter / 2;
         pointer = new Pointer();
         sectors = new ArrayList<Polygon>();
+        activeSectors = new boolean[playerSides];
 
         // Pelaaja on 10-sivuinen
         if (playerSides == 10) {
             texture = new Texture("tenside.png");
             // Tässä on 10-kulmion pisteet, joista hitbox Polygon muodostetaan
-            vertices = new float[] {
-                    0.5f,    1.0f,
-                    0.795f,  0.905f,
-                    0.98f,   0.65f,
-                    0.98f,   0.35f,
-                    0.795f,  0.095f,
-                    0.5f,    0f,
-                    0.205f,  0.095f,
+            vertices = new float[]{
+                    0.5f, 1.0f,
+                    0.795f, 0.905f,
+                    0.98f, 0.65f,
+                    0.98f, 0.35f,
+                    0.795f, 0.095f,
+                    0.5f, 0f,
+                    0.205f, 0.095f,
                     0.0203f, 0.35f,
                     0.0203f, 0.65f,
-                    0.205f,  0.905f
+                    0.205f, 0.905f
             };
             // Tehdään 10-kulmion pisteistä sektoreille omat kolmiot
             for (int i = 0; i < playerSides; i++) {
                 float[] triangleVerts = {
-                        vertices[i * 2],               vertices[i * 2 + 1],
-                        vertices[(i * 2 + 2) % 20],           vertices[(i * 2 + 3) % 20],
+                        vertices[i * 2], vertices[i * 2 + 1],
+                        vertices[(i * 2 + 2) % 20], vertices[(i * 2 + 3) % 20],
                         0.5f, 0.5f
                 };
                 // Muodostetaan kolmiot ja kerrotaan koko ja sijainti oikeiksi, että se vastaa
@@ -126,7 +128,10 @@ public class Player {
                 sectors.add(new Polygon(triangleVerts));
                 sectors.get(i).setScale(playerDiameter, playerDiameter);
                 sectors.get(i).setPosition(GameMain.getScreenWidth() / 2 - radius, GameMain.getScreenHeight() / 2 - radius);
+                // asetetaan sektori aktiiviseksi
+                activeSectors[i] = true;
             }
+
         } else {
             throw new IllegalArgumentException("Invalid number of playerSides");
         }
@@ -134,6 +139,8 @@ public class Player {
         hitbox = new Polygon(vertices);
         hitbox.setScale(playerDiameter, playerDiameter);
         hitbox.setPosition(GameMain.getScreenWidth() / 2 - radius, GameMain.getScreenHeight() / 2 - radius);
+        //testi - ei-aktiiviset sektorit
+        activeSectors[2] = false; activeSectors[3] = false; activeSectors[4] = false;
     }
 
     // Palauttaa kulmion pisteet
