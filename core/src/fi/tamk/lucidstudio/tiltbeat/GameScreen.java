@@ -46,9 +46,12 @@ GameScreen implements Screen {
         song = new Song();
         for (int i = 0; i < 100 ; i++) {
             int random = MathUtils.random(0, 9);
+            random = moveNotes(random);
+            //jos ei järjestelmällinen siirtäminen toimi järkevästi niin arvotaan uusi paikka
             while (!isSectorActive(random)) {
                 random = MathUtils.random(0, 9);
             }
+
             song.addNote(new Point(random, 3.5f * i * noteSpeed / 6 + 5));
         }
 
@@ -60,6 +63,27 @@ GameScreen implements Screen {
         if (Player.activeSectors[a] == true) {
             return true;
         } else { return false;}
+    }
+
+    public int moveNotes(int a) {
+        int b = a; int goBack=0; int continuousSectors = 0; int r;
+
+        if (Player.activeSectors[b] == false) {
+            //kelataan peräkkäisten aktiviisten sektoreiden ensimmäiseen
+            while (Player.activeSectors[b] == false) {
+                goBack=b; b--;
+                if (b==-1) { b = 9; } //että pysytään järkevissä luvuissa
+            }
+            //lasketaan montako sektoria putkeen
+            while (Player.activeSectors[goBack] == false) {
+                continuousSectors++; goBack++;
+                if (goBack==10) { goBack = 0; } //epjl
+            }
+        }
+        //siirretään nuottia passiivisen alueen verran
+        r = a + continuousSectors;
+        if (r>9) { r -= 10; } //epjl
+        return r;
     }
 
     @Override

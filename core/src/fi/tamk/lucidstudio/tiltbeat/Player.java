@@ -141,6 +141,7 @@ public class Player {
         hitbox.setPosition(GameMain.getScreenWidth() / 2 - radius, GameMain.getScreenHeight() / 2 - radius);
         //testi - ei-aktiiviset sektorit
         activeSectors[2] = false; activeSectors[3] = false; activeSectors[4] = false;
+        activeSectors[6] = false; activeSectors[7] = false;
     }
 
     // Palauttaa kulmion pisteet
