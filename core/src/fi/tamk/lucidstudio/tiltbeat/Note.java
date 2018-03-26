@@ -40,23 +40,23 @@ public abstract class Note {
 class Point extends Note {
     private Texture texture;
     private Vector2 vector;
-    private float diameter;
-    private float radius;
+    private float width;
+    private float height;
 
     public Point(int sector, float distance) {
         super(sector, distance);
-        texture = new Texture("pointer.png");
-        diameter = 1;
-        radius = diameter / 2;
+        texture = new Texture("Red Glow.png");
+        width = 1;
+        height = (float) 0.7 * width;
         vector = new Vector2(distance, 0);
     }
     @Override
     void draw(SpriteBatch batch, int playerSides) {
         // Vektorilla lasketaan pelaajan kulmion kulmien perusteella nuottien liikerata kohti niiden
         // sektoreita
-        vector.setLength(getDistance() + GameMain.getPlayerInradius() - radius);
+        vector.setLength(getDistance() + GameMain.getPlayerInradius() - height * 3/4f);
         vector.setAngle(90 - (360 / playerSides) * getSector() - (360 / playerSides) / 2);
-        batch.draw(texture, GameMain.getScreenWidth() / 2 + vector.x - radius, GameMain.getScreenHeight() / 2 + vector.y - radius, diameter, diameter);
+        batch.draw(texture, GameMain.getScreenWidth() / 2 + vector.x - width / 2, GameMain.getScreenHeight() / 2 + vector.y - height / 2, width / 2, height / 2, width, height, 1, 1, vector.angle() - 90, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
     }
 }
 
