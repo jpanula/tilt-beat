@@ -9,7 +9,7 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "Tilt Beat";
 		config.width = 1280;
-        config.height = 720;
+        config.height = 800;
 		new LwjglApplication(new GameMain(), config);
 	}
 }
