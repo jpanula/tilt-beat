@@ -11,7 +11,7 @@ public class GameMain extends Game {
 	private OrthographicCamera camera;
 	private GameScreen gameScreen;
 	private static final float SCREEN_WIDTH = 16;
-	private static final float SCREEN_HEIGHT = 9;
+	private static final float SCREEN_HEIGHT = 10;
 	private static int playerSides = 10;
 	private static float noteSpeed = 4;
 	private static float playerDiameter = 3;
