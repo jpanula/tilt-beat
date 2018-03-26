@@ -13,7 +13,6 @@ public class GameMain extends Game {
 	private SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
 	private OrthographicCamera camera;
-	private OrthographicCamera fontCamera;
 	//private GameScreen gameScreen;
 	//private MainMenu menu;
 	private static final float SCREEN_WIDTH = 16;
@@ -22,8 +21,11 @@ public class GameMain extends Game {
 	private static float noteSpeed = 4;
 	private static float playerDiameter = 3;
 	private static float playerInradius = (float) (playerDiameter * Math.cos(180/playerSides));
+	private static final float HEADING_SIZE = 0.22f;
+    private static final float FONT_SIZE = 0.13f;
 
 	static BitmapFont basicFont;
+	static BitmapFont headingFont;
 	private FreeTypeFontGenerator generator;
 
 	public SpriteBatch getBatch() {
@@ -37,10 +39,6 @@ public class GameMain extends Game {
     public OrthographicCamera getCamera() {
 	    return camera;
     }
-
-	public OrthographicCamera getFontCamera() {
-		return fontCamera;
-	}
 
     public static float getScreenWidth() {
         return SCREEN_WIDTH;
@@ -70,15 +68,25 @@ public class GameMain extends Game {
 	public void create () {
 	    batch = new SpriteBatch();
 	    shapeRenderer = new ShapeRenderer();
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, SCREEN_WIDTH, SCREEN_HEIGHT);
+		camera = new OrthographicCamera();
+		camera.setToOrtho(false, SCREEN_WIDTH, SCREEN_HEIGHT);
+
         //menu = new MainMenu(this);
         //gameScreen = new GameScreen(this);
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("grove.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-		parameter.size = 50;
-		parameter.color = Color.WHITE;
+		//luodaan perusfontti
+		parameter.size = (int)(FONT_SIZE * Gdx.graphics.getHeight());
+		parameter.color = Color.RED;
 		basicFont = generator.generateFont(parameter);
+        basicFont.getData().setScale(SCREEN_HEIGHT / Gdx.graphics.getHeight());
+		//luodaan otsikkofontti
+		parameter.size = (int)(HEADING_SIZE * Gdx.graphics.getHeight());
+		parameter.color = Color.CYAN;
+		parameter.borderColor = Color.BLACK;
+		parameter.borderWidth = 3;
+		headingFont = generator.generateFont(parameter);
+		headingFont.getData().setScale(SCREEN_HEIGHT / Gdx.graphics.getHeight());
 
 		setScreen(new MainMenu(this));
 	}

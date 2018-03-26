@@ -23,10 +23,8 @@ public class MainMenu implements Screen {
     private GameMain host;
     private SpriteBatch batch;
     private OrthographicCamera camera;
-    private OrthographicCamera fontCamera;
-    private BitmapFont f;
     private BitmapFont heading;
-    private FreeTypeFontGenerator generator;
+    private BitmapFont basic;
     private Texture button;
     private Rectangle buttonPlay;
     private Rectangle buttonSettings;
@@ -38,22 +36,15 @@ public class MainMenu implements Screen {
         this.host = host;
         batch = host.getBatch();
         camera = host.getCamera();
-        fontCamera = host.getFontCamera();
         button = new Texture(Gdx.files.internal("nappi1.png"));
         background = new Texture(Gdx.files.internal("Galaxy blue.png"));
-
-        generator = new FreeTypeFontGenerator(Gdx.files.internal("grove.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
         buttonPlay = new Rectangle(2f, 1.8f, 3.7f, 2f);
         buttonSettings = new Rectangle(6.5f, 1.8f, 3.7f, 2f);
         buttonHighscore = new Rectangle(11f, 1.8f, 3.7f, 2f);
 
-        parameter.size = 150;
-        parameter.color = Color.CYAN;
-        parameter.borderColor = Color.BLACK;
-        parameter.borderWidth = 3;
-        heading = generator.generateFont(parameter);
+        heading = GameMain.headingFont;
+        basic = GameMain.basicFont;
 
     }
 
@@ -70,20 +61,22 @@ public class MainMenu implements Screen {
 
         batch.begin();
 
-        //piirrellään paljon tekstiä
+        //piirrellään tausta ja napit
         batch.draw(background, 0, 0 , 16, 10);
         batch.draw(button, buttonPlay.x, buttonPlay.y, buttonPlay.width, buttonPlay.height);
         batch.draw(button, buttonSettings.x, buttonSettings.y, buttonSettings.width, buttonSettings.height);
         batch.draw(button, buttonHighscore.x, buttonHighscore.y, buttonHighscore.width, buttonHighscore.height);
-        heading.draw(batch, "TilT" , 500, 600);
-        heading.draw(batch, "BeaT" , 580, 520);
-        GameMain.basicFont.draw(batch, "highscore" , buttonHighscore.x + 50, buttonHighscore.y + 100);
-        GameMain.basicFont.draw(batch, "settings" , buttonSettings.x + 50, buttonSettings.y + 100);
-        GameMain.basicFont.draw(batch, "play" , buttonPlay.x + 100, buttonPlay.y + 100);
+        //piirrellään fontit
+        heading.draw(batch, "TilT" , 4, 8);
+        heading.draw(batch, "BeaT" , 4.2f, 7);
+        basic.draw(batch, "play" , buttonPlay.x + 0.3f, buttonPlay.y + 1f);
+        basic.draw(batch, "settings" , buttonSettings.x + 50, buttonSettings.y + 100);
+        basic.draw(batch, "highscore" , buttonHighscore.x + 0.1f, buttonHighscore.y + 0.1f);
 
         batch.end();
 
-        //napit toimii jee
+        batch.setProjectionMatrix(camera.combined);
+        //nappien kosketuksesta screeni vaihtuu
         if (Gdx.input.isTouched()) {
                 Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
                 camera.unproject(touchPos);
@@ -91,9 +84,19 @@ public class MainMenu implements Screen {
                 if (buttonPlay.contains(touchPos.x, touchPos.y)) {
                     host.setScreen(new GameScreen(host));
                 }
-                if (buttonHighscore.contains(touchPos.x, touchPos.y)) {
+                if (buttonSettings.contains(touchPos.x, touchPos.y) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                    host.setScreen(new Settings(host));
+                }
+                if (buttonHighscore.contains(touchPos.x, touchPos.y) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                     host.setScreen(new Highscore(host));
                 }
+        }
+
+        if ( Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            host.setScreen(new Settings(host));
+        }
+        if ( Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            host.setScreen(new Highscore(host));
         }
 
     }
@@ -120,7 +123,6 @@ public class MainMenu implements Screen {
 
     @Override
     public void dispose() {
-        f.dispose();
         heading.dispose();
 
     }

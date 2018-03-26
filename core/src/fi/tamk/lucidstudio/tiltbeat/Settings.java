@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -14,19 +13,20 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
  * Created by Anna on 26/03/2018.
  */
 
-public class Highscore implements Screen {
+public class Settings implements Screen {
     GameMain host;
     SpriteBatch batch;
     BitmapFont heading;
-    private BitmapFont basic;
+    BitmapFont basic;
+    FreeTypeFontGenerator generator;
 
-    public  Highscore(GameMain host) {
+    public Settings(GameMain host) {
         this.host = host;
         batch = host.getBatch();
         heading = GameMain.headingFont;
         basic = GameMain.basicFont;
-    }
 
+    }
     @Override
     public void show() {
 
@@ -38,12 +38,11 @@ public class Highscore implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-        heading.draw(batch, "highscore" , 3, 8);
-        basic.draw(batch, "click to exit to main menu" , 3, 4);
+        heading.draw(batch, "settings" , 4, 8);
 
         batch.end();
 
-        if (Gdx.input.isTouched()) {
+        if (Gdx.input.isTouched() || Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
             host.setScreen(new MainMenu(host));
         }
 
