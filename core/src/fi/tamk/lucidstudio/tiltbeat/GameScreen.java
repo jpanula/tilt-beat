@@ -1,10 +1,14 @@
 package fi.tamk.lucidstudio.tiltbeat;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 
@@ -27,6 +31,10 @@ GameScreen implements Screen {
     private int playerSides;
     private float playerDiameter;
     private float noteSpeed;
+
+    private int points;
+    BitmapFont p;
+    FreeTypeFontGenerator generator;
 
     /**
      * Peliruutu, asetukset haetaan GameMainistä, joka toimii "hostina"
@@ -55,7 +63,16 @@ GameScreen implements Screen {
             song.addNote(new Point(random, 3.5f * i * noteSpeed / 6 + 5));
         }
 
-        useShapeRenderer = true;
+        /*
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("grove.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 50;
+        parameter.color = Color.CYAN;
+        p = generator.generateFont(parameter); */
+
+        points = 0;
+
+        useShapeRenderer = false;
     }
 
     public boolean isSectorActive(int a) {
@@ -101,6 +118,7 @@ GameScreen implements Screen {
 
         // Normaali render
         batch.begin();
+        GameMain.basicFont.draw(batch, "points: ", 50, 100);
         player.draw(batch);
         for (Note note : song.notes) {
             note.draw(batch, playerSides);
@@ -134,12 +152,18 @@ GameScreen implements Screen {
                 // Jos pelaajan osoitin on samalla sektorilla, poista nuotti
                 if (note.getSector() == player.getPointerSector()) {
                     iter.remove();
+                    points++;
                 // Muuten FAIL
                 } else {
                     System.out.println("FAIL!");
                 }
             }
         }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
+            host.setScreen(new MainMenu(host));
+        }
+
     }
 
     @Override
@@ -164,6 +188,7 @@ GameScreen implements Screen {
 
     @Override
     public void dispose() {
+        p.dispose();
 
     }
 }
