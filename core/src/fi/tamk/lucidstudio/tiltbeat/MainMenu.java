@@ -71,7 +71,7 @@ public class MainMenu implements Screen {
         batch.begin();
 
         //piirrellään paljon tekstiä
-        batch.draw(background, 0, 0 , 16, 9);
+        batch.draw(background, 0, 0 , 16, 10);
         batch.draw(button, buttonPlay.x, buttonPlay.y, buttonPlay.width, buttonPlay.height);
         batch.draw(button, buttonSettings.x, buttonSettings.y, buttonSettings.width, buttonSettings.height);
         batch.draw(button, buttonHighscore.x, buttonHighscore.y, buttonHighscore.width, buttonHighscore.height);
