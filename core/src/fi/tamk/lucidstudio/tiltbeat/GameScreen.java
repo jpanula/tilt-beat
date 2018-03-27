@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -23,6 +24,7 @@ GameScreen implements Screen {
     private GameMain host;
     private SpriteBatch batch;
     private OrthographicCamera camera;
+    private OrthographicCamera fontCamera;
     private ShapeRenderer shapeRenderer;
     private Player player;
     private Song song;
@@ -33,17 +35,21 @@ GameScreen implements Screen {
     private float noteSpeed;
 
     private int points;
-    BitmapFont p;
-    FreeTypeFontGenerator generator;
+    private BitmapFont basic;
+
+    private Texture background;
 
     /**
      * Peliruutu, asetukset haetaan GameMainistä, joka toimii "hostina"
      * @param host pelin Main-metodi
      */
     public GameScreen(GameMain host) {
+        background = GameMain.getBackgroundTexture();
+
         this.host = host;
         batch = host.getBatch();
         camera = host.getCamera();
+        fontCamera = host.getFontCamera();
         shapeRenderer = host.getShapeRenderer();
 
         playerSides = GameMain.getPlayerSides();
@@ -63,14 +69,8 @@ GameScreen implements Screen {
             song.addNote(new Point(random, 3.5f * i * noteSpeed / 6 + 5));
         }
 
-        /*
-        generator = new FreeTypeFontGenerator(Gdx.files.internal("grove.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 50;
-        parameter.color = Color.CYAN;
-        p = generator.generateFont(parameter); */
-
         points = 0;
+        basic = GameMain.basicFont;
 
         useShapeRenderer = false;
     }
@@ -113,16 +113,21 @@ GameScreen implements Screen {
         // Perus clearataan ruutu mustalla ja laitetaan renderereille kameran koordinaatit käyttöön
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.setProjectionMatrix(camera.combined);
         shapeRenderer.setProjectionMatrix(camera.combined);
 
         // Normaali render
         batch.begin();
-        GameMain.basicFont.draw(batch, "points: ", 50, 100);
+        batch.setProjectionMatrix(camera.combined);
+        batch.draw(background, 0, 0 , 16, 10);
+
         player.draw(batch);
         for (Note note : song.notes) {
             note.draw(batch, playerSides);
         }
+
+        batch.setProjectionMatrix(fontCamera.combined);
+        basic.draw(batch, "points: " + points, 50, 100);
+
         batch.end();
 
         // ShapeRenderer render, piirtää annetuilla pisteillä muotoja
@@ -156,6 +161,7 @@ GameScreen implements Screen {
                 // Muuten FAIL
                 } else {
                     System.out.println("FAIL!");
+                    iter.remove();
                 }
             }
         }
@@ -188,7 +194,6 @@ GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        p.dispose();
 
     }
 }
