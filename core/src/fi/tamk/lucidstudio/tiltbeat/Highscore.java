@@ -66,12 +66,12 @@ public class Highscore implements Screen {
 
         batch.setProjectionMatrix(fontCamera.combined);
         //piirrellään fontit
-        heading.draw(batch, "Highscore" , 370, 650);
-        basic.draw(batch, "click anywhere to exit to main menu" , 280, 400);
+        heading.draw(batch, "Highscore" , 300, 650);
+        basic.draw(batch, "press M to exit to main menu" , 280, 400);
 
         batch.end();
 
-        if (Gdx.input.isTouched()) {
+        if ( Gdx.input.isKeyPressed(Input.Keys.M)) {
             host.setScreen(new MainMenu(host));
         }
 
