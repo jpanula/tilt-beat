@@ -137,6 +137,10 @@ GameScreen implements Screen {
 
         batch.setProjectionMatrix(fontCamera.combined);
         basic.draw(batch, "points: " + points, 50, 100);
+        // Piirrellään Accelerometerin arvoja ruudulle
+        basic.draw(batch, "X: " + Gdx.input.getAccelerometerX(), Gdx.graphics.getWidth() * 2/3, Gdx.graphics.getHeight() / 3);
+        basic.draw(batch, " Y: " + Gdx.input.getAccelerometerY(), Gdx.graphics.getWidth() * 2/3, Gdx.graphics.getHeight() / 3 - 50);
+        basic.draw(batch, " Z: " + Gdx.input.getAccelerometerZ(), Gdx.graphics.getWidth() * 2/3, Gdx.graphics.getHeight() / 3 - 100);
 
         batch.end();
 
@@ -149,7 +153,7 @@ GameScreen implements Screen {
         }
 
         // Printtaa konsoliin accelerometerin arvoja
-        // System.out.println("X: " + Gdx.input.getAccelerometerX() + " Y: " + Gdx.input.getAccelerometerY() + " Z: " + Gdx.input.getAccelerometerZ());
+        //System.out.println("X: " + Gdx.input.getAccelerometerX() + " Y: " + Gdx.input.getAccelerometerY() + " Z: " + Gdx.input.getAccelerometerZ());
 
         // Pelaajan liike tarvitsee kameraa kosketus-/klikkausohjauksen unprojectia varten
         // (Ruutukoordinaateista maailmakoordinaateiksi)
