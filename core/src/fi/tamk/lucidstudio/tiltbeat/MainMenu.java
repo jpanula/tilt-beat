@@ -45,8 +45,8 @@ public class MainMenu implements Screen {
         buttonSettings = new Rectangle(6.15f, 1.8f, 3.7f, 2f);
         buttonHighscore = new Rectangle(11f, 1.8f, 3.7f, 2f);
 
-        heading = GameMain.headingFont;
-        basic = GameMain.basicFont;
+        heading = GameMain.getHeadingFont();
+        basic = GameMain.getBasicFont();
 
     }
 

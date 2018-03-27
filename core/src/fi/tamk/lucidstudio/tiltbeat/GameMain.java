@@ -30,9 +30,10 @@ public class GameMain extends Game {
 	private static float playerInradius = (float) (playerDiameter * Math.cos(180/playerSides));
     private static Texture background;
     private static Texture button;
-
-	static BitmapFont basicFont;
-	static BitmapFont headingFont;
+	private static Texture pauseButton;
+	private static Texture backButton;
+	private static BitmapFont basicFont;
+	private static BitmapFont headingFont;
 	private FreeTypeFontGenerator generator;
 
 	public SpriteBatch getBatch() {
@@ -79,6 +80,14 @@ public class GameMain extends Game {
 
     public static Texture getButtonTexture() { return button; }
 
+	public static Texture getBackButtonTexture() { return backButton; }
+
+	public static Texture getPauseButtonTexture() { return pauseButton; }
+
+	public static BitmapFont getHeadingFont() { return headingFont; }
+
+	public static BitmapFont getBasicFont() { return basicFont; }
+
     @Override
 	public void create () {
 	    batch = new SpriteBatch();
@@ -90,6 +99,8 @@ public class GameMain extends Game {
 
 		background = new Texture(Gdx.files.internal("Galaxy blue.png"));
         button = new Texture(Gdx.files.internal("nappi1.png"));
+        pauseButton = new Texture(Gdx.files.internal("pausenappi.png"));
+		backButton = new Texture(Gdx.files.internal("backTemp.png"));
 
 		createFonts();
         //menu = new MainMenu(this);

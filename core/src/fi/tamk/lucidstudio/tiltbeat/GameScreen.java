@@ -1,5 +1,6 @@
 package fi.tamk.lucidstudio.tiltbeat;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -12,6 +13,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 
 import java.util.Iterator;
 
@@ -36,16 +39,17 @@ GameScreen implements Screen {
 
     private int points;
     private BitmapFont basic;
+    private BitmapFont heading;
 
     private Texture background;
+    private Texture pauseButtonTexture;
+    private Rectangle pauseButton;
 
     /**
      * Peliruutu, asetukset haetaan GameMainistä, joka toimii "hostina"
      * @param host pelin Main-metodi
      */
     public GameScreen(GameMain host) {
-        background = GameMain.getBackgroundTexture();
-
         this.host = host;
         batch = host.getBatch();
         camera = host.getCamera();
@@ -70,7 +74,12 @@ GameScreen implements Screen {
         }
 
         points = 0;
-        basic = GameMain.basicFont;
+        basic = GameMain.getBasicFont();
+        heading = GameMain.getHeadingFont();
+        background = new Texture(Gdx.files.internal("Galaxy dark purple.png"));
+
+        pauseButtonTexture = GameMain.getPauseButtonTexture();
+        pauseButton = new Rectangle(0.2f, 8.8f, 1f, 1f);
 
         useShapeRenderer = false;
     }
@@ -119,6 +128,7 @@ GameScreen implements Screen {
         batch.begin();
         batch.setProjectionMatrix(camera.combined);
         batch.draw(background, 0, 0 , 16, 10);
+        batch.draw(pauseButtonTexture, pauseButton.x, pauseButton.y, pauseButton.width, pauseButton.height);
 
         player.draw(batch);
         for (Note note : song.notes) {
@@ -170,6 +180,14 @@ GameScreen implements Screen {
             host.setScreen(new MainMenu(host));
         }
 
+        if (Gdx.input.isTouched()) {
+            Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            camera.unproject(touchPos);
+            if (pauseButton.contains(touchPos.x, touchPos.y)) {
+                pause();
+            }
+        }
+
     }
 
     @Override
@@ -179,7 +197,13 @@ GameScreen implements Screen {
 
     @Override
     public void pause() {
+        batch.begin();
+        heading.draw(batch, "PAUSE", 420, 450);
+        batch.end();
 
+        if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
+            host.setScreen(new MainMenu(host));
+        }
     }
 
     @Override

@@ -39,6 +39,7 @@ public abstract class Note {
 
 class Point extends Note {
     private Texture texture;
+    private Texture texture2;
     private Vector2 vector;
     private float width;
     private float height;
