@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -75,6 +76,11 @@ public class Player {
                     hitbox.x = touchPos.x;
                     hitbox.y = touchPos.y;
                 }
+            }
+            // Osoittimen ohjaus accelerometrillä
+            if (Math.abs(Gdx.input.getAccelerometerY()) > GameMain.getAccelerometerDeadzone() || Math.abs(Gdx.input.getAccelerometerX()) > GameMain.getAccelerometerDeadzone()) {
+                hitbox.y = GameMain.getScreenHeight() / 2 - Math.min((Gdx.input.getAccelerometerX() / GameMain.getAccelerometerMax() * (GameMain.getPlayerInradius() - hitbox.radius * 2)), (GameMain.getPlayerInradius() - hitbox.radius * 2));
+                hitbox.x = GameMain.getScreenWidth() / 2 + Math.min((Gdx.input.getAccelerometerY() / GameMain.getAccelerometerMax() * (GameMain.getPlayerInradius() - hitbox.radius * 2)), (GameMain.getPlayerInradius() - hitbox.radius * 2));
             }
         }
 
