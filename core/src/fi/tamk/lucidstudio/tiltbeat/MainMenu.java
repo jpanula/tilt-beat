@@ -88,7 +88,7 @@ public class MainMenu implements Screen {
                 Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
                 camera.unproject(touchPos);
                 if (buttonPlay.contains(touchPos.x, touchPos.y)) {
-                    host.setScreen(new GameScreen(host));
+                    host.setScreen(new Difficulty(host));
                 }
                 if (buttonSettings.contains(touchPos.x, touchPos.y) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                     host.setScreen(new Settings(host));
