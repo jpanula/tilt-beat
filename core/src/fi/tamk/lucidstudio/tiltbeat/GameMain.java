@@ -28,6 +28,8 @@ public class GameMain extends Game {
 	private static float noteSpeed = 4;
 	private static float playerDiameter = 3;
 	private static float playerInradius = (float) (playerDiameter * Math.cos(180/playerSides));
+    private static float accelerometerDeadzone = 0.25f;
+	private static float accelerometerMax = 3f;
     private static Texture background;
     private static Texture button;
 	private static Texture pauseButton;
@@ -92,6 +94,14 @@ public class GameMain extends Game {
 	public static BitmapFont getBasicFont() { return basicFont; }
 
     public static BitmapFont getSmallerHeadingFont() { return smallerHeadingFont; }
+
+    public static float getAccelerometerDeadzone() {
+        return accelerometerDeadzone;
+    }
+
+    public static float getAccelerometerMax() {
+        return accelerometerMax;
+    }
 
     @Override
 	public void create () {
