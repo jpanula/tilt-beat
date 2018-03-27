@@ -34,7 +34,10 @@ public class GameMain extends Game {
 	private static Texture backButton;
 	private static BitmapFont basicFont;
 	private static BitmapFont headingFont;
+    private static BitmapFont smallerHeadingFont;
 	private FreeTypeFontGenerator generator;
+
+	public static void setPlayerSides(int a) { playerSides = a; }
 
 	public SpriteBatch getBatch() {
 	    return batch;
@@ -88,6 +91,8 @@ public class GameMain extends Game {
 
 	public static BitmapFont getBasicFont() { return basicFont; }
 
+    public static BitmapFont getSmallerHeadingFont() { return smallerHeadingFont; }
+
     @Override
 	public void create () {
 	    batch = new SpriteBatch();
@@ -124,6 +129,12 @@ public class GameMain extends Game {
 		parameter.borderColor = Color.BLACK;
 		parameter.borderWidth = 3;
 		headingFont = generator.generateFont(parameter);
+
+        parameter.size = 100;
+        parameter.color = Color.CYAN;
+        parameter.borderColor = Color.BLACK;
+        parameter.borderWidth = 3;
+        smallerHeadingFont = generator.generateFont(parameter);
 	}
 
 	@Override

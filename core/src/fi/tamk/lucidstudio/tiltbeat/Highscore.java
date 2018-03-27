@@ -37,7 +37,7 @@ public class Highscore implements Screen {
         batch = host.getBatch();
         camera = host.getCamera();
         fontCamera = host.getFontCamera();
-        heading = GameMain.getHeadingFont();
+        heading = GameMain.getSmallerHeadingFont();
         basic = GameMain.getBasicFont();
         background = GameMain.getBackgroundTexture();
         buttonTexture = GameMain.getButtonTexture();
@@ -71,7 +71,6 @@ public class Highscore implements Screen {
         batch.draw(buttonTexture, button2.x, button2.y, button2.width, button2.height);
         batch.draw(buttonTexture, button3.x, button3.y, button3.width, button3.height);
         */
-
 
         batch.setProjectionMatrix(fontCamera.combined);
         //piirrellään fontit

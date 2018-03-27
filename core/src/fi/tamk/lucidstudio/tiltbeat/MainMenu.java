@@ -28,6 +28,7 @@ public class MainMenu implements Screen {
     private BitmapFont basic;
     private Texture button;
     private Rectangle buttonPlay;
+    private Rectangle buttonMods;
     private Rectangle buttonSettings;
     private Rectangle buttonHighscore;
     private Texture background;
@@ -41,9 +42,10 @@ public class MainMenu implements Screen {
         button = new Texture(Gdx.files.internal("nappi1.png"));
         background = GameMain.getBackgroundTexture();
 
-        buttonPlay = new Rectangle(1.3f, 1.8f, 3.7f, 2f);
-        buttonSettings = new Rectangle(6.15f, 1.8f, 3.7f, 2f);
-        buttonHighscore = new Rectangle(11f, 1.8f, 3.7f, 2f);
+        buttonPlay = new Rectangle(2.8f, 4f, 4f, 1.7f);
+        buttonMods = new Rectangle(8.5f, 4f, 4f, 1.7f);
+        buttonSettings = new Rectangle(2.8f, 1f, 4f, 1.7f);
+        buttonHighscore = new Rectangle(8.5f, 1f, 4f, 1.7f);
 
         heading = GameMain.getHeadingFont();
         basic = GameMain.getBasicFont();
@@ -68,14 +70,16 @@ public class MainMenu implements Screen {
         batch.draw(button, buttonPlay.x, buttonPlay.y, buttonPlay.width, buttonPlay.height);
         batch.draw(button, buttonSettings.x, buttonSettings.y, buttonSettings.width, buttonSettings.height);
         batch.draw(button, buttonHighscore.x, buttonHighscore.y, buttonHighscore.width, buttonHighscore.height);
+        batch.draw(button, buttonMods.x, buttonMods.y, buttonMods.width, buttonMods.height);
 
         batch.setProjectionMatrix(fontCamera.combined);
         //piirrellään fontit
-        heading.draw(batch, "TilT" , 370, 650);
-        heading.draw(batch, "BeaT" , 550f, 570);
-        basic.draw(batch, "play" , 197, 250);
-        basic.draw(batch, "settings" , 547, 250);
-        basic.draw(batch, "highscore" , 924, 250);
+        heading.draw(batch, "TilT" , 370, 750);
+        heading.draw(batch, "BeaT" , 550f, 670);
+        basic.draw(batch, "play" , 300, 400);
+        basic.draw(batch, "settings" , 300, 150);
+        basic.draw(batch, "highscore" , 750, 150);
+        basic.draw(batch, "mods" , 750, 400);
 
         batch.end();
 
@@ -91,6 +95,9 @@ public class MainMenu implements Screen {
                 }
                 if (buttonHighscore.contains(touchPos.x, touchPos.y) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                     host.setScreen(new Highscore(host));
+                }
+                if (buttonMods.contains(touchPos.x, touchPos.y) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                    host.setScreen(new Mods(host));
                 }
         }
 
