@@ -70,7 +70,7 @@ GameScreen implements Screen {
                 random = MathUtils.random(0, (playerSides-1));
             }
 
-            song.addNote(new Hold(random, 20f * i * noteSpeed / 6 + 5, 2f));
+            song.addNote(new Hold(random, 12f * i * noteSpeed / 6 + 5, 1f * noteSpeed));
         }
 
         points = 0;
@@ -171,7 +171,7 @@ GameScreen implements Screen {
                 // Jos pelaajan osoitin on samalla sektorilla, poista nuotti
                 if (note.getSector() == player.getPointerSector()) {
                     iter.remove();
-                    points++;
+                    points += 5;
                 // Muuten FAIL
                 } else {
                     System.out.println("FAIL!");
@@ -181,11 +181,30 @@ GameScreen implements Screen {
                 if (note.getDistance() + ((Hold) note).getLength() <= 0) {
                     if (note.getSector() == player.getPointerSector()) {
                         iter.remove();
-                        points++;
-                        // Muuten FAIL
+                        points += 10;
                     } else {
                         System.out.println("FAIL!");
                         iter.remove();
+                    }
+                }
+                if (note.getDistance() <= 0 && !((Hold) note).isScored()) {
+                    if (note.getSector() == player.getPointerSector()) {
+                        points += 10;
+                        ((Hold) note).setScored(true);
+                    } else {
+                        System.out.println("FAIL!");
+                        ((Hold) note).setScored(true);
+                    }
+                }
+                for (Hold.Tick tick : ((Hold) note).getTicks()) {
+                    if (tick.getDistance() <= 0 && !tick.isScored()) {
+                        if (tick.getSector() == player.getPointerSector()) {
+                            points++;
+                            tick.setScored(true);
+                        } else {
+                            System.out.println("FAIL!");
+                            tick.setScored(true);
+                        }
                     }
                 }
             }

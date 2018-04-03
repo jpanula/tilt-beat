@@ -58,49 +58,99 @@ class Point extends Note {
     }
 }
 
-// TODO implementoi hold-tyyppinen nuotti
  class Hold extends Note {
     private Texture noteTexture;
-    private Texture pointTexture;
+    private Texture tickTexture;
     private Vector2 startPoint;
     private Vector2 endPoint;
     private float length;
     private float width;
     private float height;
-    private float pointAmount;
-    private float pointDiameter;
+    private static float tickDiameter;
+    private int tickAmount;
+    private ArrayList<Tick> ticks;
+    private boolean scored;
+    //private float pointDiameter;
+
+    class Tick extends Note {
+        private Texture texture;
+        private Vector2 vector;
+        private boolean scored;
+
+        public Tick(int sector, float distance) {
+            super(sector, distance);
+            texture = tickTexture;
+            vector = new Vector2(distance, 0);
+            scored = false;
+        }
+
+        public boolean isScored() {
+            return scored;
+        }
+
+        public void setScored(boolean scored) {
+            this.scored = scored;
+        }
+
+        @Override
+        void draw(SpriteBatch batch, int playerSides) {
+            vector.setLength(getDistance() + GameMain.getPlayerInradius() * 5 / 7);
+            vector.setAngle(90 - (360 / playerSides) * getSector() - (360 / playerSides) / 2);
+            if (getDistance() > 0)
+            batch.draw(texture, GameMain.getScreenWidth() / 2 + vector.x - tickDiameter / 2, GameMain.getScreenHeight() / 2 + vector.y - tickDiameter / 2, tickDiameter, tickDiameter);
+        }
+    }
 
     public Hold(int sector, float distance, float length) {
         super(sector, distance);
         noteTexture = new Texture("Smol Blue Hold.png");
-        pointTexture = new Texture("Smol Blue Ball.png");
+        tickTexture = new Texture("Smol Blue Ball.png");
         this.length = length;
         width = 1;
-        pointDiameter = 0.2f;
+        tickDiameter = 0.2f;
         height = 0.7f * width;
-        pointAmount = (int) length / (pointDiameter * 2);
+        tickAmount = (int) (length / (tickDiameter * GameMain.getNoteSpeed()));
         startPoint = new Vector2(distance, 0);
         endPoint = new Vector2(distance + length, 0);
+        ticks = new ArrayList<Tick>();
+        for (int i = 1; i < tickAmount; i++) {
+            ticks.add(new Tick(sector, distance + (float) i / tickAmount * length));
+        }
+
     }
 
-    public float getLength() {
+     public boolean isScored() {
+         return scored;
+     }
+
+     public void setScored(boolean scored) {
+         this.scored = scored;
+     }
+
+     public float getLength() {
         return length;
     }
 
-    @Override
+     public ArrayList<Tick> getTicks() {
+         return ticks;
+     }
+
+     @Override
     void draw(SpriteBatch batch, int playerSides) {
         // Vektorilla lasketaan pelaajan kulmion kulmien perusteella nuottien liikerata kohti niiden
         // sektoreita
-
-        startPoint.setLength(getDistance() + GameMain.getPlayerInradius() - height * 3/4f);
+         for (Tick tick : ticks) {
+             tick.draw(batch, playerSides);
+         }
+        startPoint.setLength(getDistance() + GameMain.getPlayerInradius() * 5 / 7);
         startPoint.setAngle(90 - (360 / playerSides) * getSector() - (360 / playerSides) / 2);
-        if (startPoint.len() > GameMain.getPlayerInradius() - height) {
+        if (getDistance() > 0) {
             batch.draw(noteTexture, GameMain.getScreenWidth() / 2 + startPoint.x - width / 2, GameMain.getScreenHeight() / 2 + startPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, startPoint.angle() - 90, 0, 0, noteTexture.getWidth(), noteTexture.getHeight(), false, false);
         }
-        endPoint.setLength(getDistance() + length + GameMain.getPlayerInradius() - height * 3/4f);
+        endPoint.setLength(getDistance() + length + GameMain.getPlayerInradius() * 5 / 7);
         endPoint.setAngle(90 - (360 / playerSides) * getSector() - (360 / playerSides) / 2);
         batch.draw(noteTexture, GameMain.getScreenWidth() / 2 + endPoint.x - width / 2, GameMain.getScreenHeight() / 2 + endPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, endPoint.angle() - 90, 0, 0, noteTexture.getWidth(), noteTexture.getHeight(), false, true);
-        for (int i = 1; i < pointAmount; i++) {
+        /*for (int i = 1; i < pointAmount; i++) {
             float x = (startPoint.x + (endPoint.x - startPoint.x) * i / pointAmount) - pointDiameter / 2;
             float y = (startPoint.y + (endPoint.y - startPoint.y) * i / pointAmount) - pointDiameter / 2;
             Vector2 pointVector = new Vector2(x, y);
@@ -112,9 +162,17 @@ class Point extends Note {
                     System.out.println("Point distance: " + pointDistance + " Distance: " + getDistance());
                 }
             }
-        }
+        }*/
     }
-}
+
+     @Override
+     public void move(float noteSpeed) {
+         super.move(noteSpeed);
+         for (Tick tick : ticks) {
+             tick.move(noteSpeed);
+         }
+     }
+ }
 
 // TODO implementoi slide-tyyppinen nuotti
 /*class Slide extends Note {
