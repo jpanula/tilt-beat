@@ -70,7 +70,7 @@ GameScreen implements Screen {
                 random = MathUtils.random(0, (playerSides-1));
             }
 
-            song.addNote(new Hold(random, 3.5f * i * noteSpeed / 6 + 5, 0.75f));
+            song.addNote(new Hold(random, 7f * i * noteSpeed / 6 + 5, 2f));
         }
 
         points = 0;
@@ -167,7 +167,7 @@ GameScreen implements Screen {
             note.move(noteSpeed);
 
             // Jos nuotin etäisyys keskikulmiosta on 0 tai vähemmän
-            if (note.getDistance() <= 0) {
+            if (note instanceof Point && note.getDistance() <= 0) {
                 // Jos pelaajan osoitin on samalla sektorilla, poista nuotti
                 if (note.getSector() == player.getPointerSector()) {
                     iter.remove();
@@ -176,6 +176,17 @@ GameScreen implements Screen {
                 } else {
                     System.out.println("FAIL!");
                     iter.remove();
+                }
+            } else if (note instanceof  Hold) {
+                if (note.getDistance() + ((Hold) note).getLength() <= 0) {
+                    if (note.getSector() == player.getPointerSector()) {
+                        iter.remove();
+                        points++;
+                        // Muuten FAIL
+                    } else {
+                        System.out.println("FAIL!");
+                        iter.remove();
+                    }
                 }
             }
         }
