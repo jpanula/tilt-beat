@@ -77,8 +77,8 @@ class Point extends Note {
         this.length = length;
         width = 1;
         pointDiameter = 0.2f;
+        height = 0.7f * width;
         pointAmount = (int) length / (pointDiameter * 2);
-        height = (float) 0.7 * width;
         startPoint = new Vector2(distance, 0);
         endPoint = new Vector2(distance + length, 0);
     }
@@ -91,14 +91,27 @@ class Point extends Note {
     void draw(SpriteBatch batch, int playerSides) {
         // Vektorilla lasketaan pelaajan kulmion kulmien perusteella nuottien liikerata kohti niiden
         // sektoreita
+
         startPoint.setLength(getDistance() + GameMain.getPlayerInradius() - height * 3/4f);
         startPoint.setAngle(90 - (360 / playerSides) * getSector() - (360 / playerSides) / 2);
-        batch.draw(noteTexture, GameMain.getScreenWidth() / 2 + startPoint.x - width / 2, GameMain.getScreenHeight() / 2 + startPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, startPoint.angle() - 90, 0, 0, noteTexture.getWidth(), noteTexture.getHeight(), false, false);
+        if (startPoint.len() > GameMain.getPlayerInradius() - height) {
+            batch.draw(noteTexture, GameMain.getScreenWidth() / 2 + startPoint.x - width / 2, GameMain.getScreenHeight() / 2 + startPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, startPoint.angle() - 90, 0, 0, noteTexture.getWidth(), noteTexture.getHeight(), false, false);
+        }
         endPoint.setLength(getDistance() + length + GameMain.getPlayerInradius() - height * 3/4f);
         endPoint.setAngle(90 - (360 / playerSides) * getSector() - (360 / playerSides) / 2);
         batch.draw(noteTexture, GameMain.getScreenWidth() / 2 + endPoint.x - width / 2, GameMain.getScreenHeight() / 2 + endPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, endPoint.angle() - 90, 0, 0, noteTexture.getWidth(), noteTexture.getHeight(), false, true);
         for (int i = 1; i < pointAmount; i++) {
-            batch.draw(pointTexture, GameMain.getScreenWidth() / 2 + (startPoint.x + (endPoint.x - startPoint.x) * i / pointAmount) - pointDiameter / 2, GameMain.getScreenHeight() / 2 + (startPoint.y + (endPoint.y - startPoint.y) * i / pointAmount), pointDiameter, pointDiameter);
+            float x = (startPoint.x + (endPoint.x - startPoint.x) * i / pointAmount) - pointDiameter / 2;
+            float y = (startPoint.y + (endPoint.y - startPoint.y) * i / pointAmount) - pointDiameter / 2;
+            Vector2 pointVector = new Vector2(x, y);
+            float pointDistance = pointVector.len();
+            //float pointDistance = (float) Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+            if (pointDistance > GameMain.getPlayerInradius() - height) {
+                batch.draw(pointTexture, GameMain.getScreenWidth() / 2 + x, GameMain.getScreenHeight() / 2 + y, pointDiameter, pointDiameter);
+                if (getDistance() < 3) {
+                    System.out.println("Point distance: " + pointDistance + " Distance: " + getDistance());
+                }
+            }
         }
     }
 }
