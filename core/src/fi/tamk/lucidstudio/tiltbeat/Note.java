@@ -52,7 +52,7 @@ class Point extends Note {
     void draw(SpriteBatch batch, int playerSides) {
         // Vektorilla lasketaan pelaajan kulmion kulmien perusteella nuottien liikerata kohti niiden
         // sektoreita
-        vector.setLength(getDistance() + GameMain.getPlayerInradius() - height * 3/4f);
+        vector.setLength(getDistance() + GameMain.getPlayerInradius());
         vector.setAngle(90 - (360 / playerSides) * getSector() - (360 / playerSides) / 2);
         batch.draw(texture, GameMain.getScreenWidth() / 2 + vector.x - width / 2, GameMain.getScreenHeight() / 2 + vector.y - height / 2, width / 2, height / 2, width, height, 1, 1, vector.angle() - 90, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
     }
@@ -94,7 +94,7 @@ class Point extends Note {
 
         @Override
         void draw(SpriteBatch batch, int playerSides) {
-            vector.setLength(getDistance() + GameMain.getPlayerInradius() * 5 / 7);
+            vector.setLength(getDistance() + GameMain.getPlayerInradius());
             vector.setAngle(90 - (360 / playerSides) * getSector() - (360 / playerSides) / 2);
             if (getDistance() > 0)
             batch.draw(texture, GameMain.getScreenWidth() / 2 + vector.x - tickDiameter / 2, GameMain.getScreenHeight() / 2 + vector.y - tickDiameter / 2, tickDiameter, tickDiameter);
@@ -142,12 +142,12 @@ class Point extends Note {
          for (Tick tick : ticks) {
              tick.draw(batch, playerSides);
          }
-        startPoint.setLength(getDistance() + GameMain.getPlayerInradius() * 5 / 7);
+        startPoint.setLength(getDistance() + GameMain.getPlayerInradius());
         startPoint.setAngle(90 - (360 / playerSides) * getSector() - (360 / playerSides) / 2);
         if (getDistance() > 0) {
             batch.draw(noteTexture, GameMain.getScreenWidth() / 2 + startPoint.x - width / 2, GameMain.getScreenHeight() / 2 + startPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, startPoint.angle() - 90, 0, 0, noteTexture.getWidth(), noteTexture.getHeight(), false, false);
         }
-        endPoint.setLength(getDistance() + length + GameMain.getPlayerInradius() * 5 / 7);
+        endPoint.setLength(getDistance() + length + GameMain.getPlayerInradius());
         endPoint.setAngle(90 - (360 / playerSides) * getSector() - (360 / playerSides) / 2);
         batch.draw(noteTexture, GameMain.getScreenWidth() / 2 + endPoint.x - width / 2, GameMain.getScreenHeight() / 2 + endPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, endPoint.angle() - 90, 0, 0, noteTexture.getWidth(), noteTexture.getHeight(), false, true);
         /*for (int i = 1; i < pointAmount; i++) {

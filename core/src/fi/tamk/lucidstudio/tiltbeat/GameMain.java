@@ -27,7 +27,6 @@ public class GameMain extends Game {
 	private static int playerSides = 10;
 	private static float noteSpeed = 0.8f;
 	private static float playerDiameter = 3;
-	private static float playerInradius = (float) (playerDiameter * Math.cos(180/playerSides));
     private static float accelerometerDeadzone = 0.25f;
 	private static float accelerometerMax = 3f;
     private static Texture background;
@@ -78,6 +77,7 @@ public class GameMain extends Game {
 	}
 
 	public static float getPlayerInradius() {
+		float playerInradius = (float) (getPlayerDiameter() / 2 * Math.cos(Math.PI/getPlayerSides()));
 		return playerInradius;
 	}
 

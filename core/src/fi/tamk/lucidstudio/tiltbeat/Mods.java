@@ -42,7 +42,7 @@ public class Mods implements Screen {
         buttonTexture = GameMain.getButtonTexture();
         backButtonTexture = GameMain.getBackButtonTexture();
 
-        sides = 10;
+        sides = GameMain.getPlayerSides();
 
         button6 = new Rectangle(1.3f, 4.5f, 2.5f, 2.5f);
         button8 = new Rectangle(6.15f, 4.5f, 2.5f, 2.5f);
