@@ -122,24 +122,34 @@ public class Player {
                     0.0203f, 0.65f,
                     0.205f, 0.905f
             };
-            // Tehdään 10-kulmion pisteistä sektoreille omat kolmiot
-            for (int i = 0; i < playerSides; i++) {
-                float[] triangleVerts = {
-                        vertices[i * 2], vertices[i * 2 + 1],
-                        vertices[(i * 2 + 2) % 20], vertices[(i * 2 + 3) % 20],
-                        0.5f, 0.5f
-                };
-                // Muodostetaan kolmiot ja kerrotaan koko ja sijainti oikeiksi, että se vastaa
-                // keskellä olevaa kulmion kuvaa
-                sectors.add(new Polygon(triangleVerts));
-                sectors.get(i).setScale(playerDiameter, playerDiameter);
-                sectors.get(i).setPosition(GameMain.getScreenWidth() / 2 - radius, GameMain.getScreenHeight() / 2 - radius);
-                // asetetaan sektori aktiiviseksi
-                activeSectors[i] = true;
-            }
-
+        } else if (playerSides == 8) {
+            texture = new Texture("eightside.png");
+            vertices = new float[]{
+                    0.5f, 1.0f,
+                    0.8555f, 0.8555f,
+                    1f, 0.5f,
+                    0.8555f, 0.1445f,
+                    0.5f, 0f,
+                    0.1445f, 0.1445f,
+                    0f, 0.5f,
+                    0.1445f, 0.8555f
+            };
         } else {
             throw new IllegalArgumentException("Invalid number of playerSides");
+        }
+        for (int i = 0; i < playerSides; i++) {
+            float[] triangleVerts = {
+                    vertices[i * 2], vertices[i * 2 + 1],
+                    vertices[(i * 2 + 2) % (playerSides * 2)], vertices[(i * 2 + 3) % (playerSides * 2)],
+                    0.5f, 0.5f
+            };
+            // Muodostetaan kolmiot ja kerrotaan koko ja sijainti oikeiksi, että se vastaa
+            // keskellä olevaa kulmion kuvaa
+            sectors.add(new Polygon(triangleVerts));
+            sectors.get(i).setScale(playerDiameter, playerDiameter);
+            sectors.get(i).setPosition(GameMain.getScreenWidth() / 2 - radius, GameMain.getScreenHeight() / 2 - radius);
+            // asetetaan sektori aktiiviseksi
+            activeSectors[i] = true;
         }
         // Muodostetaan pelaajan kulmio, tehdään siitä oikean kokoinen ja siirretään se keskelle ruutua
         hitbox = new Polygon(vertices);
