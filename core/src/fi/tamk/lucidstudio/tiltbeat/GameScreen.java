@@ -31,6 +31,7 @@ GameScreen implements Screen {
     private ShapeRenderer shapeRenderer;
     private Player player;
     private Song song;
+    private boolean paused;
     private boolean useShapeRenderer;
 
     private int playerSides;
@@ -81,6 +82,7 @@ GameScreen implements Screen {
         pauseButtonTexture = GameMain.getPauseButtonTexture();
         pauseButton = new Rectangle(0.2f, 8.8f, 1f, 1f);
 
+        paused = false;
         useShapeRenderer = true;
     }
 
@@ -141,6 +143,9 @@ GameScreen implements Screen {
         basic.draw(batch, "X: " + Gdx.input.getAccelerometerX(), Gdx.graphics.getWidth() * 2/3, Gdx.graphics.getHeight() / 3);
         basic.draw(batch, " Y: " + Gdx.input.getAccelerometerY(), Gdx.graphics.getWidth() * 2/3, Gdx.graphics.getHeight() / 3 - 50);
         basic.draw(batch, " Z: " + Gdx.input.getAccelerometerZ(), Gdx.graphics.getWidth() * 2/3, Gdx.graphics.getHeight() / 3 - 100);
+        if (paused) {
+            heading.draw(batch, "PAUSE", 420, 450);
+        }
 
         batch.end();
 
@@ -157,15 +162,17 @@ GameScreen implements Screen {
 
         // Pelaajan liike tarvitsee kameraa kosketus-/klikkausohjauksen unprojectia varten
         // (Ruutukoordinaateista maailmakoordinaateiksi)
-        player.move(camera);
-
+        if (!paused) {
+            player.move(camera);
+        }
         // ArrayList pitää käydä läpi Iteratorilla, koska ArrayLististä ei voi poistaa elementtejä,
         // kun sen läpi iteroidaan. Iteraattorissa tämän voi tehdä.
         Iterator<Note> iter = song.notes.iterator();
         while (iter.hasNext()) {
             Note note = iter.next();
-            note.move(noteSpeed);
-
+            if (!paused) {
+                note.move(noteSpeed);
+            }
             // Jos nuotin etäisyys keskikulmiosta on 0 tai vähemmän
             if (note instanceof Point && note.getDistance() <= 0) {
                 // Jos pelaajan osoitin on samalla sektorilla, poista nuotti
@@ -218,7 +225,10 @@ GameScreen implements Screen {
             Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);
             if (pauseButton.contains(touchPos.x, touchPos.y)) {
+                paused = true;
                 pause();
+            } else {
+                paused = false;
             }
         }
 
@@ -231,15 +241,8 @@ GameScreen implements Screen {
 
     @Override
     public void pause() {
-        batch.begin();
-        heading.draw(batch, "PAUSE", 420, 450);
-        batch.end();
-
-        if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
-            host.setScreen(new MainMenu(host));
-        }
+        paused = true;
     }
-
     @Override
     public void resume() {
 
