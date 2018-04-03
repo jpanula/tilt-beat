@@ -226,7 +226,8 @@ GameScreen implements Screen {
             camera.unproject(touchPos);
             if (pauseButton.contains(touchPos.x, touchPos.y)) {
                 paused = true;
-                pause();
+            //} else if (pauseButton.contains(touchPos.x, touchPos.y) && paused) {
+            //    paused = false;
             } else {
                 paused = false;
             }
@@ -245,12 +246,12 @@ GameScreen implements Screen {
     }
     @Override
     public void resume() {
-
+        paused = true;
     }
 
     @Override
     public void hide() {
-
+        paused = true;
     }
 
     @Override
