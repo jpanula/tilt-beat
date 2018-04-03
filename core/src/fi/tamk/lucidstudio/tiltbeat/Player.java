@@ -134,6 +134,16 @@ public class Player {
                     0f, 0.5f,
                     0.1445f, 0.8555f
             };
+        } else if (playerSides == 6) {
+            texture = new Texture("sixside.png");
+            vertices = new float[]{
+                    0.5f, 1f,
+                    0.933f, 0.75f,
+                    0.933f, 0.25f,
+                    0.5f, 0f,
+                    0.067f, 0.25f,
+                    0.067f, 0.75f
+            };
         } else {
             throw new IllegalArgumentException("Invalid number of playerSides");
         }
@@ -156,8 +166,8 @@ public class Player {
         hitbox.setScale(playerDiameter, playerDiameter);
         hitbox.setPosition(GameMain.getScreenWidth() / 2 - radius, GameMain.getScreenHeight() / 2 - radius);
         //testi - ei-aktiiviset sektorit
-        activeSectors[2] = false; activeSectors[3] = false; activeSectors[4] = false;
-        activeSectors[6] = false; activeSectors[7] = false;
+        //activeSectors[2] = false; activeSectors[3] = false; activeSectors[4] = false;
+        //activeSectors[6] = false; activeSectors[7] = false;
     }
 
     // Palauttaa kulmion pisteet

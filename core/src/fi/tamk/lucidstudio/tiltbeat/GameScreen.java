@@ -81,7 +81,7 @@ GameScreen implements Screen {
         pauseButtonTexture = GameMain.getPauseButtonTexture();
         pauseButton = new Rectangle(0.2f, 8.8f, 1f, 1f);
 
-        useShapeRenderer = false;
+        useShapeRenderer = true;
     }
 
     public boolean isSectorActive(int a) {
