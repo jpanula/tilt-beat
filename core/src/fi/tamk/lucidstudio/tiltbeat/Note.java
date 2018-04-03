@@ -39,14 +39,13 @@ public abstract class Note {
 
 class Point extends Note {
     private Texture texture;
-    private Texture texture2;
     private Vector2 vector;
     private float width;
     private float height;
 
     public Point(int sector, float distance) {
         super(sector, distance);
-        texture = new Texture("Red Glow.png");
+        texture = new Texture("Smol Yellow Slide.png");
         width = 1;
         height = (float) 0.7 * width;
         vector = new Vector2(distance, 0);
@@ -62,18 +61,39 @@ class Point extends Note {
 }
 
 // TODO implementoi hold-tyyppinen nuotti
-/* class Hold extends Note {
-    float length;
+ class Hold extends Note {
+    private Texture noteTexture;
+    private Texture pointTexture;
+    private Vector2 vector;
+    private float length;
+    private float width;
+    private float height;
+    private float pointDiameter;
 
     public Hold(int sector, float distance, float length) {
         super(sector, distance);
+        noteTexture = new Texture("Smol Pink Hold.png");
+        pointTexture = new Texture("Smol Pink Ball.png");
         this.length = length;
+        width = 1;
+        pointDiameter = 0.2f;
+        height = (float) 0.7 * width;
+        vector = new Vector2(distance, 0);
     }
     @Override
-    void draw(int playerSides) {
-
+    void draw(SpriteBatch batch, int playerSides) {
+        // Vektorilla lasketaan pelaajan kulmion kulmien perusteella nuottien liikerata kohti niiden
+        // sektoreita
+        vector.setLength(getDistance() + GameMain.getPlayerInradius() - height * 3/4f);
+        vector.setAngle(90 - (360 / playerSides) * getSector() - (360 / playerSides) / 2);
+        batch.draw(noteTexture, GameMain.getScreenWidth() / 2 + vector.x - width / 2, GameMain.getScreenHeight() / 2 + vector.y - height / 2, width / 2, height / 2, width, height, 1, 1, vector.angle() - 90, 0, 0, noteTexture.getWidth(), noteTexture.getHeight(), false, false);
+        vector.setLength(getDistance() + length + GameMain.getPlayerInradius() - height * 3/4f);
+        batch.draw(noteTexture, GameMain.getScreenWidth() / 2 + vector.x - width / 2, GameMain.getScreenHeight() / 2 + vector.y - height / 2, width / 2, height / 2, width, height, 1, 1, vector.angle() - 90, 0, 0, noteTexture.getWidth(), noteTexture.getHeight(), false, true);
+        for (int i = 1; i < 10; i++) {
+            batch.draw(pointTexture, GameMain.getScreenWidth() / 2 + vector.x - pointDiameter / 2, GameMain.getScreenHeight() / 2 + vector.y - pointDiameter / 2, pointDiameter, pointDiameter);
+        }
     }
-}*/
+}
 
 // TODO implementoi slide-tyyppinen nuotti
 /*class Slide extends Note {

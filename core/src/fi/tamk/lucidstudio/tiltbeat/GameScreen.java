@@ -70,7 +70,7 @@ GameScreen implements Screen {
                 random = MathUtils.random(0, (playerSides-1));
             }
 
-            song.addNote(new Point(random, 3.5f * i * noteSpeed / 6 + 5));
+            song.addNote(new Hold(random, 3.5f * i * noteSpeed / 6 + 5, 0.75f));
         }
 
         points = 0;
