@@ -25,7 +25,7 @@ public class GameMain extends Game {
 	private static final float SCREEN_WIDTH_PIXELS = 1280;
 	private static final float SCREEN_HEIGHT_PIXELS = 800;
 	private static int playerSides = 10;
-	private static float noteSpeed = 4;
+	private static float noteSpeed = 1;
 	private static float playerDiameter = 3;
 	private static float playerInradius = (float) (playerDiameter * Math.cos(180/playerSides));
     private static float accelerometerDeadzone = 0.25f;
