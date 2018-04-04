@@ -27,7 +27,7 @@ public class GameMain extends Game {
 	private static int playerSides = 10;
 	private static float noteSpeed = 3f;
 	private static float playerDiameter = 3;
-    private static float accelerometerDeadzone = 0.25f;
+    private static float accelerometerDeadzone = 1f;
 	private static float accelerometerMax = 3f;
     private static Texture background;
     private static Texture button;
@@ -37,6 +37,9 @@ public class GameMain extends Game {
 	private static BitmapFont headingFont;
     private static BitmapFont smallerHeadingFont;
 	private FreeTypeFontGenerator generator;
+	private static float zeroPointX = 0;
+	private static float zeroPointY = 0;
+	private static float zeroPointZ = 0;
 
 	public static void setPlayerSides(int a) { playerSides = a; }
 
@@ -102,6 +105,25 @@ public class GameMain extends Game {
     public static float getAccelerometerMax() {
         return accelerometerMax;
     }
+
+    public static float getZeroPointX() {
+        return zeroPointX;
+    }
+
+    public static float getZeroPointY() {
+        return zeroPointY;
+    }
+
+    public static float getZeroPointZ() {
+        return zeroPointZ;
+    }
+
+    // Kalibroi nollapistearvot nykyisiin
+    public static void calibrateZeroPoint() {
+		zeroPointX = Gdx.input.getAccelerometerX();
+		zeroPointY = Gdx.input.getAccelerometerY();
+        zeroPointZ = Gdx.input.getAccelerometerZ();
+	}
 
     @Override
 	public void create () {

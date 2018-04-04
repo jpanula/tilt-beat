@@ -72,11 +72,7 @@ GameScreen implements Screen {
             while (!isSectorActive(random)) {
                 random = MathUtils.random(0, (playerSides-1));
             }
-            ArrayList<Point> slide = new ArrayList<Point>();
-            for (int j = 0; j < 3; j++) {
-                slide.add(new Point(i + j % 10, (7f * j * noteSpeed / 6 + 5), new Texture("Smol Green Slide.png")));
-            }
-            song.add(new Slide(random, 30f * i * noteSpeed / 6 + 5, slide));
+            song.add(new Point(random, 2f * i * noteSpeed, new Texture("Smol Red.png")));
         }
 
         points = 0;
@@ -86,8 +82,8 @@ GameScreen implements Screen {
 
         pauseButtonTexture = GameMain.getPauseButtonTexture();
         pauseButton = new Rectangle(0.2f, 8.8f, 1f, 1f);
-
         paused = false;
+
         useShapeRenderer = true;
     }
 
@@ -164,6 +160,8 @@ GameScreen implements Screen {
                     ((Slide) note).draw(shapeRenderer);
                 }
             }
+            shapeRenderer.setColor(1, 0, 0, 0);
+            //shapeRenderer.line(GameMain.getScreenWidth() / 2, GameMain.getScreenHeight() / 2, 0, Gdx.input.getAccelerometerY() + GameMain.getScreenWidth() / 2, -Gdx.input.getAccelerometerX() + GameMain.getScreenHeight() / 2, -Math.abs(Gdx.input.getAccelerometerZ()));
             shapeRenderer.end();
         }
 
@@ -194,6 +192,7 @@ GameScreen implements Screen {
                     System.out.println("FAIL!");
                     iter.remove();
                 }
+            // Hold-tyyppisten nuottien tarkistus
             } else if (note instanceof  Hold) {
                 if (note.getDistance() + ((Hold) note).getLength() <= 0) {
                     if (note.getSector() == player.getPointerSector()) {
@@ -213,6 +212,7 @@ GameScreen implements Screen {
                         ((Hold) note).setScored(true);
                     }
                 }
+                // Holdin pikkupalleroiden tarkistus
                 for (Hold.Tick tick : ((Hold) note).getTicks()) {
                     if (tick.getDistance() <= 0 && !tick.isScored()) {
                         if (tick.getSector() == player.getPointerSector()) {
@@ -224,6 +224,7 @@ GameScreen implements Screen {
                         }
                     }
                 }
+            // Slide-tyyppisten nuottirykelmien tarkistus
             } else if (note instanceof Slide) {
                 Iterator<Point> slideIter = ((Slide) note).getNotes().iterator();
                 while (slideIter.hasNext()) {
@@ -250,6 +251,8 @@ GameScreen implements Screen {
             camera.unproject(touchPos);
             if (pauseButton.contains(touchPos.x, touchPos.y)) {
                 paused = true;
+                // Väliaikainen kalibrointi paussinapissa
+                GameMain.calibrateZeroPoint();
             } else {
                 paused = false;
             }

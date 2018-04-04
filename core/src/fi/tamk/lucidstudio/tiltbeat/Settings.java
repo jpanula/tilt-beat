@@ -1,15 +1,14 @@
 package fi.tamk.lucidstudio.tiltbeat;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
@@ -26,9 +25,9 @@ public class Settings implements Screen {
     private Texture buttonTexture;
     BitmapFont heading;
     BitmapFont basic;
-    private Rectangle button1;
-    private Rectangle button2;
-    private Rectangle button3;
+    private Rectangle mode;
+    private Rectangle calibration;
+    private Rectangle sound;
     private Rectangle backButton;
     private Texture backButtonTexture;
 
@@ -42,9 +41,9 @@ public class Settings implements Screen {
         fontCamera = host.getFontCamera();
         heading = GameMain.getSmallerHeadingFont();
         basic = GameMain.getBasicFont();
-        button1 = new Rectangle(1.3f, 1.8f, 3.7f, 2f);
-        button2 = new Rectangle(6.15f, 1.8f, 3.7f, 2f);
-        button3 = new Rectangle(11f, 1.8f, 3.7f, 2f);
+        mode = new Rectangle(1.3f, 1.8f, 3.7f, 2f);
+        calibration = new Rectangle(6.15f, 1.8f, 3.7f, 2f);
+        sound = new Rectangle(11f, 1.8f, 3.7f, 2f);
         backButton = new Rectangle(0.2f, 8.8f, 1f, 1f);
     }
     @Override
@@ -62,9 +61,9 @@ public class Settings implements Screen {
         batch.setProjectionMatrix(camera.combined);
         //piirrellään tausta ja napit
         batch.draw(background, 0, 0 , 16, 10);
-        batch.draw(buttonTexture, button1.x, button1.y, button1.width, button1.height);
-        batch.draw(buttonTexture, button2.x, button2.y, button2.width, button2.height);
-        batch.draw(buttonTexture, button3.x, button3.y, button3.width, button3.height);
+        batch.draw(buttonTexture, mode.x, mode.y, mode.width, mode.height);
+        batch.draw(buttonTexture, calibration.x, calibration.y, calibration.width, calibration.height);
+        batch.draw(buttonTexture, sound.x, sound.y, sound.width, sound.height);
         batch.draw(backButtonTexture, backButton.x, backButton.y, backButton.width, backButton.height);
 
         batch.setProjectionMatrix(fontCamera.combined);
@@ -87,6 +86,10 @@ public class Settings implements Screen {
             camera.unproject(touchPos);
             if (backButton.contains(touchPos.x, touchPos.y)) {
                 host.setScreen(new MainMenu(host));
+            }
+            // Nollapisteen kalibrointi
+            if (calibration.contains(touchPos.x, touchPos.y)) {
+                GameMain.calibrateZeroPoint();
             }
         }
     }

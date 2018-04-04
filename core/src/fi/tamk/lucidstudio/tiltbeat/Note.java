@@ -67,6 +67,7 @@ class Point extends Note {
         return vector;
     }
 
+    // Kääntää nuotin kuvan vaakasuunnassa ympäri
     public void flip() {
         if (flipped) {
             flipped = false;
@@ -103,6 +104,7 @@ class Hold extends Note {
         private Vector2 vector;
         private boolean scored;
 
+        // Pikkupallerot Hold-nuottien välissä
         public Tick(int sector, float distance, Texture texture) {
             super(sector, distance);
             this.texture = texture;
@@ -192,6 +194,7 @@ class Slide extends Note {
 
     public Slide(int sector, float distance, ArrayList<Point> notes) {
         super(sector, distance);
+        // Muutetaan annetun nuottikasan sektorit ja etäisyys koko Sliden mukaan
         for (int i = 0; i < notes.size(); i++) {
             Point note = notes.get(i);
             note.setSector((note.getSector() + sector) % GameMain.getPlayerSides());
@@ -206,6 +209,7 @@ class Slide extends Note {
 
     public void draw(ShapeRenderer shapeRenderer) {
         for (int i = 0; i < notes.size() - 1; i++) {
+            // Piirretään ShapeRendererillä viiva Sliden sisällä olevien nuottien väliin
             Vector2 startPoint = (notes.get(i).getVector().add(new Vector2(GameMain.getScreenWidth() / 2, GameMain.getScreenHeight() / 2)));
             Vector2 endPoint = (notes.get(i + 1).getVector().add(new Vector2(GameMain.getScreenWidth() / 2, GameMain.getScreenHeight() / 2)));
             shapeRenderer.line(startPoint, endPoint);

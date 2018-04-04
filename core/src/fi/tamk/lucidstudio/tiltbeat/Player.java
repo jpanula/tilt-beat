@@ -78,9 +78,19 @@ public class Player {
                 }
             }
             // Osoittimen ohjaus accelerometrillä
-            if (Math.abs(Gdx.input.getAccelerometerY()) > GameMain.getAccelerometerDeadzone() || Math.abs(Gdx.input.getAccelerometerX()) > GameMain.getAccelerometerDeadzone()) {
+            /*if (Math.abs(Gdx.input.getAccelerometerY()) > GameMain.getAccelerometerDeadzone() || Math.abs(Gdx.input.getAccelerometerX()) > GameMain.getAccelerometerDeadzone()) {
                 hitbox.y = GameMain.getScreenHeight() / 2 - Math.min((Gdx.input.getAccelerometerX() / GameMain.getAccelerometerMax() * (GameMain.getPlayerInradius() - hitbox.radius * 2)), (GameMain.getPlayerInradius() - hitbox.radius * 2));
                 hitbox.x = GameMain.getScreenWidth() / 2 + Math.min((Gdx.input.getAccelerometerY() / GameMain.getAccelerometerMax() * (GameMain.getPlayerInradius() - hitbox.radius * 2)), (GameMain.getPlayerInradius() - hitbox.radius * 2));
+            }*/
+            if (Math.abs(GameMain.getZeroPointZ() - Gdx.input.getAccelerometerZ()) > GameMain.getAccelerometerDeadzone() || Math.abs(GameMain.getZeroPointY() - Gdx.input.getAccelerometerY()) > GameMain.getAccelerometerDeadzone()) {
+                hitbox.y = 0.05f + GameMain.getScreenHeight() / 2 + (Gdx.input.getAccelerometerZ() - GameMain.getZeroPointZ()) / 6;
+                hitbox.x = GameMain.getScreenWidth() / 2 + (Gdx.input.getAccelerometerY() - GameMain.getZeroPointY()) / 4;
+                Vector2 vector = new Vector2(hitbox.x - GameMain.getScreenWidth() / 2, hitbox.y - GameMain.getScreenHeight() / 2);
+                if (vector.len() > GameMain.getPlayerInradius()) {
+                    vector.setLength(GameMain.getPlayerInradius());
+                    hitbox.x = GameMain.getScreenWidth() / 2 + vector.x;
+                    hitbox.y = GameMain.getScreenHeight() / 2 + vector.y;
+                }
             }
         }
 
@@ -122,6 +132,7 @@ public class Player {
                     0.0203f, 0.65f,
                     0.205f, 0.905f
             };
+        // Kahdeksankulmion pisteet
         } else if (playerSides == 8) {
             texture = new Texture("eightside.png");
             vertices = new float[]{
@@ -134,6 +145,7 @@ public class Player {
                     0f, 0.5f,
                     0.1445f, 0.8555f
             };
+        // Kuusikulmion pisteet
         } else if (playerSides == 6) {
             texture = new Texture("sixside.png");
             vertices = new float[]{
@@ -147,15 +159,15 @@ public class Player {
         } else {
             throw new IllegalArgumentException("Invalid number of playerSides");
         }
+        // Sektorien muodostus
         for (int i = 0; i < playerSides; i++) {
             float[] triangleVerts = {
                     vertices[i * 2], vertices[i * 2 + 1],
                     vertices[(i * 2 + 2) % (playerSides * 2)], vertices[(i * 2 + 3) % (playerSides * 2)],
                     0.5f, 0.5f
             };
-            // Muodostetaan kolmiot ja kerrotaan koko ja sijainti oikeiksi, että se vastaa
-            // keskellä olevaa kulmion kuvaa
             sectors.add(new Polygon(triangleVerts));
+            // Asetetaan sektorien koko ja sijainti oikeiksi
             sectors.get(i).setScale(playerDiameter, playerDiameter);
             sectors.get(i).setPosition(GameMain.getScreenWidth() / 2 - radius, GameMain.getScreenHeight() / 2 - radius);
             // asetetaan sektori aktiiviseksi
@@ -203,7 +215,7 @@ public class Player {
     // Piirtometodi SpriteBatchille, käyttää kuvia
     public void draw(SpriteBatch batch) {
         batch.draw(texture, hitbox.getX(), hitbox.getY(), hitbox.getScaleX(), hitbox.getScaleY());
-        pointer.draw(batch);
+        //pointer.draw(batch);
     }
 
     // Piirtometodi ShapeRendererille, käyttää pisteitä / muotoja
@@ -212,7 +224,7 @@ public class Player {
         if (getPointerSector() > -1) {
             shapeRenderer.polygon(getSectorVertices(getPointerSector()));
         }
-        pointer.draw(shapeRenderer);
+        //pointer.draw(shapeRenderer);
     }
 
     public void move(OrthographicCamera camera) {
