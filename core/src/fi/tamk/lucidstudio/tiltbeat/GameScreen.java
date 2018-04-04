@@ -136,7 +136,7 @@ GameScreen implements Screen {
 
         player.draw(batch);
         for (Note note : song) {
-            note.draw(batch, playerSides);
+            note.draw(batch);
         }
 
         batch.setProjectionMatrix(fontCamera.combined);

@@ -3,6 +3,7 @@ package fi.tamk.lucidstudio.tiltbeat;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public abstract class Note {
             distance -= noteSpeed * Gdx.graphics.getDeltaTime();
     }
 
-    abstract void draw(SpriteBatch batch, int playerSides);
+    abstract void draw(SpriteBatch batch);
 }
 
 class Point extends Note {
@@ -48,12 +49,19 @@ class Point extends Note {
         height = (float) 0.7 * width;
         vector = new Vector2(distance, 0);
     }
+
+    public Vector2 getVector() {
+        vector.setLength(getDistance() + GameMain.getPlayerInradius());
+        vector.setAngle(90 - (360 / GameMain.getPlayerSides()) * getSector() - (360 / GameMain.getPlayerSides()) / 2);
+        return vector;
+    }
+
     @Override
-    void draw(SpriteBatch batch, int playerSides) {
+    void draw(SpriteBatch batch) {
         // Vektorilla lasketaan pelaajan kulmion kulmien perusteella nuottien liikerata kohti niiden
         // sektoreita
         vector.setLength(getDistance() + GameMain.getPlayerInradius());
-        vector.setAngle(90 - (360 / playerSides) * getSector() - (360 / playerSides) / 2);
+        vector.setAngle(90 - (360 / GameMain.getPlayerSides()) * getSector() - (360 / GameMain.getPlayerSides()) / 2);
         batch.draw(texture, GameMain.getScreenWidth() / 2 + vector.x - width / 2, GameMain.getScreenHeight() / 2 + vector.y - height / 2, width / 2, height / 2, width, height, 1, 1, vector.angle() - 90, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
     }
 }
@@ -92,9 +100,9 @@ class Hold extends Note {
         }
 
         @Override
-        void draw(SpriteBatch batch, int playerSides) {
+        void draw(SpriteBatch batch) {
             vector.setLength(getDistance() + GameMain.getPlayerInradius());
-            vector.setAngle(90 - (360 / playerSides) * getSector() - (360 / playerSides) / 2);
+            vector.setAngle(90 - (360 / GameMain.getPlayerSides()) * getSector() - (360 / GameMain.getPlayerSides()) / 2);
             if (getDistance() > 0)
             batch.draw(texture, GameMain.getScreenWidth() / 2 + vector.x - tickDiameter / 2, GameMain.getScreenHeight() / 2 + vector.y - tickDiameter / 2, tickDiameter, tickDiameter);
         }
@@ -135,19 +143,19 @@ class Hold extends Note {
      }
 
      @Override
-    void draw(SpriteBatch batch, int playerSides) {
+    void draw(SpriteBatch batch) {
         // Vektorilla lasketaan pelaajan kulmion kulmien perusteella nuottien liikerata kohti niiden
         // sektoreita
          for (Tick tick : ticks) {
-             tick.draw(batch, playerSides);
+             tick.draw(batch);
          }
         startPoint.setLength(getDistance() + GameMain.getPlayerInradius());
-        startPoint.setAngle(90 - (360 / playerSides) * getSector() - (360 / playerSides) / 2);
+        startPoint.setAngle(90 - (360 / GameMain.getPlayerSides()) * getSector() - (360 / GameMain.getPlayerSides()) / 2);
         if (getDistance() > 0) {
             batch.draw(texture, GameMain.getScreenWidth() / 2 + startPoint.x - width / 2, GameMain.getScreenHeight() / 2 + startPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, startPoint.angle() - 90, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
         }
         endPoint.setLength(getDistance() + length + GameMain.getPlayerInradius());
-        endPoint.setAngle(90 - (360 / playerSides) * getSector() - (360 / playerSides) / 2);
+        endPoint.setAngle(90 - (360 / GameMain.getPlayerSides()) * getSector() - (360 / GameMain.getPlayerSides()) / 2);
         batch.draw(texture, GameMain.getScreenWidth() / 2 + endPoint.x - width / 2, GameMain.getScreenHeight() / 2 + endPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, endPoint.angle() - 90, 0, 0, texture.getWidth(), texture.getHeight(), false, true);
     }
 
@@ -161,11 +169,10 @@ class Hold extends Note {
  }
 
 // TODO implementoi slide-tyyppinen nuotti
-class Slide extends Note {
+class Slide{
     private ArrayList<Point> notes;
 
-    public Slide(int sector, float distance, ArrayList<Point> notes) {
-        super(sector, distance);
+    public Slide(ArrayList<Point> notes) {
         this.notes = notes;
     }
 
@@ -173,8 +180,7 @@ class Slide extends Note {
         return notes;
     }
 
-    @Override
-    void draw(SpriteBatch batch, int playerSides) {
+    public void draw(ShapeRenderer shapeRenderer) {
 
     }
 }
