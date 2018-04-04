@@ -168,7 +168,6 @@ class Hold extends Note {
      }
  }
 
-// TODO implementoi slide-tyyppinen nuotti
 class Slide{
     private ArrayList<Point> notes;
 
@@ -176,11 +175,17 @@ class Slide{
         this.notes = notes;
     }
 
-    public ArrayList<Point> getNotes() {
-        return notes;
+    public void draw(ShapeRenderer shapeRenderer) {
+        for (int i = 0; i < notes.size() - 1; i++) {
+            Vector2 startPoint = notes.get(i).getVector();
+            Vector2 endPoint = notes.get(i).getVector();
+            shapeRenderer.line(startPoint, endPoint);
+        }
     }
 
-    public void draw(ShapeRenderer shapeRenderer) {
-
+    public void draw(SpriteBatch batch) {
+        for (int i = 0; i < notes.size(); i++) {
+            notes.get(i).draw(batch);
+        }
     }
 }
