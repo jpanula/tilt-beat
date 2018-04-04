@@ -73,7 +73,7 @@ GameScreen implements Screen {
                 random = MathUtils.random(0, (playerSides-1));
             }
 
-            song.add(new Hold(random, 12f * i * noteSpeed / 6 + 5, 1f * noteSpeed));
+            song.add(new Hold(random, 12f * i * noteSpeed / 6 + 5, new Texture("Smol Blue Hold.png"), 1f * noteSpeed));
         }
 
         points = 0;

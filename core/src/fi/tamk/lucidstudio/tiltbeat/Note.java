@@ -41,9 +41,9 @@ class Point extends Note {
     private float width;
     private float height;
 
-    public Point(int sector, float distance) {
+    public Point(int sector, float distance, Texture texture) {
         super(sector, distance);
-        texture = new Texture("Smol Yellow Slide.png");
+        this.texture = texture;
         width = 1;
         height = (float) 0.7 * width;
         vector = new Vector2(distance, 0);
@@ -58,8 +58,8 @@ class Point extends Note {
     }
 }
 
- class Hold extends Note {
-    private Texture noteTexture;
+class Hold extends Note {
+    private Texture texture;
     private Texture tickTexture;
     private Vector2 startPoint;
     private Vector2 endPoint;
@@ -76,9 +76,9 @@ class Point extends Note {
         private Vector2 vector;
         private boolean scored;
 
-        public Tick(int sector, float distance) {
+        public Tick(int sector, float distance, Texture texture) {
             super(sector, distance);
-            texture = tickTexture;
+            this.texture = texture;
             vector = new Vector2(distance, 0);
             scored = false;
         }
@@ -100,10 +100,10 @@ class Point extends Note {
         }
     }
 
-    public Hold(int sector, float distance, float length) {
+    public Hold(int sector, float distance, Texture texture, float length) {
         super(sector, distance);
-        noteTexture = new Texture("Smol Blue Hold.png");
         tickTexture = new Texture("Smol Blue Ball.png");
+        this.texture = texture;
         this.length = length;
         width = 1;
         tickDiameter = 0.2f;
@@ -113,7 +113,7 @@ class Point extends Note {
         endPoint = new Vector2(distance + length, 0);
         ticks = new ArrayList<Tick>();
         for (int i = 1; i < tickAmount; i++) {
-            ticks.add(new Tick(sector, distance + (float) i / tickAmount * length));
+            ticks.add(new Tick(sector, (distance + (float) i / tickAmount * length), tickTexture));
         }
 
     }
@@ -144,11 +144,11 @@ class Point extends Note {
         startPoint.setLength(getDistance() + GameMain.getPlayerInradius());
         startPoint.setAngle(90 - (360 / playerSides) * getSector() - (360 / playerSides) / 2);
         if (getDistance() > 0) {
-            batch.draw(noteTexture, GameMain.getScreenWidth() / 2 + startPoint.x - width / 2, GameMain.getScreenHeight() / 2 + startPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, startPoint.angle() - 90, 0, 0, noteTexture.getWidth(), noteTexture.getHeight(), false, false);
+            batch.draw(texture, GameMain.getScreenWidth() / 2 + startPoint.x - width / 2, GameMain.getScreenHeight() / 2 + startPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, startPoint.angle() - 90, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
         }
         endPoint.setLength(getDistance() + length + GameMain.getPlayerInradius());
         endPoint.setAngle(90 - (360 / playerSides) * getSector() - (360 / playerSides) / 2);
-        batch.draw(noteTexture, GameMain.getScreenWidth() / 2 + endPoint.x - width / 2, GameMain.getScreenHeight() / 2 + endPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, endPoint.angle() - 90, 0, 0, noteTexture.getWidth(), noteTexture.getHeight(), false, true);
+        batch.draw(texture, GameMain.getScreenWidth() / 2 + endPoint.x - width / 2, GameMain.getScreenHeight() / 2 + endPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, endPoint.angle() - 90, 0, 0, texture.getWidth(), texture.getHeight(), false, true);
     }
 
      @Override
@@ -161,9 +161,20 @@ class Point extends Note {
  }
 
 // TODO implementoi slide-tyyppinen nuotti
-/*class Slide extends Note {
+class Slide extends Note {
+    private ArrayList<Point> notes;
+
+    public Slide(int sector, float distance, ArrayList<Point> notes) {
+        super(sector, distance);
+        this.notes = notes;
+    }
+
+    public ArrayList<Point> getNotes() {
+        return notes;
+    }
+
     @Override
-    void draw(int playerSides) {
+    void draw(SpriteBatch batch, int playerSides) {
 
     }
-}*/
+}
