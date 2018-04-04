@@ -41,6 +41,7 @@ class Point extends Note {
     private Vector2 vector;
     private float width;
     private float height;
+    private boolean flipped;
 
     public Point(int sector, float distance, Texture texture) {
         super(sector, distance);
@@ -48,6 +49,7 @@ class Point extends Note {
         width = 1;
         height = (float) 0.7 * width;
         vector = new Vector2(distance, 0);
+        flipped = false;
     }
 
     public Vector2 getVector() {
@@ -56,13 +58,21 @@ class Point extends Note {
         return vector;
     }
 
+    public void flip() {
+        if (flipped) {
+            flipped = false;
+        } else {
+            flipped = true;
+        }
+    }
+
     @Override
     void draw(SpriteBatch batch) {
         // Vektorilla lasketaan pelaajan kulmion kulmien perusteella nuottien liikerata kohti niiden
         // sektoreita
         vector.setLength(getDistance() + GameMain.getPlayerInradius());
         vector.setAngle(90 - (360 / GameMain.getPlayerSides()) * getSector() - (360 / GameMain.getPlayerSides()) / 2);
-        batch.draw(texture, GameMain.getScreenWidth() / 2 + vector.x - width / 2, GameMain.getScreenHeight() / 2 + vector.y - height / 2, width / 2, height / 2, width, height, 1, 1, vector.angle() - 90, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
+        batch.draw(texture, GameMain.getScreenWidth() / 2 + vector.x - width / 2, GameMain.getScreenHeight() / 2 + vector.y - height / 2, width / 2, height / 2, width, height, 1, 1, vector.angle() - 90, 0, 0, texture.getWidth(), texture.getHeight(), flipped, false);
     }
 }
 
@@ -168,10 +178,11 @@ class Hold extends Note {
      }
  }
 
-class Slide{
+class Slide extends Note {
     private ArrayList<Point> notes;
 
-    public Slide(ArrayList<Point> notes) {
+    public Slide(int sector, float distance, ArrayList<Point> notes) {
+        super(sector, distance);
         this.notes = notes;
     }
 
