@@ -70,7 +70,6 @@ class Point extends Note {
     private int tickAmount;
     private ArrayList<Tick> ticks;
     private boolean scored;
-    //private float pointDiameter;
 
     class Tick extends Note {
         private Texture texture;
@@ -150,19 +149,6 @@ class Point extends Note {
         endPoint.setLength(getDistance() + length + GameMain.getPlayerInradius());
         endPoint.setAngle(90 - (360 / playerSides) * getSector() - (360 / playerSides) / 2);
         batch.draw(noteTexture, GameMain.getScreenWidth() / 2 + endPoint.x - width / 2, GameMain.getScreenHeight() / 2 + endPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, endPoint.angle() - 90, 0, 0, noteTexture.getWidth(), noteTexture.getHeight(), false, true);
-        /*for (int i = 1; i < pointAmount; i++) {
-            float x = (startPoint.x + (endPoint.x - startPoint.x) * i / pointAmount) - pointDiameter / 2;
-            float y = (startPoint.y + (endPoint.y - startPoint.y) * i / pointAmount) - pointDiameter / 2;
-            Vector2 pointVector = new Vector2(x, y);
-            float pointDistance = pointVector.len();
-            //float pointDistance = (float) Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-            if (pointDistance > GameMain.getPlayerInradius() - height) {
-                batch.draw(pointTexture, GameMain.getScreenWidth() / 2 + x, GameMain.getScreenHeight() / 2 + y, pointDiameter, pointDiameter);
-                if (getDistance() < 3) {
-                    System.out.println("Point distance: " + pointDistance + " Distance: " + getDistance());
-                }
-            }
-        }*/
     }
 
      @Override
@@ -181,20 +167,3 @@ class Point extends Note {
 
     }
 }*/
-
-// TODO arvioi onko luokka tarpeellinen vai voiko käyttää suoraan arraylistiä
-class Song {
-    ArrayList<Note> notes;
-
-    public Song() {
-        notes = new ArrayList<Note>();
-    }
-
-    public void addNote(Note note) {
-        notes.add(note);
-    }
-
-    public void removeNote(Note note) {
-        notes.remove(note);
-    }
-}

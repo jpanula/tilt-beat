@@ -16,6 +16,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
@@ -30,7 +31,7 @@ GameScreen implements Screen {
     private OrthographicCamera fontCamera;
     private ShapeRenderer shapeRenderer;
     private Player player;
-    private Song song;
+    private ArrayList<Note> song;
     private boolean paused;
     private boolean useShapeRenderer;
 
@@ -62,7 +63,8 @@ GameScreen implements Screen {
         player = new Player(playerSides, playerDiameter);
 
         noteSpeed = GameMain.getNoteSpeed();
-        song = new Song();
+        song = new ArrayList<Note>();
+
         for (int i = 0; i < 100 ; i++) {
             int random = MathUtils.random(0, (playerSides-1));
             random = moveNotes(random);
@@ -71,7 +73,7 @@ GameScreen implements Screen {
                 random = MathUtils.random(0, (playerSides-1));
             }
 
-            song.addNote(new Hold(random, 12f * i * noteSpeed / 6 + 5, 1f * noteSpeed));
+            song.add(new Hold(random, 12f * i * noteSpeed / 6 + 5, 1f * noteSpeed));
         }
 
         points = 0;
@@ -133,7 +135,7 @@ GameScreen implements Screen {
         batch.draw(pauseButtonTexture, pauseButton.x, pauseButton.y, pauseButton.width, pauseButton.height);
 
         player.draw(batch);
-        for (Note note : song.notes) {
+        for (Note note : song) {
             note.draw(batch, playerSides);
         }
 
@@ -167,7 +169,7 @@ GameScreen implements Screen {
         }
         // ArrayList pitää käydä läpi Iteratorilla, koska ArrayLististä ei voi poistaa elementtejä,
         // kun sen läpi iteroidaan. Iteraattorissa tämän voi tehdä.
-        Iterator<Note> iter = song.notes.iterator();
+        Iterator<Note> iter = song.iterator();
         while (iter.hasNext()) {
             Note note = iter.next();
             if (!paused) {
@@ -226,8 +228,6 @@ GameScreen implements Screen {
             camera.unproject(touchPos);
             if (pauseButton.contains(touchPos.x, touchPos.y)) {
                 paused = true;
-            //} else if (pauseButton.contains(touchPos.x, touchPos.y) && paused) {
-            //    paused = false;
             } else {
                 paused = false;
             }
