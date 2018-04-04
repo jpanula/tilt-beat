@@ -72,8 +72,11 @@ GameScreen implements Screen {
             while (!isSectorActive(random)) {
                 random = MathUtils.random(0, (playerSides-1));
             }
-
-            song.add(new Hold(random, 12f * i * noteSpeed / 6 + 5, new Texture("Smol Blue Hold.png"), 1f * noteSpeed));
+            ArrayList<Point> slide = new ArrayList<Point>();
+            for (int j = 0; j < 3; j++) {
+                slide.add(new Point(i + j % 10, (7f * j * noteSpeed / 6 + 5), new Texture("Smol Green Slide.png")));
+            }
+            song.add(new Slide(random, 30f * i * noteSpeed / 6 + 5, slide));
         }
 
         points = 0;
@@ -156,6 +159,11 @@ GameScreen implements Screen {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
             shapeRenderer.setColor(1, 0, 1, 1);
             player.draw(shapeRenderer);
+            for (Note note : song) {
+                if (note instanceof Slide) {
+                    ((Slide) note).draw(shapeRenderer);
+                }
+            }
             shapeRenderer.end();
         }
 
@@ -213,6 +221,20 @@ GameScreen implements Screen {
                         } else {
                             System.out.println("FAIL!");
                             tick.setScored(true);
+                        }
+                    }
+                }
+            } else if (note instanceof Slide) {
+                Iterator<Point> slideIter = ((Slide) note).getNotes().iterator();
+                while (slideIter.hasNext()) {
+                    Point point = slideIter.next();
+                    if (point.getDistance() <= 0) {
+                        if (point.getSector() == player.getPointerSector()) {
+                            points += 10;
+                            slideIter.remove();
+                        } else {
+                            System.out.println("FAIL!");
+                            slideIter.remove();
                         }
                     }
                 }

@@ -1,5 +1,6 @@
 package fi.tamk.lucidstudio.tiltbeat;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -25,8 +26,16 @@ public abstract class Note {
         return sector;
     }
 
+    public void setSector(int sector) {
+        this.sector = sector;
+    }
+
     public float getDistance() {
         return distance;
+    }
+
+    public void setDistance(float distance) {
+        this.distance = distance;
     }
 
     public void move(float noteSpeed) {
@@ -183,13 +192,22 @@ class Slide extends Note {
 
     public Slide(int sector, float distance, ArrayList<Point> notes) {
         super(sector, distance);
+        for (int i = 0; i < notes.size(); i++) {
+            Point note = notes.get(i);
+            note.setSector((note.getSector() + sector) % GameMain.getPlayerSides());
+            note.setDistance(note.getDistance() + distance);
+        }
         this.notes = notes;
+    }
+
+    public ArrayList<Point> getNotes() {
+        return notes;
     }
 
     public void draw(ShapeRenderer shapeRenderer) {
         for (int i = 0; i < notes.size() - 1; i++) {
-            Vector2 startPoint = notes.get(i).getVector();
-            Vector2 endPoint = notes.get(i).getVector();
+            Vector2 startPoint = (notes.get(i).getVector().add(new Vector2(GameMain.getScreenWidth() / 2, GameMain.getScreenHeight() / 2)));
+            Vector2 endPoint = (notes.get(i + 1).getVector().add(new Vector2(GameMain.getScreenWidth() / 2, GameMain.getScreenHeight() / 2)));
             shapeRenderer.line(startPoint, endPoint);
         }
     }
@@ -197,6 +215,14 @@ class Slide extends Note {
     public void draw(SpriteBatch batch) {
         for (int i = 0; i < notes.size(); i++) {
             notes.get(i).draw(batch);
+        }
+    }
+
+    @Override
+    public void move(float noteSpeed) {
+        super.move(noteSpeed);
+        for (Point note : notes) {
+            note.move(noteSpeed);
         }
     }
 }

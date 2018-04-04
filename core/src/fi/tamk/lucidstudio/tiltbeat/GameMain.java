@@ -25,7 +25,7 @@ public class GameMain extends Game {
 	private static final float SCREEN_WIDTH_PIXELS = 1280;
 	private static final float SCREEN_HEIGHT_PIXELS = 800;
 	private static int playerSides = 10;
-	private static float noteSpeed = 0.8f;
+	private static float noteSpeed = 3f;
 	private static float playerDiameter = 3;
     private static float accelerometerDeadzone = 0.25f;
 	private static float accelerometerMax = 3f;
