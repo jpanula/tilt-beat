@@ -23,13 +23,13 @@ public class Settings implements Screen {
     private OrthographicCamera fontCamera;
     private Texture background;
     private Texture buttonTexture;
+    private Texture backButtonTexture;
     BitmapFont heading;
     BitmapFont basic;
     private Rectangle mode;
     private Rectangle calibration;
     private Rectangle sound;
     private Rectangle backButton;
-    private Texture backButtonTexture;
 
     public Settings(GameMain host) {
         this.host = host;
@@ -44,7 +44,7 @@ public class Settings implements Screen {
         mode = new Rectangle(1.3f, 1.8f, 3.7f, 2f);
         calibration = new Rectangle(6.15f, 1.8f, 3.7f, 2f);
         sound = new Rectangle(11f, 1.8f, 3.7f, 2f);
-        backButton = new Rectangle(0.2f, 8.8f, 1f, 1f);
+        backButton = new Rectangle(0.2f, 8.3f, 1.5f, 1.5f);
     }
     @Override
     public void show() {

@@ -39,7 +39,7 @@ public class MainMenu implements Screen {
         batch = host.getBatch();
         camera = host.getCamera();
         fontCamera = host.getFontCamera();
-        button = new Texture(Gdx.files.internal("nappi1.png"));
+        button = GameMain.getButtonTexture();
         background = GameMain.getBackgroundTexture();
 
         buttonPlay = new Rectangle(2.8f, 4f, 4f, 1.7f);

@@ -46,7 +46,7 @@ public class Highscore implements Screen {
         button1 = new Rectangle(1.3f, 1.8f, 3.7f, 2f);
         button2 = new Rectangle(6.15f, 1.8f, 3.7f, 2f);
         button3 = new Rectangle(11f, 1.8f, 3.7f, 2f);
-        backButton = new Rectangle(0.2f, 8.8f, 1f, 1f);
+        backButton = new Rectangle(0.2f, 8.3f, 1.5f, 1.5f);
     }
 
     @Override

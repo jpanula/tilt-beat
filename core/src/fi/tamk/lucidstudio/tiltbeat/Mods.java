@@ -65,7 +65,7 @@ public class Mods implements Screen {
         buttonTexture = GameMain.getButtonTexture();
         buttonPressedTexture = GameMain.getButtonPressedTexture();
         backButtonTexture = GameMain.getBackButtonTexture();
-        textBoxTexture = buttonTexture;
+        textBoxTexture = GameMain.getTextBoxTexture();
 
         button6Texture = buttonTexture;
         button8Texture = buttonTexture;
@@ -74,7 +74,7 @@ public class Mods implements Screen {
         button6 = new Rectangle(1f, 4.5f, 3f, 1.5f);
         button8 = new Rectangle(1f, 2.5f, 3f, 1.5f);
         button10 = new Rectangle(1f, 0.5f, 3f, 1.5f);
-        backButton = new Rectangle(0.2f, 8.8f, 1f, 1f);
+        backButton = new Rectangle(0.2f, 8.3f, 1.5f, 1.5f);
         textBox = new Rectangle(10.5f, 1.5f, 5.5f, 5f);
 
         playerSides = GameMain.getPlayerSides();
@@ -224,22 +224,12 @@ public class Mods implements Screen {
                 button8Texture = buttonTexture;
                 button10Texture = buttonPressedTexture;
             }
-            for (Polygon polygon: sectors) {
-                if(polygon.contains(touchPos.x, touchPos.y)) {
-
-                }
-            }
             for (int i=0 ; i<playerSides ; i++) {
                 Polygon polygon = sectors.get(i);
                 if(polygon.contains(touchPos.x, touchPos.y)) {
                     Player.setActiveSectors(i);
                 }
             }
-            /* jotain että sektori aktivoituu/deaktivoituu
-            if (testSector.contains(touchPos.x, touchPos.y)) {
-
-                polygonTexture = new Texture("eightside.png");
-            }*/
         }
 
     }

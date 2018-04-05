@@ -31,10 +31,12 @@ public class GameMain extends Game {
 	private static float accelerometerMax = 3f;
     private static Texture background;
     private static Texture button;
+    private static Texture buttonHigh;
     private static Texture buttonPressed;
 	private static Texture pauseButton;
 	private static Texture backButton;
     private static Texture playButton;
+    private static Texture textBox;
 	private static BitmapFont smallFont;
 	private static BitmapFont basicFont;
 	private static BitmapFont headingFont;
@@ -91,13 +93,17 @@ public class GameMain extends Game {
 
     public static Texture getButtonTexture() { return button; }
 
+    public static Texture getButtonHighTexture() { return buttonHigh; }
+
     public static Texture getButtonPressedTexture() { return buttonPressed; }
 
 	public static Texture getBackButtonTexture() { return backButton; }
 
 	public static Texture getPauseButtonTexture() { return pauseButton; }
 
-    public static Texture getPlayButtonTexture() { return pauseButton; }
+    public static Texture getPlayButtonTexture() { return playButton; }
+
+    public static Texture getTextBoxTexture() { return textBox; }
 
 	public static BitmapFont getHeadingFont() { return headingFont; }
 
@@ -144,10 +150,13 @@ public class GameMain extends Game {
 		fontCamera.setToOrtho(false, SCREEN_WIDTH_PIXELS, SCREEN_HEIGHT_PIXELS);
 
 		background = new Texture(Gdx.files.internal("Galaxy blue.png"));
-        button = new Texture(Gdx.files.internal("nappi1.png"));
+        button = new Texture(Gdx.files.internal("nappi1korkee.png"));
+        buttonHigh = new Texture(Gdx.files.internal("nappi1korkee.png"));
         buttonPressed = new Texture(Gdx.files.internal("nappi2.png"));
         pauseButton = new Texture(Gdx.files.internal("pausenappi.png"));
-		backButton = new Texture(Gdx.files.internal("backTemp.png"));
+		backButton = new Texture(Gdx.files.internal("backnappi.png"));
+		playButton = new Texture(Gdx.files.internal("playnappi.png"));
+		textBox = new Texture(Gdx.files.internal("folio.png"));
         //playButton = new Texture(Gdx.files.internal("playButton.png"));
 
 		createFonts();

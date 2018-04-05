@@ -17,12 +17,14 @@ import com.badlogic.gdx.math.Vector3;
 public class Difficulty implements Screen {
     private GameMain host;
     private SpriteBatch batch;
-    private BitmapFont heading;
+    private BitmapFont small;
     private BitmapFont basic;
+    private BitmapFont heading;
     private OrthographicCamera camera;
     private OrthographicCamera fontCamera;
     private Texture background;
     private Texture buttonTexture;
+    private Texture buttonHighTexture;
     private Rectangle buttonEasy;
     private Rectangle buttonNormal;
     private Rectangle buttonHard;
@@ -32,6 +34,12 @@ public class Difficulty implements Screen {
     private Texture backButtonTexture;
     private Texture playButtonTexture;
     private String difficulty;
+    private Rectangle textBox;
+    private Texture textBoxTexture;
+    private Texture buttonPressedTexture;
+    private Rectangle buttonSong1;
+    private Rectangle buttonSong2;
+    private Rectangle buttonSong3;
 
     public Difficulty(GameMain host) {
         this.host = host;
@@ -40,19 +48,27 @@ public class Difficulty implements Screen {
         fontCamera = host.getFontCamera();
         heading = GameMain.getSmallerHeadingFont();
         basic = GameMain.getBasicFont();
+        small = GameMain.getSmallFont();
         background = GameMain.getBackgroundTexture();
         buttonTexture = GameMain.getButtonTexture();
+        buttonHighTexture = GameMain.getButtonHighTexture();
+        buttonPressedTexture = GameMain.getButtonPressedTexture();
         backButtonTexture = GameMain.getBackButtonTexture();
         playButtonTexture = GameMain.getPlayButtonTexture();
+        textBoxTexture = GameMain.getTextBoxTexture();
 
         difficulty = "normal";
 
-        buttonEasy = new Rectangle(1.5f, 4.5f, 2.5f, 2.5f);
-        buttonNormal = new Rectangle(5f, 4.5f, 2.5f, 2.5f);
-        buttonHard = new Rectangle(8.5f, 4.5f, 2.5f, 2.5f);
-        buttonBackBreaker = new Rectangle(12f, 4.5f, 2.5f, 2.5f);
-        backButton = new Rectangle(0.2f, 8.8f, 1f, 1f);
-        playButton = new Rectangle(14.5f, 0.5f, 1f, 1f);
+        buttonEasy = new Rectangle(.5f, .5f, 2.6f, 2f);
+        buttonNormal = new Rectangle(4f, .5f, 2.6f, 2f);
+        buttonHard = new Rectangle(7.5f, .5f, 2.6f, 2f);
+        buttonBackBreaker = new Rectangle(11f, .5f, 2.6f, 2f);
+        backButton = new Rectangle(0.2f, 8.3f, 1.5f, 1.5f);
+        playButton = new Rectangle(14f, 0.5f, 1.5f, 1.5f);
+        textBox = new Rectangle(1f, 3f, 7f, 4.6f);
+        buttonSong1 = new Rectangle(10f, 7f, 5f, 1.5f);
+        buttonSong2 = new Rectangle(10f, 5f, 5f, 1.5f);
+        buttonSong3 = new Rectangle(10f, 3f, 5f, 1.5f);
     }
 
     @Override
@@ -71,21 +87,29 @@ public class Difficulty implements Screen {
         //piirrellään tausta ja napit
         batch.draw(background, 0, 0 , 16, 10);
         batch.draw(backButtonTexture, backButton.x, backButton.y, backButton.width, backButton.height);
-        batch.draw(backButtonTexture, playButton.x, playButton.y, playButton.width, playButton.height);
-        batch.draw(buttonTexture, buttonEasy.x, buttonEasy.y, buttonEasy.width, buttonEasy.height);
-        batch.draw(buttonTexture, buttonNormal.x, buttonNormal.y, buttonNormal.width, buttonNormal.height);
-        batch.draw(buttonTexture, buttonHard.x, buttonHard.y, buttonHard.width, buttonHard.height);
-        batch.draw(buttonTexture, buttonBackBreaker.x, buttonBackBreaker.y, buttonBackBreaker.width, buttonBackBreaker.height);
+        batch.draw(playButtonTexture, playButton.x, playButton.y, playButton.width, playButton.height);
+        batch.draw(buttonHighTexture, buttonEasy.x, buttonEasy.y, buttonEasy.width, buttonEasy.height);
+        batch.draw(buttonHighTexture, buttonNormal.x, buttonNormal.y, buttonNormal.width, buttonNormal.height);
+        batch.draw(buttonHighTexture, buttonHard.x, buttonHard.y, buttonHard.width, buttonHard.height);
+        batch.draw(buttonHighTexture, buttonBackBreaker.x, buttonBackBreaker.y, buttonBackBreaker.width, buttonBackBreaker.height);
+        batch.draw(textBoxTexture, textBox.x, textBox.y, textBox.width, textBox.height);
+        batch.draw(buttonTexture, buttonSong1.x, buttonSong1.y, buttonSong1.width, buttonSong1.height);
+        batch.draw(buttonTexture, buttonSong2.x, buttonSong2.y, buttonSong2.width, buttonSong2.height);
+        batch.draw(buttonTexture, buttonSong3.x, buttonSong3.y, buttonSong3.width, buttonSong3.height);
 
         batch.setProjectionMatrix(fontCamera.combined);
         //piirrellään fontit
-        heading.draw(batch, "Difficulty" , 250, 680);
-        basic.draw(batch, "easy" , 150, 500);
-        basic.draw(batch, "normal" , 430, 500);
-        basic.draw(batch, "hard" , 700, 500);
-        basic.draw(batch, "back-" , 1000, 510);
-        basic.draw(batch, "breaker" , 975, 450);
-        heading.draw(batch, difficulty + "" , 300, 200);
+        heading.draw(batch, "Difficulty" , 180, 720);
+        basic.draw(batch, "easy" , 80, 160);
+        basic.draw(batch, "normal" , 350, 160);
+        basic.draw(batch, "hard" , 650, 160);
+        basic.draw(batch, "back-" , 925, 190);
+        basic.draw(batch, "breaker" , 900, 140);
+        heading.draw(batch, difficulty + "" , 150, 500);
+        basic.draw(batch, "difficulty description" , 150, 400);
+        small.draw(batch, "song 3" , 900, 320);
+        small.draw(batch, "song 2" , 900, 490);
+        small.draw(batch, "song 1" , 900, 650);
 
         batch.end();
 
