@@ -31,8 +31,11 @@ public class GameMain extends Game {
 	private static float accelerometerMax = 3f;
     private static Texture background;
     private static Texture button;
+    private static Texture buttonPressed;
 	private static Texture pauseButton;
 	private static Texture backButton;
+    private static Texture playButton;
+	private static BitmapFont smallFont;
 	private static BitmapFont basicFont;
 	private static BitmapFont headingFont;
     private static BitmapFont smallerHeadingFont;
@@ -88,11 +91,17 @@ public class GameMain extends Game {
 
     public static Texture getButtonTexture() { return button; }
 
+    public static Texture getButtonPressedTexture() { return buttonPressed; }
+
 	public static Texture getBackButtonTexture() { return backButton; }
 
 	public static Texture getPauseButtonTexture() { return pauseButton; }
 
+    public static Texture getPlayButtonTexture() { return pauseButton; }
+
 	public static BitmapFont getHeadingFont() { return headingFont; }
+
+	public static BitmapFont getSmallFont() { return smallFont; }
 
 	public static BitmapFont getBasicFont() { return basicFont; }
 
@@ -136,8 +145,10 @@ public class GameMain extends Game {
 
 		background = new Texture(Gdx.files.internal("Galaxy blue.png"));
         button = new Texture(Gdx.files.internal("nappi1.png"));
+        buttonPressed = new Texture(Gdx.files.internal("nappi2.png"));
         pauseButton = new Texture(Gdx.files.internal("pausenappi.png"));
 		backButton = new Texture(Gdx.files.internal("backTemp.png"));
+        //playButton = new Texture(Gdx.files.internal("playButton.png"));
 
 		createFonts();
         //menu = new MainMenu(this);
@@ -149,6 +160,11 @@ public class GameMain extends Game {
 	public void createFonts() {
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("grove.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+
+		//luodaan pieni fontti
+		parameter.size = 40;
+		parameter.color = Color.WHITE;
+		smallFont = generator.generateFont(parameter);
 
 		//luodaan perusfontti
 		parameter.size = 50;

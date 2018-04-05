@@ -269,6 +269,7 @@ GameScreen implements Screen {
     public void pause() {
         paused = true;
     }
+
     @Override
     public void resume() {
         paused = true;

@@ -75,7 +75,6 @@ public class Highscore implements Screen {
         batch.setProjectionMatrix(fontCamera.combined);
         //piirrellään fontit
         heading.draw(batch, "Highscore" , 300, 650);
-        basic.draw(batch, "press M to exit to main menu" , 280, 440);
 
         basic.draw(batch, "1:  anna              817p" , 200, 300);
         basic.draw(batch, "2:  miko              647p" , 200, 240);
@@ -83,10 +82,6 @@ public class Highscore implements Screen {
         basic.draw(batch, "4:  jaakko             17p" , 200, 120);
 
         batch.end();
-
-        if ( Gdx.input.isKeyPressed(Input.Keys.M)) {
-            host.setScreen(new MainMenu(host));
-        }
 
         if (Gdx.input.isTouched()) {
             Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);

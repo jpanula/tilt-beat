@@ -69,7 +69,6 @@ public class Settings implements Screen {
         batch.setProjectionMatrix(fontCamera.combined);
         //piirrellään fontit
         heading.draw(batch, "Settings" , 250, 700);
-        basic.draw(batch, "press M to exit to main menu" , 280, 400);
 
         basic.draw(batch, "mode" , 195, 250);
         basic.draw(batch, "calibration" , 525, 250);

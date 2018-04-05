@@ -30,6 +30,7 @@ public class Difficulty implements Screen {
     private Rectangle backButton;
     private Rectangle playButton;
     private Texture backButtonTexture;
+    private Texture playButtonTexture;
     private String difficulty;
 
     public Difficulty(GameMain host) {
@@ -42,6 +43,7 @@ public class Difficulty implements Screen {
         background = GameMain.getBackgroundTexture();
         buttonTexture = GameMain.getButtonTexture();
         backButtonTexture = GameMain.getBackButtonTexture();
+        playButtonTexture = GameMain.getPlayButtonTexture();
 
         difficulty = "normal";
 
@@ -79,9 +81,10 @@ public class Difficulty implements Screen {
         //piirrellään fontit
         heading.draw(batch, "Difficulty" , 250, 680);
         basic.draw(batch, "easy" , 150, 500);
-        basic.draw(batch, "normal" , 400, 500);
+        basic.draw(batch, "normal" , 430, 500);
         basic.draw(batch, "hard" , 700, 500);
-        basic.draw(batch, "backbreaker" , 900, 500);
+        basic.draw(batch, "back-" , 1000, 510);
+        basic.draw(batch, "breaker" , 975, 450);
         heading.draw(batch, difficulty + "" , 300, 200);
 
         batch.end();
