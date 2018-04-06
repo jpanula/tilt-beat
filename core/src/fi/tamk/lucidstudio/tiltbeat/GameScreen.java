@@ -3,7 +3,6 @@ package fi.tamk.lucidstudio.tiltbeat;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -25,7 +24,7 @@ import java.util.Iterator;
  */
 
 public class
-GameScreen extends InputAdapter implements Screen {
+GameScreen implements Screen {
     private GameMain host;
     private SpriteBatch batch;
     private OrthographicCamera camera;
@@ -35,6 +34,7 @@ GameScreen extends InputAdapter implements Screen {
     private ArrayList<Note> song;
     private boolean paused;
     private boolean useShapeRenderer;
+    private Texture noteTexture;
 
     private int playerSides;
     private float playerDiameter;
@@ -65,6 +65,7 @@ GameScreen extends InputAdapter implements Screen {
 
         noteSpeed = GameMain.getNoteSpeed();
         song = new ArrayList<Note>();
+        noteTexture = new Texture("Smol Red.png");
 
         for (int i = 0; i < 100 ; i++) {
             int random = MathUtils.random(0, (playerSides-1));
@@ -73,7 +74,16 @@ GameScreen extends InputAdapter implements Screen {
             while (!isSectorActive(random)) {
                 random = MathUtils.random(0, (playerSides-1));
             }
-            song.add(new Point(random, 2f * i * noteSpeed, new Texture("Smol Red.png")));
+            int rand = MathUtils.random(0, 5);
+            for (int j = 0; j < 3; j++) {
+                if (rand == 0) {
+                song.add(new Point(((random + j) % playerSides), 2.5f * i * noteSpeed + j * 0.8f * noteSpeed, noteTexture));
+                } else if (rand == 1) {
+                    song.add(new Point(((random - j) % playerSides), 2.5f * i * noteSpeed + j * 0.8f * noteSpeed, noteTexture));
+                } else {
+                    song.add(new Point(((random) % playerSides), 2.5f * i * noteSpeed + j * 0.5f *  noteSpeed, noteTexture));
+                }
+            }
         }
 
         points = 0;
@@ -82,7 +92,7 @@ GameScreen extends InputAdapter implements Screen {
         background = new Texture(Gdx.files.internal("Galaxy dark purple.png"));
 
         pauseButtonTexture = GameMain.getPauseButtonTexture();
-        pauseButton = new Rectangle(0.2f, 8.3f, 1.5f, 1.5f);
+        pauseButton = new Rectangle(0.2f, 8.8f, 1f, 1f);
         paused = false;
 
         useShapeRenderer = true;
@@ -142,10 +152,9 @@ GameScreen extends InputAdapter implements Screen {
         batch.setProjectionMatrix(fontCamera.combined);
         basic.draw(batch, "points: " + points, 50, 100);
         // Piirrellään Accelerometerin arvoja ruudulle
-        basic.draw(batch, "X: " + Gdx.input.getAccelerometerX(), Gdx.graphics.getWidth() * 2/3, Gdx.graphics.getHeight() / 3);
-        basic.draw(batch, " Y: " + Gdx.input.getAccelerometerY(), Gdx.graphics.getWidth() * 2/3, Gdx.graphics.getHeight() / 3 - 50);
-        basic.draw(batch, " Z: " + Gdx.input.getAccelerometerZ(), Gdx.graphics.getWidth() * 2/3, Gdx.graphics.getHeight() / 3 - 100);
-
+        basic.draw(batch, "X: " + Gdx.input.getAccelerometerX(), 50, 300);
+        basic.draw(batch, " Y: " + Gdx.input.getAccelerometerY(), 50, 250);
+        basic.draw(batch, " Z: " + Gdx.input.getAccelerometerZ(), 50, 200);
         if (paused) {
             heading.draw(batch, "PAUSE", 420, 450);
         }
@@ -255,8 +264,9 @@ GameScreen extends InputAdapter implements Screen {
                 paused = true;
                 // Väliaikainen kalibrointi paussinapissa
                 GameMain.calibrateZeroPoint();
+                //player.pointer.resetSmoothing();
             } else {
-                //paused = false;
+                paused = false;
             }
         }
 
@@ -268,7 +278,9 @@ GameScreen extends InputAdapter implements Screen {
     }
 
     @Override
-    public void pause() { paused = true; }
+    public void pause() {
+        paused = true;
+    }
 
     @Override
     public void resume() {

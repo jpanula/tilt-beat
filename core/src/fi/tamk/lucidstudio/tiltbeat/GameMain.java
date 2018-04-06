@@ -27,7 +27,7 @@ public class GameMain extends Game {
 	private static int playerSides = 10;
 	private static float noteSpeed = 3f;
 	private static float playerDiameter = 3;
-    private static float accelerometerDeadzone = 1f;
+    private static float accelerometerDeadzone = 0.25f;
 	private static float accelerometerMax = 3f;
     private static String songChoice = "song 1";
     private static String difficulty = "normal";
@@ -47,6 +47,7 @@ public class GameMain extends Game {
 	private static float zeroPointX = 0;
 	private static float zeroPointY = 0;
 	private static float zeroPointZ = 0;
+	private static int smoothingSamples = 15;
 
 	public static void setPlayerSides(int a) { playerSides = a; }
 
@@ -143,7 +144,11 @@ public class GameMain extends Game {
         return zeroPointZ;
     }
 
-    // Kalibroi nollapistearvot nykyisiin
+	public static int getSmoothingSamples() {
+		return smoothingSamples;
+	}
+
+	// Kalibroi nollapistearvot nykyisiin
     public static void calibrateZeroPoint() {
 		zeroPointX = Gdx.input.getAccelerometerX();
 		zeroPointY = Gdx.input.getAccelerometerY();
