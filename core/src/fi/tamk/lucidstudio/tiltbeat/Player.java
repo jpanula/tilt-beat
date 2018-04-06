@@ -45,8 +45,8 @@ public class Player {
             @Override
             public void run() {
                 while(true) {
-                    xSmoother[smoothIndex % smoothingSamples] = Gdx.input.getAccelerometerY();
-                    ySmoother[smoothIndex % smoothingSamples] = Gdx.input.getAccelerometerZ();
+                    xSmoother[smoothIndex % smoothingSamples] = Gdx.input.getAccelerometerY() - GameMain.getZeroPointY();
+                    ySmoother[smoothIndex % smoothingSamples] = Gdx.input.getAccelerometerZ() - GameMain.getZeroPointZ();
                     smoothIndex++;
                     try {
                         Thread.sleep(5);
@@ -131,7 +131,6 @@ public class Player {
                     hitbox.x = GameMain.getScreenWidth() / 2 + vector.x;
                     hitbox.y = GameMain.getScreenHeight() / 2 + vector.y;
                 }
-                System.out.println("X: " + avgX + " Y: " + avgY);
             }
         }
 
