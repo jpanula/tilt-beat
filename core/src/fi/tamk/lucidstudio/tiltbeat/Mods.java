@@ -203,21 +203,21 @@ public class Mods implements Screen {
             if (backButton.contains(touchPos.x, touchPos.y)) {
                 host.setScreen(new MainMenu(host));
             }
-            if (button6.contains(touchPos.x, touchPos.y)) {
+            if (button6.contains(touchPos.x, touchPos.y) || GameMain.getPlayerSides() == 6) {
                 GameMain.setPlayerSides(6);
                 createSixside();
                 button6Texture = buttonPressedTexture;
                 button8Texture = buttonTexture;
                 button10Texture = buttonTexture;
             }
-            if (button8.contains(touchPos.x, touchPos.y)) {
+            if (button8.contains(touchPos.x, touchPos.y) || GameMain.getPlayerSides() == 8) {
                 GameMain.setPlayerSides(8);
                 createEightside();
                 button6Texture = buttonTexture;
                 button8Texture = buttonPressedTexture;
                 button10Texture = buttonTexture;
             }
-            if (button10.contains(touchPos.x, touchPos.y)) {
+            if (button10.contains(touchPos.x, touchPos.y) || GameMain.getPlayerSides() == 10) {
                 GameMain.setPlayerSides(10);
                 createTenside();
                 button6Texture = buttonTexture;
