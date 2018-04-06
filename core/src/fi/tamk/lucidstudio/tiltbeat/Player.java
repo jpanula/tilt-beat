@@ -44,12 +44,15 @@ public class Player {
         class inputSmoother implements Runnable {
             @Override
             public void run() {
-                xSmoother[smoothIndex % smoothingSamples] = Gdx.input.getAccelerometerY();
-                ySmoother[smoothIndex % smoothingSamples] = Gdx.input.getAccelerometerZ();
-                smoothIndex++;
-                try {
-                    Thread.sleep(5);
-                } catch (Exception e) {}
+                while(true) {
+                    xSmoother[smoothIndex % smoothingSamples] = Gdx.input.getAccelerometerY();
+                    ySmoother[smoothIndex % smoothingSamples] = Gdx.input.getAccelerometerZ();
+                    smoothIndex++;
+                    try {
+                        Thread.sleep(5);
+                    } catch (Exception e) {
+                    }
+                }
             }
         }
 
@@ -128,6 +131,7 @@ public class Player {
                     hitbox.x = GameMain.getScreenWidth() / 2 + vector.x;
                     hitbox.y = GameMain.getScreenHeight() / 2 + vector.y;
                 }
+                System.out.println("X: " + avgX + " Y: " + avgY);
             }
         }
 
@@ -262,7 +266,7 @@ public class Player {
         if (getPointerSector() > -1) {
             shapeRenderer.polygon(getSectorVertices(getPointerSector()));
         }
-        //pointer.draw(shapeRenderer);
+        pointer.draw(shapeRenderer);
     }
 
     public void move(OrthographicCamera camera) {

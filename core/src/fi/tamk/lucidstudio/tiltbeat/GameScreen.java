@@ -152,9 +152,9 @@ GameScreen implements Screen {
         batch.setProjectionMatrix(fontCamera.combined);
         basic.draw(batch, "points: " + points, 50, 100);
         // Piirrellään Accelerometerin arvoja ruudulle
-        basic.draw(batch, "X: " + Gdx.input.getAccelerometerX(), Gdx.graphics.getWidth() * 2/3, Gdx.graphics.getHeight() / 3);
-        basic.draw(batch, " Y: " + Gdx.input.getAccelerometerY(), Gdx.graphics.getWidth() * 2/3, Gdx.graphics.getHeight() / 3 - 50);
-        basic.draw(batch, " Z: " + Gdx.input.getAccelerometerZ(), Gdx.graphics.getWidth() * 2/3, Gdx.graphics.getHeight() / 3 - 100);
+        basic.draw(batch, "X: " + Gdx.input.getAccelerometerX(), 50, 300);
+        basic.draw(batch, " Y: " + Gdx.input.getAccelerometerY(), 50, 250);
+        basic.draw(batch, " Z: " + Gdx.input.getAccelerometerZ(), 50, 200);
         if (paused) {
             heading.draw(batch, "PAUSE", 420, 450);
         }
@@ -264,7 +264,7 @@ GameScreen implements Screen {
                 paused = true;
                 // Väliaikainen kalibrointi paussinapissa
                 GameMain.calibrateZeroPoint();
-                player.pointer.resetSmoothing();
+                //player.pointer.resetSmoothing();
             } else {
                 paused = false;
             }
