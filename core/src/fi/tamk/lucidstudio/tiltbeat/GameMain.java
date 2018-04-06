@@ -29,6 +29,8 @@ public class GameMain extends Game {
 	private static float playerDiameter = 3;
     private static float accelerometerDeadzone = 1f;
 	private static float accelerometerMax = 3f;
+    private static String songChoice = "song 1";
+    private static String difficulty = "normal";
     private static Texture background;
     private static Texture button;
     private static Texture buttonHigh;
@@ -47,6 +49,10 @@ public class GameMain extends Game {
 	private static float zeroPointZ = 0;
 
 	public static void setPlayerSides(int a) { playerSides = a; }
+
+	public static void setSongChoice(String a) { songChoice = a; }
+
+    public static void setDifficulty(String a) { difficulty = a; }
 
 	public SpriteBatch getBatch() {
 	    return batch;
@@ -88,6 +94,10 @@ public class GameMain extends Game {
 		float playerInradius = (float) (getPlayerDiameter() / 2 * Math.cos(Math.PI/getPlayerSides()));
 		return playerInradius;
 	}
+
+	public static String getSongChoice() { return songChoice; }
+
+    public static String getDifficulty() { return difficulty; }
 
     public static Texture getBackgroundTexture() { return background; }
 

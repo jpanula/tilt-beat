@@ -75,7 +75,7 @@ public class Mods implements Screen {
         button8 = new Rectangle(1f, 2.5f, 3f, 1.5f);
         button10 = new Rectangle(1f, 0.5f, 3f, 1.5f);
         backButton = new Rectangle(0.2f, 8.3f, 1.5f, 1.5f);
-        textBox = new Rectangle(10.5f, 1.5f, 5.5f, 5f);
+        textBox = new Rectangle(10.5f, 2.5f, 5.4f, 3f);
 
         playerSides = GameMain.getPlayerSides();
         playerDiameter = GameMain.getPlayerDiameter();

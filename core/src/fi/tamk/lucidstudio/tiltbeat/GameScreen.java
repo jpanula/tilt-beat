@@ -3,6 +3,7 @@ package fi.tamk.lucidstudio.tiltbeat;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -24,7 +25,7 @@ import java.util.Iterator;
  */
 
 public class
-GameScreen implements Screen {
+GameScreen extends InputAdapter implements Screen {
     private GameMain host;
     private SpriteBatch batch;
     private OrthographicCamera camera;
@@ -144,6 +145,7 @@ GameScreen implements Screen {
         basic.draw(batch, "X: " + Gdx.input.getAccelerometerX(), Gdx.graphics.getWidth() * 2/3, Gdx.graphics.getHeight() / 3);
         basic.draw(batch, " Y: " + Gdx.input.getAccelerometerY(), Gdx.graphics.getWidth() * 2/3, Gdx.graphics.getHeight() / 3 - 50);
         basic.draw(batch, " Z: " + Gdx.input.getAccelerometerZ(), Gdx.graphics.getWidth() * 2/3, Gdx.graphics.getHeight() / 3 - 100);
+
         if (paused) {
             heading.draw(batch, "PAUSE", 420, 450);
         }
@@ -254,7 +256,7 @@ GameScreen implements Screen {
                 // Väliaikainen kalibrointi paussinapissa
                 GameMain.calibrateZeroPoint();
             } else {
-                paused = false;
+                //paused = false;
             }
         }
 
@@ -266,9 +268,7 @@ GameScreen implements Screen {
     }
 
     @Override
-    public void pause() {
-        paused = true;
-    }
+    public void pause() { paused = true; }
 
     @Override
     public void resume() {
