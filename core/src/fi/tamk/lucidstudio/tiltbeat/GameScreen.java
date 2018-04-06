@@ -34,6 +34,7 @@ GameScreen implements Screen {
     private ArrayList<Note> song;
     private boolean paused;
     private boolean useShapeRenderer;
+    private Texture noteTexture;
 
     private int playerSides;
     private float playerDiameter;
@@ -64,6 +65,7 @@ GameScreen implements Screen {
 
         noteSpeed = GameMain.getNoteSpeed();
         song = new ArrayList<Note>();
+        noteTexture = new Texture("Smol Red.png");
 
         for (int i = 0; i < 100 ; i++) {
             int random = MathUtils.random(0, (playerSides-1));
@@ -72,7 +74,16 @@ GameScreen implements Screen {
             while (!isSectorActive(random)) {
                 random = MathUtils.random(0, (playerSides-1));
             }
-            song.add(new Point(random, 2f * i * noteSpeed, new Texture("Smol Red.png")));
+            int rand = MathUtils.random(0, 5);
+            for (int j = 0; j < 3; j++) {
+                if (rand == 0) {
+                song.add(new Point(((random + j) % playerSides), 2.5f * i * noteSpeed + j * 0.8f * noteSpeed, noteTexture));
+                } else if (rand == 1) {
+                    song.add(new Point(((random - j) % playerSides), 2.5f * i * noteSpeed + j * 0.8f * noteSpeed, noteTexture));
+                } else {
+                    song.add(new Point(((random) % playerSides), 2.5f * i * noteSpeed + j * 0.5f *  noteSpeed, noteTexture));
+                }
+            }
         }
 
         points = 0;
@@ -253,6 +264,7 @@ GameScreen implements Screen {
                 paused = true;
                 // Väliaikainen kalibrointi paussinapissa
                 GameMain.calibrateZeroPoint();
+                player.pointer.resetSmoothing();
             } else {
                 paused = false;
             }
