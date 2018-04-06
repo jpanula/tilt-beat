@@ -22,26 +22,30 @@ public class Difficulty implements Screen {
     private BitmapFont heading;
     private OrthographicCamera camera;
     private OrthographicCamera fontCamera;
-    private Texture background;
-    private Texture buttonTexture;
-    private Texture buttonHighTexture;
+    private Rectangle textBox;
+    private Rectangle backButton;
+    private Rectangle playButton;
     private Rectangle buttonEasy;
     private Rectangle buttonNormal;
     private Rectangle buttonHard;
     private Rectangle buttonBackBreaker;
-    private Rectangle backButton;
-    private Rectangle playButton;
-    private Texture backButtonTexture;
-    private Texture playButtonTexture;
-    private Rectangle textBox;
-    private Texture textBoxTexture;
-    private Texture buttonPressedTexture;
     private Rectangle buttonSong1;
     private Rectangle buttonSong2;
     private Rectangle buttonSong3;
+    private Texture background;
+    private Texture textBoxTexture;
+    private Texture backButtonTexture;
+    private Texture playButtonTexture;
+    private Texture buttonTexture;
+    private Texture buttonHighTexture;
+    private Texture buttonPressedTexture;
     private Texture buttonSong1Texture;
     private Texture buttonSong2Texture;
     private Texture buttonSong3Texture;
+    private Texture buttonEasyTexture;
+    private Texture buttonNormalTexture;
+    private Texture buttonHardTexture;
+    private Texture buttonBBTexture;
 
     public Difficulty(GameMain host) {
         this.host = host;
@@ -61,6 +65,10 @@ public class Difficulty implements Screen {
         buttonSong1Texture = buttonPressedTexture;
         buttonSong2Texture = buttonTexture;
         buttonSong3Texture = buttonTexture;
+        buttonEasyTexture = buttonHighTexture;
+        buttonNormalTexture = buttonPressedTexture;
+        buttonHardTexture = buttonHighTexture;
+        buttonBBTexture = buttonHighTexture;
 
         buttonEasy = new Rectangle(.5f, .5f, 2.6f, 2f);
         buttonNormal = new Rectangle(4f, .5f, 2.6f, 2f);
@@ -91,10 +99,10 @@ public class Difficulty implements Screen {
         batch.draw(background, 0, 0 , 16, 10);
         batch.draw(backButtonTexture, backButton.x, backButton.y, backButton.width, backButton.height);
         batch.draw(playButtonTexture, playButton.x, playButton.y, playButton.width, playButton.height);
-        batch.draw(buttonHighTexture, buttonEasy.x, buttonEasy.y, buttonEasy.width, buttonEasy.height);
-        batch.draw(buttonHighTexture, buttonNormal.x, buttonNormal.y, buttonNormal.width, buttonNormal.height);
-        batch.draw(buttonHighTexture, buttonHard.x, buttonHard.y, buttonHard.width, buttonHard.height);
-        batch.draw(buttonHighTexture, buttonBackBreaker.x, buttonBackBreaker.y, buttonBackBreaker.width, buttonBackBreaker.height);
+        batch.draw(buttonEasyTexture, buttonEasy.x, buttonEasy.y, buttonEasy.width, buttonEasy.height);
+        batch.draw(buttonNormalTexture, buttonNormal.x, buttonNormal.y, buttonNormal.width, buttonNormal.height);
+        batch.draw(buttonHardTexture, buttonHard.x, buttonHard.y, buttonHard.width, buttonHard.height);
+        batch.draw(buttonBBTexture, buttonBackBreaker.x, buttonBackBreaker.y, buttonBackBreaker.width, buttonBackBreaker.height);
         batch.draw(textBoxTexture, textBox.x, textBox.y, textBox.width, textBox.height);
         batch.draw(buttonSong1Texture, buttonSong1.x, buttonSong1.y, buttonSong1.width, buttonSong1.height);
         batch.draw(buttonSong2Texture, buttonSong2.x, buttonSong2.y, buttonSong2.width, buttonSong2.height);
@@ -143,15 +151,31 @@ public class Difficulty implements Screen {
             }
             if (buttonEasy.contains(touchPos.x, touchPos.y)) {
                 GameMain.setDifficulty("easy");
+                buttonEasyTexture = buttonPressedTexture;
+                buttonNormalTexture = buttonHighTexture;
+                buttonHardTexture = buttonHighTexture;
+                buttonBBTexture = buttonHighTexture;
             }
             if (buttonNormal.contains(touchPos.x, touchPos.y)) {
                 GameMain.setDifficulty("normal");
+                buttonEasyTexture = buttonHighTexture;
+                buttonNormalTexture = buttonPressedTexture;
+                buttonHardTexture = buttonHighTexture;
+                buttonBBTexture = buttonHighTexture;
             }
             if (buttonHard.contains(touchPos.x, touchPos.y)) {
                 GameMain.setDifficulty("hard");
+                buttonEasyTexture = buttonHighTexture;
+                buttonNormalTexture = buttonHighTexture;
+                buttonHardTexture = buttonPressedTexture;
+                buttonBBTexture = buttonHighTexture;
             }
             if (buttonBackBreaker.contains(touchPos.x, touchPos.y)) {
                 GameMain.setDifficulty("BACKBREAKER");
+                buttonEasyTexture = buttonHighTexture;
+                buttonNormalTexture = buttonHighTexture;
+                buttonHardTexture = buttonHighTexture;
+                buttonBBTexture = buttonPressedTexture;
             }
             if (buttonSong1.contains(touchPos.x, touchPos.y)) {
                 GameMain.setSongChoice("song 1");
