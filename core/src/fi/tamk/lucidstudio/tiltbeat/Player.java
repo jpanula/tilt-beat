@@ -1,6 +1,5 @@
 package fi.tamk.lucidstudio.tiltbeat;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -8,14 +7,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 import java.util.ArrayList;
-
-import static com.badlogic.gdx.Gdx.input;
 
 /**
  * Created by Jaakko on 11.3.2018.
@@ -39,12 +35,34 @@ public class Player {
         Circle hitbox;
         float radius;
         float speed;
+        float[] xSmoother;
+        float[] ySmoother;
+        int smoothIndex;
+        int smoothingSamples;
+
+        // Erillinen thread accelerometerin syötteen pehmennystä varten
+        class inputSmoother implements Runnable {
+            @Override
+            public void run() {
+                xSmoother[smoothIndex % smoothingSamples] = Gdx.input.getAccelerometerY();
+                ySmoother[smoothIndex % smoothingSamples] = Gdx.input.getAccelerometerZ();
+                smoothIndex++;
+                try {
+                    Thread.sleep(5);
+                } catch (Exception e) {}
+            }
+        }
 
         public Pointer() {
             radius = 0.4f;
             speed = 8;
             pointerTexture = new Texture("pointer.png");
             hitbox = new Circle(GameMain.getScreenWidth() / 2, GameMain.getScreenHeight() / 2, radius);
+            smoothingSamples = GameMain.getSmoothingSamples();
+            xSmoother = new float[smoothingSamples];
+            ySmoother = new float[smoothingSamples];
+            smoothIndex = 0;
+            (new Thread(new inputSmoother())).start();
         }
 
         // Piirtometodi SpriteBatchille, käyttää kuvia
@@ -55,6 +73,15 @@ public class Player {
         // Piirtometodi ShapeRendererille, käyttää pisteitä / muotoja
         public void draw(ShapeRenderer shapeRenderer) {
             shapeRenderer.circle(hitbox.x, hitbox.y, hitbox.radius, 100);
+        }
+
+        public void resetSmoothing() {
+            for (int i = 0; i < xSmoother.length; i++) {
+                xSmoother[i] = GameMain.getZeroPointY();
+            }
+            for (int i = 0; i < ySmoother.length; i++) {
+                ySmoother[i] = GameMain.getZeroPointZ();
+            }
         }
 
         public void move(OrthographicCamera camera) {
@@ -83,11 +110,21 @@ public class Player {
                 hitbox.x = GameMain.getScreenWidth() / 2 + Math.min((Gdx.input.getAccelerometerY() / GameMain.getAccelerometerMax() * (GameMain.getPlayerInradius() - hitbox.radius * 2)), (GameMain.getPlayerInradius() - hitbox.radius * 2));
             }*/
             if (Math.abs(GameMain.getZeroPointZ() - Gdx.input.getAccelerometerZ()) > GameMain.getAccelerometerDeadzone() || Math.abs(GameMain.getZeroPointY() - Gdx.input.getAccelerometerY()) > GameMain.getAccelerometerDeadzone()) {
-                hitbox.y = 0.05f + GameMain.getScreenHeight() / 2 + (Gdx.input.getAccelerometerZ() - GameMain.getZeroPointZ()) / 6;
-                hitbox.x = GameMain.getScreenWidth() / 2 + (Gdx.input.getAccelerometerY() - GameMain.getZeroPointY()) / 4;
+                float avgX = 0;
+                float avgY = 0;
+
+                for (int i = 0; i < smoothingSamples; i++) {
+                    avgX += xSmoother[i];
+                    avgY += ySmoother[i];
+                }
+                avgX /= smoothingSamples;
+                avgY /= smoothingSamples;
+
+                hitbox.x = GameMain.getScreenWidth() / 2 + avgX;
+                hitbox.y =  GameMain.getScreenHeight() / 2 + avgY;
                 Vector2 vector = new Vector2(hitbox.x - GameMain.getScreenWidth() / 2, hitbox.y - GameMain.getScreenHeight() / 2);
-                if (vector.len() > GameMain.getPlayerInradius()) {
-                    vector.setLength(GameMain.getPlayerInradius());
+                if (vector.len() > GameMain.getPlayerInradius() * 0.8f) {
+                    vector.setLength(GameMain.getPlayerInradius() * 0.8f);
                     hitbox.x = GameMain.getScreenWidth() / 2 + vector.x;
                     hitbox.y = GameMain.getScreenHeight() / 2 + vector.y;
                 }
