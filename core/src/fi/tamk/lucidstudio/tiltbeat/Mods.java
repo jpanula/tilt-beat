@@ -67,10 +67,6 @@ public class Mods implements Screen {
         backButtonTexture = GameMain.getBackButtonTexture();
         textBoxTexture = GameMain.getTextBoxTexture();
 
-        button6Texture = buttonTexture;
-        button8Texture = buttonTexture;
-        button10Texture = buttonPressedTexture;
-
         button6 = new Rectangle(1f, 4.5f, 3f, 1.5f);
         button8 = new Rectangle(1f, 2.5f, 3f, 1.5f);
         button10 = new Rectangle(1f, 0.5f, 3f, 1.5f);
@@ -82,7 +78,27 @@ public class Mods implements Screen {
         radius = playerDiameter / 2;
         sectors = new ArrayList<Polygon>();
 
-        createTenside();
+        makeButtonsAndPolygon();
+
+    }
+
+    public void makeButtonsAndPolygon() {
+        if(playerSides==10) {
+            createTenside();
+            button6Texture = buttonTexture;
+            button8Texture = buttonTexture;
+            button10Texture = buttonPressedTexture;
+        } else if (playerSides==8) {
+            createEightside();
+            button6Texture = buttonTexture;
+            button8Texture = buttonPressedTexture;
+            button10Texture = buttonTexture;
+        } else {
+            createSixside();
+            button6Texture = buttonPressedTexture;
+            button8Texture = buttonTexture;
+            button10Texture = buttonTexture;
+        }
 
     }
 
@@ -97,7 +113,6 @@ public class Mods implements Screen {
                 0.067f, 0.75f
         };
         GameMain.activeSectors = new boolean[6];
-
         createSectors(vertices);
     }
 
@@ -192,7 +207,6 @@ public class Mods implements Screen {
         small.draw(batch, "activate or" , 885, 350);
         small.draw(batch, "de-activate them" , 885, 300);
 
-
         //väliaikainen millä näkee onko sektorit päällä vai pois
         if(playerSides==10) {
             draw10sectors();
@@ -210,21 +224,21 @@ public class Mods implements Screen {
             if (backButton.contains(touchPos.x, touchPos.y)) {
                 host.setScreen(new MainMenu(host));
             }
-            if (button6.contains(touchPos.x, touchPos.y) || GameMain.getPlayerSides() == 6) {
+            if (button6.contains(touchPos.x, touchPos.y)) {
                 GameMain.setPlayerSides(6);
                 createSixside();
                 button6Texture = buttonPressedTexture;
                 button8Texture = buttonTexture;
                 button10Texture = buttonTexture;
             }
-            if (button8.contains(touchPos.x, touchPos.y) || GameMain.getPlayerSides() == 8) {
+            if (button8.contains(touchPos.x, touchPos.y)) {
                 GameMain.setPlayerSides(8);
                 createEightside();
                 button6Texture = buttonTexture;
                 button8Texture = buttonPressedTexture;
                 button10Texture = buttonTexture;
             }
-            if (button10.contains(touchPos.x, touchPos.y) || GameMain.getPlayerSides() == 10) {
+            if (button10.contains(touchPos.x, touchPos.y)) {
                 GameMain.setPlayerSides(10);
                 createTenside();
                 button6Texture = buttonTexture;
