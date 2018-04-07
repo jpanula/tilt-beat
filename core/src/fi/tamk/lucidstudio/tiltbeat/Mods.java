@@ -16,6 +16,7 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
+import java.lang.reflect.GenericArrayType;
 import java.util.ArrayList;
 
 /**
@@ -49,7 +50,6 @@ public class Mods implements Screen {
     Polygon hitbox;
     Texture texture;
     float radius;
-    static boolean[] activeSectors;
     int playerSides;
     float playerDiameter;
 
@@ -81,7 +81,6 @@ public class Mods implements Screen {
         playerDiameter = GameMain.getPlayerDiameter();
         radius = playerDiameter / 2;
         sectors = new ArrayList<Polygon>();
-        activeSectors = new boolean[playerSides];
 
         createTenside();
 
@@ -97,7 +96,7 @@ public class Mods implements Screen {
                 0.067f, 0.25f,
                 0.067f, 0.75f
         };
-        activeSectors = new boolean[6];
+        GameMain.activeSectors = new boolean[6];
 
         createSectors(vertices);
     }
@@ -115,7 +114,7 @@ public class Mods implements Screen {
                 0f, 0.5f,
                 0.1445f, 0.8555f
         };
-        activeSectors = new boolean[8];
+        GameMain.activeSectors = new boolean[8];
         createSectors(vertices);
     }
 
@@ -134,11 +133,12 @@ public class Mods implements Screen {
                 0.0203f, 0.65f,
                 0.205f, 0.905f
         };
-        activeSectors = new boolean[10];
+        GameMain.activeSectors = new boolean[10];
         createSectors(vertices);
     }
 
     public void createSectors(float[] vertices) {
+        sectors = new ArrayList<Polygon>();
         playerSides = GameMain.getPlayerSides();
         for (int i = 0; i < playerSides; i++) {
             float[] triangleVerts = {
@@ -148,19 +148,16 @@ public class Mods implements Screen {
             };
             sectors.add(new Polygon(triangleVerts));
             // Asetetaan sektorien koko ja sijainti oikeiksi
-            sectors.get(i).setScale(playerDiameter, playerDiameter);
-            sectors.get(i).setPosition(GameMain.getScreenWidth() / 2 - radius, GameMain.getScreenHeight() / 2 - radius);
+            sectors.get(i).setScale(playerDiameter+2f, playerDiameter+2f);
+            sectors.get(i).setPosition(GameMain.getScreenWidth() / 2 - radius - 1.5f, GameMain.getScreenHeight() / 2 - radius - 2.5f);
             // asetetaan sektori aktiiviseksi
-            activeSectors[i] = true;
+            GameMain.activeSectors[i] = true;
         }
         // Muodostetaan pelaajan kulmio, tehdään siitä oikean kokoinen ja siirretään se keskelle ruutua
         hitbox = new Polygon(vertices);
         hitbox.setScale(playerDiameter+2f, playerDiameter+2f);
         hitbox.setPosition(GameMain.getScreenWidth() / 2 - radius - 1.5f, GameMain.getScreenHeight() / 2 - radius - 2.5f);
 
-        //testi - ei-aktiiviset sektorit
-        //activeSectors[2] = false; activeSectors[3] = false; activeSectors[4] = false;
-        //activeSectors[6] = false; activeSectors[7] = false;
     }
 
     @Override
@@ -195,6 +192,16 @@ public class Mods implements Screen {
         small.draw(batch, "activate or" , 885, 350);
         small.draw(batch, "de-activate them" , 885, 300);
 
+
+        //väliaikainen millä näkee onko sektorit päällä vai pois
+        if(playerSides==10) {
+            draw10sectors();
+        } else if(playerSides==8) {
+            draw8sectors();
+        } else if(playerSides==6) {
+            draw6sectors();
+        }
+
         batch.end();
 
         if (Gdx.input.isTouched()) {
@@ -227,10 +234,94 @@ public class Mods implements Screen {
             for (int i=0 ; i<playerSides ; i++) {
                 Polygon polygon = sectors.get(i);
                 if(polygon.contains(touchPos.x, touchPos.y)) {
-                    Player.setActiveSectors(i);
+                    GameMain.activeSectors[i] ^= true;
                 }
             }
         }
+
+    }
+
+    public void draw6sectors() {
+        if(GameMain.activeSectors[0]) {
+            small.draw(batch, "on", 640, 400);
+        } else { small.draw(batch, "off", 640, 400); }
+        if(GameMain.activeSectors[1]) {
+            small.draw(batch, "on", 680, 300);
+        } else { small.draw(batch, "off", 680, 300); }
+        if(GameMain.activeSectors[2]) {
+            small.draw(batch, "on", 640, 200);
+        } else { small.draw(batch, "off", 640, 200); }
+        if(GameMain.activeSectors[3]) {
+            small.draw(batch, "on", 500, 200);
+        } else { small.draw(batch, "off", 500, 200); }
+        if(GameMain.activeSectors[4]) {
+            small.draw(batch, "on", 460, 300);
+        } else { small.draw(batch, "off", 460, 300); }
+        if(GameMain.activeSectors[5]) {
+            small.draw(batch, "on", 500, 400);
+        } else { small.draw(batch, "off", 500, 400); }
+
+    }
+
+    public void draw8sectors() {
+        if(GameMain.activeSectors[0]) {
+            small.draw(batch, "on", 620, 420);
+        } else { small.draw(batch, "off", 620, 420); }
+        if(GameMain.activeSectors[1]) {
+            small.draw(batch, "on", 700, 350);
+        } else { small.draw(batch, "off", 700, 350); }
+        if(GameMain.activeSectors[2]) {
+            small.draw(batch, "on", 700, 240);
+        } else { small.draw(batch, "off", 700, 240); }
+        if(GameMain.activeSectors[3]) {
+            small.draw(batch, "on", 620, 170);
+        } else { small.draw(batch, "off", 620, 170); }
+        if(GameMain.activeSectors[4]) {
+            small.draw(batch, "on", 520, 170);
+        } else { small.draw(batch, "off", 520, 170); }
+        if(GameMain.activeSectors[5]) {
+            small.draw(batch, "on", 440, 240);
+        } else { small.draw(batch, "off", 440, 240); }
+        if(GameMain.activeSectors[6]) {
+            small.draw(batch, "on", 440, 350);
+        } else { small.draw(batch, "off", 440, 350); }
+        if(GameMain.activeSectors[7]) {
+            small.draw(batch, "on", 520, 420);
+        } else { small.draw(batch, "off", 520, 420); }
+
+    }
+
+    public void draw10sectors() {
+        if(GameMain.activeSectors[0]) {
+            small.draw(batch, "on", 620, 440);
+        } else { small.draw(batch, "off", 620, 440); }
+        if(GameMain.activeSectors[1]) {
+            small.draw(batch, "on", 680, 370);
+        } else { small.draw(batch, "off", 680, 370); }
+        if(GameMain.activeSectors[2]) {
+            small.draw(batch, "on", 720, 300);
+        } else { small.draw(batch, "off", 720, 300); }
+        if(GameMain.activeSectors[3]) {
+            small.draw(batch, "on", 680, 230);
+        } else { small.draw(batch, "off", 680, 230); }
+        if(GameMain.activeSectors[4]) {
+            small.draw(batch, "on", 620, 160);
+        } else { small.draw(batch, "off", 620, 160); }
+        if(GameMain.activeSectors[5]) {
+            small.draw(batch, "on", 520, 160);
+        } else { small.draw(batch, "off", 520, 160); }
+        if(GameMain.activeSectors[6]) {
+            small.draw(batch, "on", 460, 230);
+        } else { small.draw(batch, "off", 460, 230); }
+        if(GameMain.activeSectors[7]) {
+            small.draw(batch, "on", 420, 300);
+        } else { small.draw(batch, "off", 420, 300); }
+        if(GameMain.activeSectors[8]) {
+            small.draw(batch, "on", 460, 370);
+        } else { small.draw(batch, "off", 460, 370); }
+        if(GameMain.activeSectors[9]) {
+            small.draw(batch, "on", 520, 440);
+        } else { small.draw(batch, "off", 520, 440); }
 
     }
 

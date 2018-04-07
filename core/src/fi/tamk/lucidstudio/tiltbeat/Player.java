@@ -27,7 +27,6 @@ public class Player {
     float radius;
     float[] vertices;
     Pointer pointer;
-    static boolean[] activeSectors;
 
     // Pelaajan osoittimen luokka
     class Pointer {
@@ -154,7 +153,6 @@ public class Player {
         this.radius = playerDiameter / 2;
         pointer = new Pointer();
         sectors = new ArrayList<Polygon>();
-        activeSectors = new boolean[playerSides];
 
         // Pelaaja on 10-sivuinen
         if (playerSides == 10) {
@@ -211,16 +209,12 @@ public class Player {
             sectors.get(i).setScale(playerDiameter, playerDiameter);
             sectors.get(i).setPosition(GameMain.getScreenWidth() / 2 - radius, GameMain.getScreenHeight() / 2 - radius);
             // asetetaan sektori aktiiviseksi
-            activeSectors[i] = true;
         }
         // Muodostetaan pelaajan kulmio, tehdään siitä oikean kokoinen ja siirretään se keskelle ruutua
         hitbox = new Polygon(vertices);
         hitbox.setScale(playerDiameter, playerDiameter);
         hitbox.setPosition(GameMain.getScreenWidth() / 2 - radius, GameMain.getScreenHeight() / 2 - radius);
 
-        //testi - ei-aktiiviset sektorit
-        //activeSectors[2] = false; activeSectors[3] = false; activeSectors[4] = false;
-        //activeSectors[6] = false; activeSectors[7] = false;
     }
 
     // Palauttaa kulmion pisteet
@@ -276,7 +270,5 @@ public class Player {
         return pointer.getSector();
     }
 
-    public static void setActiveSectors(int a) {
-        activeSectors[a] ^= true;
-    }
+    //public static void setActiveSectors(int a) { activeSectors[a] ^= true; }
 }

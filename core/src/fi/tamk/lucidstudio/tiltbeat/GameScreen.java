@@ -74,14 +74,15 @@ GameScreen implements Screen {
             while (!isSectorActive(random)) {
                 random = MathUtils.random(0, (playerSides-1));
             }
+            //song.add(new Point(((random) % playerSides), 2.5f * i * noteSpeed * 0.8f * noteSpeed, noteTexture));
             int rand = MathUtils.random(0, 5);
             for (int j = 0; j < 3; j++) {
                 if (rand == 0) {
-                song.add(new Point(((random + j) % playerSides), 2.5f * i * noteSpeed + j * 0.8f * noteSpeed, noteTexture));
+                song.add(new Point(((rand + j) % playerSides), 2.5f * i * noteSpeed + j * 0.8f * noteSpeed, noteTexture));
                 } else if (rand == 1) {
-                    song.add(new Point(((random - j) % playerSides), 2.5f * i * noteSpeed + j * 0.8f * noteSpeed, noteTexture));
+                    song.add(new Point(((rand - j) % playerSides), 2.5f * i * noteSpeed + j * 0.8f * noteSpeed, noteTexture));
                 } else {
-                    song.add(new Point(((random) % playerSides), 2.5f * i * noteSpeed + j * 0.5f *  noteSpeed, noteTexture));
+                    song.add(new Point(((rand) % playerSides), 2.5f * i * noteSpeed + j * 0.5f *  noteSpeed, noteTexture));
                 }
             }
         }
@@ -92,7 +93,7 @@ GameScreen implements Screen {
         background = new Texture(Gdx.files.internal("Galaxy dark purple.png"));
 
         pauseButtonTexture = GameMain.getPauseButtonTexture();
-        pauseButton = new Rectangle(0.2f, 8.8f, 1f, 1f);
+        pauseButton = new Rectangle(0.2f, 8.3f, 1.5f, 1.5f);
         paused = false;
 
         useShapeRenderer = true;
@@ -100,7 +101,7 @@ GameScreen implements Screen {
 
     public boolean isSectorActive(int a) {
         //tarkistaa onko sektori aktiivinen
-        if (Player.activeSectors[a] == true) {
+        if (GameMain.activeSectors[a]) {
             return true;
         } else { return false;}
     }
@@ -108,14 +109,14 @@ GameScreen implements Screen {
     public int moveNotes(int a) {
         int b = a; int goBack=0; int continuousSectors = 0; int r;
 
-        if (Player.activeSectors[b] == false) {
+        if (!GameMain.activeSectors[a]) {
             //kelataan peräkkäisten aktiviisten sektoreiden ensimmäiseen
-            while (Player.activeSectors[b] == false) {
+            while (!GameMain.activeSectors[b]) {
                 goBack=b; b--;
                 if (b==-1) { b = (playerSides-1); } //että pysytään järkevissä luvuissa
             }
             //lasketaan montako sektoria putkeen
-            while (Player.activeSectors[goBack] == false) {
+            while (!GameMain.activeSectors[goBack]) {
                 continuousSectors++; goBack++;
                 if (goBack==playerSides) { goBack = 0; } //epjl
             }

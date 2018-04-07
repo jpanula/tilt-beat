@@ -31,6 +31,7 @@ public class GameMain extends Game {
 	private static float accelerometerMax = 3f;
     private static String songChoice = "song 1";
     private static String difficulty = "normal";
+	public static boolean[] activeSectors;
     private static Texture background;
     private static Texture button;
     private static Texture buttonHigh;
@@ -163,6 +164,8 @@ public class GameMain extends Game {
 		camera.setToOrtho(false, SCREEN_WIDTH, SCREEN_HEIGHT);
 		fontCamera = new OrthographicCamera();
 		fontCamera.setToOrtho(false, SCREEN_WIDTH_PIXELS, SCREEN_HEIGHT_PIXELS);
+
+		activeSectors = new boolean[playerSides];
 
 		background = new Texture(Gdx.files.internal("Galaxy blue.png"));
         button = new Texture(Gdx.files.internal("nappi1korkee.png"));
