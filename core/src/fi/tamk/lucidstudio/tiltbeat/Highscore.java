@@ -31,6 +31,7 @@ public class Highscore implements Screen {
     private Rectangle button3;
     private Rectangle backButton;
     private Texture backButtonTexture;
+    private Texture textBoxTexture;
 
     public  Highscore(GameMain host) {
         this.host = host;
@@ -42,6 +43,7 @@ public class Highscore implements Screen {
         background = GameMain.getBackgroundTexture();
         buttonTexture = GameMain.getButtonTexture();
         backButtonTexture = GameMain.getBackButtonTexture();
+        textBoxTexture = GameMain.getTextBoxTexture();
 
         button1 = new Rectangle(1.3f, 1.8f, 3.7f, 2f);
         button2 = new Rectangle(6.15f, 1.8f, 3.7f, 2f);
@@ -65,7 +67,7 @@ public class Highscore implements Screen {
         //piirrellään tausta ja napit
         batch.draw(background, 0, 0 , 16, 10);
         batch.draw(backButtonTexture, backButton.x, backButton.y, backButton.width, backButton.height);
-
+        batch.draw(textBoxTexture, 1.5f, 1, 10, 5);
         /*
         batch.draw(buttonTexture, button1.x, button1.y, button1.width, button1.height);
         batch.draw(buttonTexture, button2.x, button2.y, button2.width, button2.height);
@@ -76,10 +78,10 @@ public class Highscore implements Screen {
         //piirrellään fontit
         heading.draw(batch, "Highscore" , 300, 650);
 
-        basic.draw(batch, "1:  anna              817p" , 200, 300);
-        basic.draw(batch, "2:  miko              647p" , 200, 240);
-        basic.draw(batch, "3:  leia               420p" , 200, 180);
-        basic.draw(batch, "4:  jaakko             17p" , 200, 120);
+        basic.draw(batch, "1:  anna              817p" , 200, 400);
+        basic.draw(batch, "2:  miko              647p" , 200, 340);
+        basic.draw(batch, "3:  leia               420p" , 200, 280);
+        basic.draw(batch, "4:  jaakko             17p" , 200, 220);
 
         batch.end();
 

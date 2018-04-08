@@ -75,11 +75,11 @@ public class MainMenu implements Screen {
         batch.setProjectionMatrix(fontCamera.combined);
         //piirrellään fontit
         heading.draw(batch, "TilT" , 370, 750);
-        heading.draw(batch, "BeaT" , 550f, 670);
-        basic.draw(batch, "play" , 300, 400);
-        basic.draw(batch, "settings" , 300, 150);
-        basic.draw(batch, "highscore" , 750, 150);
-        basic.draw(batch, "mods" , 750, 400);
+        heading.draw(batch, "BeaT" , 550, 670);
+        basic.draw(batch, "play" , 320, 410);
+        basic.draw(batch, "settings" , 283, 170);
+        basic.draw(batch, "highscore" , 735, 170);
+        basic.draw(batch, "mods" , 775, 410);
 
         batch.end();
 
@@ -99,13 +99,6 @@ public class MainMenu implements Screen {
                 if (buttonMods.contains(touchPos.x, touchPos.y) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                     host.setScreen(new Mods(host));
                 }
-        }
-
-        if ( Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            host.setScreen(new Settings(host));
-        }
-        if ( Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            host.setScreen(new Highscore(host));
         }
 
     }

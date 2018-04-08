@@ -39,6 +39,8 @@ public class GameMain extends Game {
 	private static Texture pauseButton;
 	private static Texture backButton;
     private static Texture playButton;
+	private static Texture playAgainButton;
+    private static Texture settingsButton;
     private static Texture textBox;
 	private static BitmapFont smallFont;
 	private static BitmapFont basicFont;
@@ -115,6 +117,10 @@ public class GameMain extends Game {
 
     public static Texture getPlayButtonTexture() { return playButton; }
 
+	public static Texture getPlayAgainButtonTexture() { return playAgainButton; }
+
+    public static Texture getSettingsButtonTexture() { return settingsButton; }
+
     public static Texture getTextBoxTexture() { return textBox; }
 
 	public static BitmapFont getHeadingFont() { return headingFont; }
@@ -166,20 +172,20 @@ public class GameMain extends Game {
 		fontCamera.setToOrtho(false, SCREEN_WIDTH_PIXELS, SCREEN_HEIGHT_PIXELS);
 
 		activeSectors = new boolean[playerSides];
+		for (int i=0 ; i<playerSides ; i++) {activeSectors[1] = true; }
 
 		background = new Texture(Gdx.files.internal("Galaxy blue.png"));
-        button = new Texture(Gdx.files.internal("nappi1korkee.png"));
+        button = new Texture(Gdx.files.internal("nappi1.png"));
         buttonHigh = new Texture(Gdx.files.internal("nappi1korkee.png"));
         buttonPressed = new Texture(Gdx.files.internal("nappi2.png"));
         pauseButton = new Texture(Gdx.files.internal("pausenappi.png"));
 		backButton = new Texture(Gdx.files.internal("backnappi.png"));
 		playButton = new Texture(Gdx.files.internal("playnappi.png"));
+		playAgainButton = new Texture(Gdx.files.internal("repeat.jpg"));
+        settingsButton = new Texture(Gdx.files.internal("settings.png"));
 		textBox = new Texture(Gdx.files.internal("folio.png"));
-        //playButton = new Texture(Gdx.files.internal("playButton.png"));
 
 		createFonts();
-        //menu = new MainMenu(this);
-        //gameScreen = new GameScreen(this);
 
 		setScreen(new MainMenu(this));
 	}

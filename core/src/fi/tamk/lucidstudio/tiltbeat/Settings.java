@@ -71,14 +71,10 @@ public class Settings implements Screen {
         heading.draw(batch, "Settings" , 250, 700);
 
         basic.draw(batch, "mode" , 195, 250);
-        basic.draw(batch, "calibration" , 525, 250);
+        basic.draw(batch, "calibration" , 521, 250);
         basic.draw(batch, "sound" , 960, 250);
 
         batch.end();
-
-        if ( Gdx.input.isKeyPressed(Input.Keys.M)) {
-            host.setScreen(new MainMenu(host));
-        }
 
         if (Gdx.input.isTouched()) {
             Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);

@@ -15,6 +15,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.sun.org.apache.regexp.internal.RE;
+
+import org.w3c.dom.Text;
+import org.w3c.dom.css.Rect;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -46,7 +50,17 @@ GameScreen implements Screen {
 
     private Texture background;
     private Texture pauseButtonTexture;
+    private Texture playAgainButtonTexture;
+    private Texture playButtonTexture;
+    private Texture backButtonTexture;
+    private Texture settingsButtonTexture;
     private Rectangle pauseButton;
+    private Rectangle playAgainButton;
+    private Rectangle playButton;
+    private Rectangle backButton;
+    private Rectangle settingsButton;
+    private Texture textBoxTexture;
+    private Rectangle resultBox;
 
     /**
      * Peliruutu, asetukset haetaan GameMainistä, joka toimii "hostina"
@@ -67,14 +81,15 @@ GameScreen implements Screen {
         song = new ArrayList<Note>();
         noteTexture = new Texture("Smol Red.png");
 
-        for (int i = 0; i < 100 ; i++) {
+        for (int i = 0; i < 10 ; i++) {
             int random = MathUtils.random(0, (playerSides-1));
             random = moveNotes(random);
             //jos ei järjestelmällinen siirtäminen toimi (koska uusi sektori myös passiivinen) niin arvotaan uusi paikka
             while (!isSectorActive(random)) {
                 random = MathUtils.random(0, (playerSides-1));
             }
-            //song.add(new Point(((random) % playerSides), 2.5f * i * noteSpeed * 0.8f * noteSpeed, noteTexture));
+            song.add(new Point(((random) % playerSides), 2.5f * i * noteSpeed * 0.8f * noteSpeed, noteTexture));
+            /*
             int rand = MathUtils.random(0, 5);
             for (int j = 0; j < 3; j++) {
                 if (rand == 0) {
@@ -84,7 +99,7 @@ GameScreen implements Screen {
                 } else {
                     song.add(new Point(((rand) % playerSides), 2.5f * i * noteSpeed + j * 0.5f *  noteSpeed, noteTexture));
                 }
-            }
+            }*/
         }
 
         points = 0;
@@ -93,9 +108,21 @@ GameScreen implements Screen {
         background = new Texture(Gdx.files.internal("Galaxy dark purple.png"));
 
         pauseButtonTexture = GameMain.getPauseButtonTexture();
-        pauseButton = new Rectangle(0.2f, 8.3f, 1.5f, 1.5f);
-        paused = false;
+        playButtonTexture = GameMain.getPlayButtonTexture();
+        playAgainButtonTexture = GameMain.getPlayAgainButtonTexture();
+        backButtonTexture = GameMain.getBackButtonTexture();
+        settingsButtonTexture = GameMain.getSettingsButtonTexture();
 
+        pauseButton = new Rectangle(0.2f, 8.3f, 1.5f, 1.5f);
+        playButton = new Rectangle(6f, 2f, 1.5f, 1.5f);
+        playAgainButton = new Rectangle(8.5f, 2f, 1.5f, 1.5f);
+        backButton = new Rectangle(3.5f, 2f, 1.5f, 1.5f);
+        settingsButton = new Rectangle(11f, 2f, 1.5f, 1.5f);
+
+        textBoxTexture = GameMain.getTextBoxTexture();
+        resultBox = new Rectangle(2f, 1f, 12f, 8f);
+
+        paused = false;
         useShapeRenderer = true;
     }
 
@@ -139,15 +166,28 @@ GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         shapeRenderer.setProjectionMatrix(camera.combined);
 
-        // Normaali render
         batch.begin();
         batch.setProjectionMatrix(camera.combined);
-        batch.draw(background, 0, 0 , 16, 10);
+
+        batch.draw(background, 0, 0, 16, 10);
         batch.draw(pauseButtonTexture, pauseButton.x, pauseButton.y, pauseButton.width, pauseButton.height);
 
         player.draw(batch);
         for (Note note : song) {
             note.draw(batch);
+        }
+        if (paused && !song.isEmpty()) {
+            batch.draw(textBoxTexture, resultBox.x, resultBox.y, resultBox.width, resultBox.height);
+            batch.draw(playButtonTexture, playButton.x, playButton.y, playButton.width, playButton.height);
+            batch.draw(playAgainButtonTexture, playAgainButton.x, playAgainButton.y, playAgainButton.width, playAgainButton.height);
+            batch.draw(backButtonTexture, backButton.x, backButton.y, backButton.width, backButton.height);
+            batch.draw(settingsButtonTexture, settingsButton.x, settingsButton.y, settingsButton.width, settingsButton.height);
+        }
+
+        if (song.isEmpty()) {
+            batch.draw(textBoxTexture, resultBox.x, resultBox.y, resultBox.width, resultBox.height);
+            batch.draw(playAgainButtonTexture, playAgainButton.x, playAgainButton.y, playAgainButton.width, playAgainButton.height);
+            batch.draw(backButtonTexture, backButton.x, backButton.y, backButton.width, backButton.height);
         }
 
         batch.setProjectionMatrix(fontCamera.combined);
@@ -156,8 +196,21 @@ GameScreen implements Screen {
         basic.draw(batch, "X: " + Gdx.input.getAccelerometerX(), 50, 300);
         basic.draw(batch, " Y: " + Gdx.input.getAccelerometerY(), 50, 250);
         basic.draw(batch, " Z: " + Gdx.input.getAccelerometerZ(), 50, 200);
-        if (paused) {
-            heading.draw(batch, "PAUSE", 420, 450);
+
+        if (paused && !song.isEmpty()) {
+            heading.draw(batch, "PAUSE", 300, 600);
+            basic.draw(batch, "main", 280, 400);
+            basic.draw(batch, "menu", 280, 350);
+            basic.draw(batch, "continue", 440, 380);
+            basic.draw(batch, "retry", 680, 380);
+            basic.draw(batch, "settings", 830, 380);
+        }
+
+        if (song.isEmpty()) {
+            heading.draw(batch, "you did it!!!", 220, 650);
+            basic.draw(batch, "you got " + points + " points!!", 300, 400);
+            basic.draw(batch, "main menu", 410, 230);
+            basic.draw(batch, "start again?", 820, 230);
         }
 
         batch.end();
@@ -266,8 +319,17 @@ GameScreen implements Screen {
                 // Väliaikainen kalibrointi paussinapissa
                 GameMain.calibrateZeroPoint();
                 //player.pointer.resetSmoothing();
-            } else {
+            } /*else {
                 paused = false;
+            }*/
+            if (playButton.contains(touchPos.x, touchPos.y)) {
+                paused = false;
+            }
+            if (playAgainButton.contains(touchPos.x, touchPos.y)) {
+                host.setScreen(new GameScreen(host));
+            }
+            if (backButton.contains(touchPos.x, touchPos.y)) {
+                host.setScreen(new MainMenu(host));
             }
         }
 
