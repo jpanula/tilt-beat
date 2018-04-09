@@ -112,7 +112,13 @@ public class Mods implements Screen {
                 0.067f, 0.25f,
                 0.067f, 0.75f
         };
-        GameMain.activeSectors = new boolean[6];
+        //jos kulmio&aktiiviset sektorit ovat jo olemassa, ei nollata niitä
+        if(GameMain.activeSectors.length!=6) {
+            GameMain.activeSectors = new boolean[6];
+            for (int i=0 ; i<6 ; i++) {
+                GameMain.activeSectors[i] = true;
+            }
+        }
         createSectors(vertices);
     }
 
@@ -129,7 +135,13 @@ public class Mods implements Screen {
                 0f, 0.5f,
                 0.1445f, 0.8555f
         };
-        GameMain.activeSectors = new boolean[8];
+        //jos kulmio&aktiiviset sektorit ovat jo olemassa, ei nollata niitä
+        if(GameMain.activeSectors.length!=8) {
+            GameMain.activeSectors = new boolean[8];
+            for (int i=0 ; i<8 ; i++) {
+                GameMain.activeSectors[i] = true;
+            }
+        }
         createSectors(vertices);
     }
 
@@ -148,7 +160,13 @@ public class Mods implements Screen {
                 0.0203f, 0.65f,
                 0.205f, 0.905f
         };
-        GameMain.activeSectors = new boolean[10];
+        //jos kulmio&aktiiviset sektorit ovat jo olemassa, ei nollata niitä
+        if(GameMain.activeSectors.length!=10) {
+            GameMain.activeSectors = new boolean[10];
+            for (int i=0 ; i<10 ; i++) {
+                GameMain.activeSectors[i] = true;
+            }
+        }
         createSectors(vertices);
     }
 
@@ -166,7 +184,6 @@ public class Mods implements Screen {
             sectors.get(i).setScale(playerDiameter+2f, playerDiameter+2f);
             sectors.get(i).setPosition(GameMain.getScreenWidth() / 2 - radius - 1.5f, GameMain.getScreenHeight() / 2 - radius - 2.5f);
             // asetetaan sektori aktiiviseksi
-            GameMain.activeSectors[i] = true;
         }
         // Muodostetaan pelaajan kulmio, tehdään siitä oikean kokoinen ja siirretään se keskelle ruutua
         hitbox = new Polygon(vertices);

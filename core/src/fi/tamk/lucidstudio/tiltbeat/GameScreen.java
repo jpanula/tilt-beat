@@ -319,9 +319,7 @@ GameScreen implements Screen {
                 // Väliaikainen kalibrointi paussinapissa
                 GameMain.calibrateZeroPoint();
                 //player.pointer.resetSmoothing();
-            } /*else {
-                paused = false;
-            }*/
+            }
             if (playButton.contains(touchPos.x, touchPos.y)) {
                 paused = false;
             }
@@ -330,6 +328,9 @@ GameScreen implements Screen {
             }
             if (backButton.contains(touchPos.x, touchPos.y)) {
                 host.setScreen(new MainMenu(host));
+            }
+            if (settingsButton.contains(touchPos.x, touchPos.y)) {
+                host.setScreen(new Settings(host));
             }
         }
 
