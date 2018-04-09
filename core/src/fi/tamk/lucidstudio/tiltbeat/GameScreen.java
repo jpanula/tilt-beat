@@ -79,7 +79,7 @@ GameScreen implements Screen {
 
         noteSpeed = GameMain.getNoteSpeed();
         song = new ArrayList<Note>();
-        noteTexture = new Texture("Smol Red.png");
+        noteTexture = new Texture("Smol Green.png");
 
         for (int i = 0; i < 10 ; i++) {
             int random = MathUtils.random(0, (playerSides-1));
@@ -215,7 +215,7 @@ GameScreen implements Screen {
 
         batch.end();
 
-        if(!song.isEmpty()) {
+        if(!song.isEmpty() && !paused) {
             // ShapeRenderer render, piirtää annetuilla pisteillä muotoja
             if (useShapeRenderer) {
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
@@ -307,10 +307,6 @@ GameScreen implements Screen {
                     }
                 }
             }
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
-            host.setScreen(new MainMenu(host));
         }
 
         if (Gdx.input.isTouched()) {
