@@ -44,6 +44,7 @@ public class GameMain extends Game {
 	private static Texture playAgainButton;
     private static Texture settingsButton;
     private static Texture textBox;
+    private static BitmapFont verySmallFont;
 	private static BitmapFont smallFont;
 	private static BitmapFont basicFont;
 	private static BitmapFont headingFont;
@@ -59,6 +60,8 @@ public class GameMain extends Game {
 	public static void setSongChoice(String a) { songChoice = a; }
 
     public static void setDifficulty(String a) { difficulty = a; }
+
+    public static void setNoteSpeed(int a) { noteSpeed = a; }
 
 	public SpriteBatch getBatch() {
 	    return batch;
@@ -129,7 +132,9 @@ public class GameMain extends Game {
 
 	public static BitmapFont getHeadingFont() { return headingFont; }
 
-	public static BitmapFont getSmallFont() { return smallFont; }
+    public static BitmapFont getSmallFont() { return smallFont; }
+
+	public static BitmapFont getVerySmallFont() { return verySmallFont; }
 
 	public static BitmapFont getBasicFont() { return basicFont; }
 
@@ -198,6 +203,11 @@ public class GameMain extends Game {
 	public void createFonts() {
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("grove.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+
+        //luodaan vitun pieni fontti
+        parameter.size = 25;
+        parameter.color = Color.WHITE;
+        verySmallFont = generator.generateFont(parameter);
 
 		//luodaan pieni fontti
 		parameter.size = 40;

@@ -19,7 +19,7 @@ import java.util.Scanner;
  * Created by Anna on 26/03/2018.
  */
 
-public class MainMenu implements Screen {
+public class MainMenu implements Screen{
     private GameMain host;
     private SpriteBatch batch;
     private OrthographicCamera camera;
@@ -90,13 +90,13 @@ public class MainMenu implements Screen {
                 if (buttonPlay.contains(touchPos.x, touchPos.y)) {
                     host.setScreen(new Difficulty(host));
                 }
-                if (buttonSettings.contains(touchPos.x, touchPos.y) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                if (buttonSettings.contains(touchPos.x, touchPos.y)) {
                     host.setScreen(new Settings(host));
                 }
-                if (buttonHighscore.contains(touchPos.x, touchPos.y) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                if (buttonHighscore.contains(touchPos.x, touchPos.y)) {
                     host.setScreen(new Highscore(host));
                 }
-                if (buttonMods.contains(touchPos.x, touchPos.y) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                if (buttonMods.contains(touchPos.x, touchPos.y)) {
                     host.setScreen(new Mods(host));
                 }
         }
@@ -126,6 +126,5 @@ public class MainMenu implements Screen {
     @Override
     public void dispose() {
         heading.dispose();
-
     }
 }

@@ -186,18 +186,22 @@ public class Difficulty implements Screen {
             }
             if (buttonEasy.contains(touchPos.x, touchPos.y)) {
                 GameMain.setDifficulty("easy");
+                GameMain.setNoteSpeed(2);
                 changeButtonTextures();
             }
             if (buttonNormal.contains(touchPos.x, touchPos.y)) {
                 GameMain.setDifficulty("normal");
+                GameMain.setNoteSpeed(3);
                 changeButtonTextures();
             }
             if (buttonHard.contains(touchPos.x, touchPos.y)) {
                 GameMain.setDifficulty("hard");
+                GameMain.setNoteSpeed(5);
                 changeButtonTextures();
             }
             if (buttonBackBreaker.contains(touchPos.x, touchPos.y)) {
                 GameMain.setDifficulty("BACKBREAKER");
+                GameMain.setNoteSpeed(10);
                 changeButtonTextures();
             }
             if (buttonSong1.contains(touchPos.x, touchPos.y)) {

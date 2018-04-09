@@ -333,8 +333,8 @@ public class Mods implements Screen {
             small.draw(batch, "on", 720, 300);
         } else { small.draw(batch, "off", 720, 300); }
         if(GameMain.activeSectors[3]) {
-            small.draw(batch, "on", 680, 230);
-        } else { small.draw(batch, "off", 680, 230); }
+            small.draw(batch, "on", 680, 220);
+        } else { small.draw(batch, "off", 680, 220); }
         if(GameMain.activeSectors[4]) {
             small.draw(batch, "on", 620, 160);
         } else { small.draw(batch, "off", 620, 160); }
@@ -342,8 +342,8 @@ public class Mods implements Screen {
             small.draw(batch, "on", 520, 160);
         } else { small.draw(batch, "off", 520, 160); }
         if(GameMain.activeSectors[6]) {
-            small.draw(batch, "on", 460, 230);
-        } else { small.draw(batch, "off", 460, 230); }
+            small.draw(batch, "on", 460, 220);
+        } else { small.draw(batch, "off", 460, 220); }
         if(GameMain.activeSectors[7]) {
             small.draw(batch, "on", 420, 300);
         } else { small.draw(batch, "off", 420, 300); }
