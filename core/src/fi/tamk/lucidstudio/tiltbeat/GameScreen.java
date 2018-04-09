@@ -82,14 +82,14 @@ GameScreen implements Screen {
         song = new ArrayList<Note>();
         noteTexture = new Texture("Smol Green.png");
 
-        for (int i = 0; i < 10 ; i++) {
+        for (int i = 0; i < 100 ; i++) {
             int random = MathUtils.random(0, (playerSides-1));
             random = moveNotes(random);
             //jos ei järjestelmällinen siirtäminen toimi (koska uusi sektori myös passiivinen) niin arvotaan uusi paikka
             while (!isSectorActive(random)) {
                 random = MathUtils.random(0, (playerSides-1));
             }
-            song.add(new Point(((random) % playerSides), 2.5f * i * noteSpeed, noteTexture));
+            song.add(new Point(((random) % playerSides), 2.5f * i / noteSpeed * 5f + 10f, noteTexture));
             /*
             int rand = MathUtils.random(0, 5);
             for (int j = 0; j < 3; j++) {
