@@ -223,6 +223,7 @@ public class Mods implements Screen {
         small.draw(batch, "de-activate them" , 885, 300);
 
         //väliaikainen millä näkee onko sektorit päällä vai pois
+        //piirtää sektoreihin "on/off"
         if(playerSides==10) {
             draw10sectors();
         } else if(playerSides==8) {
@@ -233,6 +234,7 @@ public class Mods implements Screen {
 
         batch.end();
 
+        //nappien toiminnallisuus
         if (Gdx.input.isTouched()) {
             Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);

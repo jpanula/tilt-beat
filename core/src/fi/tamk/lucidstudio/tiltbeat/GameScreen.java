@@ -176,6 +176,7 @@ GameScreen implements Screen {
         for (Note note : song) {
             note.draw(batch);
         }
+        //pauseruutu
         if (paused && !song.isEmpty()) {
             batch.draw(textBoxTexture, resultBox.x, resultBox.y, resultBox.width, resultBox.height);
             batch.draw(playButtonTexture, playButton.x, playButton.y, playButton.width, playButton.height);
@@ -183,7 +184,7 @@ GameScreen implements Screen {
             batch.draw(backButtonTexture, backButton.x, backButton.y, backButton.width, backButton.height);
             batch.draw(settingsButtonTexture, settingsButton.x, settingsButton.y, settingsButton.width, settingsButton.height);
         }
-
+        //tulosruutu
         if (song.isEmpty()) {
             batch.draw(textBoxTexture, resultBox.x, resultBox.y, resultBox.width, resultBox.height);
             batch.draw(playAgainButtonTexture, playAgainButton.x, playAgainButton.y, playAgainButton.width, playAgainButton.height);
@@ -196,7 +197,7 @@ GameScreen implements Screen {
         basic.draw(batch, "X: " + Gdx.input.getAccelerometerX(), 50, 300);
         basic.draw(batch, " Y: " + Gdx.input.getAccelerometerY(), 50, 250);
         basic.draw(batch, " Z: " + Gdx.input.getAccelerometerZ(), 50, 200);
-
+        //pauseruudun tekstit
         if (paused && !song.isEmpty()) {
             heading.draw(batch, "PAUSE", 300, 600);
             basic.draw(batch, "main", 280, 400);
@@ -205,7 +206,7 @@ GameScreen implements Screen {
             basic.draw(batch, "retry", 680, 380);
             basic.draw(batch, "settings", 830, 380);
         }
-
+        //tulosruudun tekstit
         if (song.isEmpty()) {
             heading.draw(batch, "you did it!!!", 220, 650);
             basic.draw(batch, "you got " + points + " points!!", 300, 400);
@@ -215,6 +216,7 @@ GameScreen implements Screen {
 
         batch.end();
 
+        //piirretään sektorit&osoitin vain kun peli päällä
         if(!song.isEmpty() && !paused) {
             // ShapeRenderer render, piirtää annetuilla pisteillä muotoja
             if (useShapeRenderer) {
@@ -309,6 +311,7 @@ GameScreen implements Screen {
             }
         }
 
+        //nappien toiminnot
         if (Gdx.input.isTouched()) {
             Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);

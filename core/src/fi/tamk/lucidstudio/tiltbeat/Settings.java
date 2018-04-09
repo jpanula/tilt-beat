@@ -93,6 +93,7 @@ public class Settings implements Screen {
 
         batch.end();
 
+        //nappien toiminnallisuus
         if (Gdx.input.isTouched()) {
             Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);
