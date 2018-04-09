@@ -103,7 +103,7 @@ public class Mods implements Screen {
     }
 
     public void createSixside() {
-        texture = new Texture("sixside.png");
+        texture = new Texture("sixsidesectors.png");
         vertices = new float[]{
                 0.5f, 1f,
                 0.933f, 0.75f,
@@ -123,7 +123,7 @@ public class Mods implements Screen {
     }
 
     public void createEightside() {
-        texture = new Texture("eightside.png");
+        texture = new Texture("eightsidesectors.png");
         vertices = new float[]{
                 0.5f, 1.0f,
                 0.8555f, 0.8555f,
@@ -145,7 +145,7 @@ public class Mods implements Screen {
     }
 
     public void createTenside() {
-        texture = new Texture("tenside.png");
+        texture = new Texture("tensidesectors.png");
         vertices = new float[]{
                 0.5f, 1.0f,
                 0.795f, 0.905f,
