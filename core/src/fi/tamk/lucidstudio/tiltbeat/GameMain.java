@@ -33,6 +33,7 @@ public class GameMain extends Game {
     private static String difficulty = "normal";
 	public static boolean[] activeSectors;
     private static Texture background;
+    private static Texture kitten;
     private static Texture button;
     private static Texture buttonHigh;
     private static Texture buttonPressed;
@@ -105,6 +106,8 @@ public class GameMain extends Game {
 
     public static Texture getBackgroundTexture() { return background; }
 
+    public static Texture getKittenTexture() { return kitten; }
+
     public static Texture getButtonTexture() { return button; }
 
     public static Texture getButtonHighTexture() { return buttonHigh; }
@@ -175,6 +178,7 @@ public class GameMain extends Game {
 		for (int i=0 ; i<playerSides ; i++) {activeSectors[i] = true; }
 
 		background = new Texture(Gdx.files.internal("Galaxy blue.png"));
+        kitten = new Texture(Gdx.files.internal("kitten.jpg"));
         button = new Texture(Gdx.files.internal("nappi1.png"));
         buttonHigh = new Texture(Gdx.files.internal("nappi1korkee.png"));
         buttonPressed = new Texture(Gdx.files.internal("nappi2.png"));
