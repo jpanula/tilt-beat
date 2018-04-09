@@ -24,7 +24,7 @@ public class GameMain extends Game {
 	private static final float SCREEN_HEIGHT = 10;
 	private static final float SCREEN_WIDTH_PIXELS = 1280;
 	private static final float SCREEN_HEIGHT_PIXELS = 800;
-	private static int playerSides = 10;
+	private static int playerSides = 8;
 	private static float noteSpeed = 3f;
 	private static float playerDiameter = 3;
     private static float accelerometerDeadzone = 0.25f;
@@ -172,7 +172,7 @@ public class GameMain extends Game {
 		fontCamera.setToOrtho(false, SCREEN_WIDTH_PIXELS, SCREEN_HEIGHT_PIXELS);
 
 		activeSectors = new boolean[playerSides];
-		for (int i=0 ; i<playerSides ; i++) {activeSectors[1] = true; }
+		for (int i=0 ; i<playerSides ; i++) {activeSectors[i] = true; }
 
 		background = new Texture(Gdx.files.internal("Galaxy blue.png"));
         button = new Texture(Gdx.files.internal("nappi1.png"));

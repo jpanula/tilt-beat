@@ -83,21 +83,21 @@ public class Mods implements Screen {
     }
 
     public void makeButtonsAndPolygon() {
-        if(playerSides==10) {
-            createTenside();
-            button6Texture = buttonTexture;
+        if(playerSides==6) {
+            createSixside();
+            button6Texture = buttonPressedTexture;
             button8Texture = buttonTexture;
-            button10Texture = buttonPressedTexture;
+            button10Texture = buttonTexture;
         } else if (playerSides==8) {
             createEightside();
             button6Texture = buttonTexture;
             button8Texture = buttonPressedTexture;
             button10Texture = buttonTexture;
         } else {
-            createSixside();
-            button6Texture = buttonPressedTexture;
+            createTenside();
+            button6Texture = buttonTexture;
             button8Texture = buttonTexture;
-            button10Texture = buttonTexture;
+            button10Texture = buttonPressedTexture;
         }
 
     }
@@ -123,7 +123,6 @@ public class Mods implements Screen {
     }
 
     public void createEightside() {
-
         texture = new Texture("eightside.png");
         vertices = new float[]{
                 0.5f, 1.0f,
@@ -147,7 +146,6 @@ public class Mods implements Screen {
 
     public void createTenside() {
         texture = new Texture("tenside.png");
-        // Tässä on 10-kulmion pisteet, joista hitbox Polygon muodostetaan
         vertices = new float[]{
                 0.5f, 1.0f,
                 0.795f, 0.905f,

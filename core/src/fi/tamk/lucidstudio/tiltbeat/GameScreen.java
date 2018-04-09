@@ -215,19 +215,21 @@ GameScreen implements Screen {
 
         batch.end();
 
-        // ShapeRenderer render, piirtää annetuilla pisteillä muotoja
-        if (useShapeRenderer) {
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            shapeRenderer.setColor(1, 0, 1, 1);
-            player.draw(shapeRenderer);
-            for (Note note : song) {
-                if (note instanceof Slide) {
-                    ((Slide) note).draw(shapeRenderer);
+        if(!song.isEmpty()) {
+            // ShapeRenderer render, piirtää annetuilla pisteillä muotoja
+            if (useShapeRenderer) {
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+                shapeRenderer.setColor(1, 0, 1, 1);
+                player.draw(shapeRenderer);
+                for (Note note : song) {
+                    if (note instanceof Slide) {
+                        ((Slide) note).draw(shapeRenderer);
+                    }
                 }
+                shapeRenderer.setColor(1, 0, 0, 0);
+                //shapeRenderer.line(GameMain.getScreenWidth() / 2, GameMain.getScreenHeight() / 2, 0, Gdx.input.getAccelerometerY() + GameMain.getScreenWidth() / 2, -Gdx.input.getAccelerometerX() + GameMain.getScreenHeight() / 2, -Math.abs(Gdx.input.getAccelerometerZ()));
+                shapeRenderer.end();
             }
-            shapeRenderer.setColor(1, 0, 0, 0);
-            //shapeRenderer.line(GameMain.getScreenWidth() / 2, GameMain.getScreenHeight() / 2, 0, Gdx.input.getAccelerometerY() + GameMain.getScreenWidth() / 2, -Gdx.input.getAccelerometerX() + GameMain.getScreenHeight() / 2, -Math.abs(Gdx.input.getAccelerometerZ()));
-            shapeRenderer.end();
         }
 
         // Printtaa konsoliin accelerometerin arvoja
