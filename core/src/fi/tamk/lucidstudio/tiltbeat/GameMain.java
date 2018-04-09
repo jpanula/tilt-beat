@@ -31,6 +31,7 @@ public class GameMain extends Game {
 	private static float accelerometerMax = 3f;
     private static String songChoice = "song 1";
     private static String difficulty = "normal";
+    public static boolean soundOn = true;
 	public static boolean[] activeSectors;
     private static Texture background;
     private static Texture kitten;
