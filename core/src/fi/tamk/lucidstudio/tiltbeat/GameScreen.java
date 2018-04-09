@@ -68,6 +68,8 @@ GameScreen implements Screen {
      * @param host pelin Main-metodi
      */
     public GameScreen(GameMain host) {
+        // Katotaan jos toimii purkkakorjauksena ettei heti alussa skippaa eteenpäi
+        paused = true;
         this.host = host;
         batch = host.getBatch();
         camera = host.getCamera();
@@ -234,9 +236,9 @@ GameScreen implements Screen {
         }
 
         // Piirrellään Accelerometerin arvoja ruudulle
-        basic.draw(batch, "X: " + Gdx.input.getAccelerometerX(), 50, 300);
+        /*basic.draw(batch, "X: " + Gdx.input.getAccelerometerX(), 50, 300);
         basic.draw(batch, " Y: " + Gdx.input.getAccelerometerY(), 50, 250);
-        basic.draw(batch, " Z: " + Gdx.input.getAccelerometerZ(), 50, 200);
+        basic.draw(batch, " Z: " + Gdx.input.getAccelerometerZ(), 50, 200);*/
         //pauseruudun tekstit
         if (paused && !song.isEmpty()) {
             heading.draw(batch, "PAUSE", 300, 600);

@@ -53,7 +53,7 @@ public class GameMain extends Game {
 	private static float zeroPointX = 0;
 	private static float zeroPointY = 0;
 	private static float zeroPointZ = 0;
-	private static int smoothingSamples = 15;
+	private static int smoothingSamples = 23;
 
 	public static void setPlayerSides(int a) { playerSides = a; }
 
