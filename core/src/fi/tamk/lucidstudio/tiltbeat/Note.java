@@ -77,12 +77,16 @@ class Point extends Note {
     }
 
     @Override
-    void draw(SpriteBatch batch) {
+    public void draw(SpriteBatch batch) {
         // Vektorilla lasketaan pelaajan kulmion kulmien perusteella nuottien liikerata kohti niiden
         // sektoreita
         vector.setLength(getDistance() + GameMain.getPlayerInradius());
         vector.setAngle(90 - (360 / GameMain.getPlayerSides()) * getSector() - (360 / GameMain.getPlayerSides()) / 2);
         batch.draw(texture, GameMain.getScreenWidth() / 2 + vector.x - width / 2, GameMain.getScreenHeight() / 2 + vector.y - height / 2, width / 2, height / 2, width, height, 1, 1, vector.angle() - 90, 0, 0, texture.getWidth(), texture.getHeight(), flipped, false);
+    }
+    public void drawInBackground(SpriteBatch batch) {
+        vector.setLength(getDistance() + GameMain.getPlayerInradius());
+        vector.setAngle(90 - (360 / GameMain.getPlayerSides()) * getSector() - (360 / GameMain.getPlayerSides()) / 2);
     }
 }
 
@@ -121,7 +125,7 @@ class Hold extends Note {
         }
 
         @Override
-        void draw(SpriteBatch batch) {
+        public void draw(SpriteBatch batch) {
             vector.setLength(getDistance() + GameMain.getPlayerInradius());
             vector.setAngle(90 - (360 / GameMain.getPlayerSides()) * getSector() - (360 / GameMain.getPlayerSides()) / 2);
             if (getDistance() > 0)
@@ -131,17 +135,25 @@ class Hold extends Note {
 
     public Hold(int sector, float distance, Texture texture, float length) {
         super(sector, distance);
-        tickTexture = new Texture("Smol Blue Ball.png");
+        tickTexture = new Texture("Smol Green Ball.png");
         this.texture = texture;
         this.length = length;
         width = 1;
         tickDiameter = 0.2f;
         height = 0.7f * width;
         tickAmount = (int) (length / (tickDiameter * GameMain.getNoteSpeed()));
+        if (GameMain.getDifficulty().equals("normal")) {
+            tickAmount *= 2;
+        } else if (GameMain.getDifficulty().equals("hard")) {
+            tickAmount *= 3;
+        } else if (GameMain.getDifficulty().equals("BACKBREAKER")) {
+            tickAmount *= 5;
+        }
+        tickAmount -= 2;
         startPoint = new Vector2(distance, 0);
         endPoint = new Vector2(distance + length, 0);
         ticks = new ArrayList<Tick>();
-        for (int i = 1; i < tickAmount; i++) {
+        for (int i = 2; i < tickAmount - 1; i++) {
             ticks.add(new Tick(sector, (distance + (float) i / tickAmount * length), tickTexture));
         }
 
@@ -164,7 +176,7 @@ class Hold extends Note {
      }
 
      @Override
-    void draw(SpriteBatch batch) {
+    public void draw(SpriteBatch batch) {
         // Vektorilla lasketaan pelaajan kulmion kulmien perusteella nuottien liikerata kohti niiden
         // sektoreita
          for (Tick tick : ticks) {

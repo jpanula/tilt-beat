@@ -1,24 +1,17 @@
 package fi.tamk.lucidstudio.tiltbeat;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
-import com.sun.org.apache.regexp.internal.RE;
-
-import org.w3c.dom.Text;
-import org.w3c.dom.css.Rect;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -38,7 +31,17 @@ GameScreen implements Screen {
     private ArrayList<Note> song;
     private boolean paused;
     private boolean useShapeRenderer;
-    private Texture noteTexture;
+    private Texture pointTexture;
+    private Texture holdTexture;
+    private Texture slideTexture;
+
+    // Musiikki ja bpm
+    private Music jauntyGumption;
+    private float bpm;
+    // Pituus minuuteissa
+    private float musicLength;
+    private int totalBeats;
+    private int startOffset;
 
     private int playerSides;
     private float playerDiameter;
@@ -80,30 +83,79 @@ GameScreen implements Screen {
         playerDiameter = GameMain.getPlayerDiameter();
         player = new Player(playerSides, playerDiameter);
 
+        jauntyGumption = Gdx.audio.newMusic(Gdx.files.internal("JauntyGumption.ogg"));
+        bpm = 146;
+        // Muutetaan nuottien tiheyttä vaikeusasteen mukaan
+        if (GameMain.getDifficulty().equals("easy")) {
+            bpm /= 8;
+            startOffset = 1;
+        } else if (GameMain.getDifficulty().equals(("normal"))) {
+            bpm /= 4;
+            startOffset = 2;
+        } else if (GameMain.getDifficulty().equals("hard")) {
+            bpm /= 2;
+            startOffset = 5;
+        } else {
+            startOffset = 10;
+        }
+        musicLength = 1 + 58f / 60;
+        totalBeats = (int) (musicLength * bpm);
+
         noteSpeed = GameMain.getNoteSpeed();
         song = new ArrayList<Note>();
-        noteTexture = new Texture("Smol Green.png");
+        pointTexture = new Texture("Smol Green.png");
+        holdTexture = new Texture("Smol Green Hold.png");
+        slideTexture = new Texture("Smol Green Slide.png");
 
-        for (int i = 0; i < 100 ; i++) {
-            int random = MathUtils.random(0, (playerSides-1));
-            random = moveNotes(random);
+
+        for (int i = 0; i < totalBeats - startOffset ; i++) {
+            int randomSector = MathUtils.random(0, (playerSides-1));
+            randomSector = moveNotes(randomSector);
             //jos ei järjestelmällinen siirtäminen toimi (koska uusi sektori myös passiivinen) niin arvotaan uusi paikka
-            while (!isSectorActive(random)) {
-                random = MathUtils.random(0, (playerSides-1));
+            while (!isSectorActive(randomSector)) {
+                randomSector = MathUtils.random(0, (playerSides-1));
             }
-            song.add(new Point(((random) % playerSides), 2.5f * i / noteSpeed * 5f + 10f, noteTexture));
+            int randomNoteType = MathUtils.random(0, 7);
+            if (randomNoteType < 5) {
+                song.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + 0.5f * noteSpeed / (146 / 60), pointTexture));
+            } else if (randomNoteType < 7) {
+                song.add(new Hold((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + 0.5f * noteSpeed / (146 / 60), holdTexture, noteSpeed / (bpm / 60)));
+                i++;
+            } else {
+                ArrayList<Point> slideGen = new ArrayList<Point>();
+                slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + 0.5f * noteSpeed / (146 / 60), slideTexture));
+                randomSector++;
+                randomSector = moveNotes(randomSector % playerSides);
+                while (!isSectorActive(randomSector % playerSides)) {
+                    randomSector = MathUtils.random(0, (playerSides - 1));
+                }
+                slideGen.add(new Point((randomSector) % playerSides, (i + 0.5f) * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + 0.5f * noteSpeed / (146 / 60), slideTexture));
+                i++;
+                if (randomSector == 0) {
+                    randomSector = GameMain.getPlayerSides() - 1;
+                } else {
+                    randomSector--;
+                }
+                randomSector = moveNotes(randomSector % playerSides);
+                while (!isSectorActive(randomSector % playerSides)) {
+                    randomSector = MathUtils.random(0, (playerSides - 1));
+                }
+                slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + 0.5f * noteSpeed / (146 / 60), slideTexture));
+                slideGen.get(1).flip();
+                song.add(new Slide(0, 0, slideGen));
+            }
+        }
             /*
             int rand = MathUtils.random(0, 5);
             for (int j = 0; j < 3; j++) {
                 if (rand == 0) {
-                song.add(new Point(((rand + j) % playerSides), 2.5f * i * noteSpeed + j * 0.8f * noteSpeed, noteTexture));
+                song.add(new Point(((rand + j) % playerSides), 2.5f * i * noteSpeed + j * 0.8f * noteSpeed, pointTexture));
                 } else if (rand == 1) {
-                    song.add(new Point(((rand - j) % playerSides), 2.5f * i * noteSpeed + j * 0.8f * noteSpeed, noteTexture));
+                    song.add(new Point(((rand - j) % playerSides), 2.5f * i * noteSpeed + j * 0.8f * noteSpeed, pointTexture));
                 } else {
-                    song.add(new Point(((rand) % playerSides), 2.5f * i * noteSpeed + j * 0.5f *  noteSpeed, noteTexture));
+                    song.add(new Point(((rand) % playerSides), 2.5f * i * noteSpeed + j * 0.5f *  noteSpeed, pointTexture));
                 }
             }*/
-        }
 
         points = 0;
         verySmall = GameMain.getVerySmallFont();
@@ -126,6 +178,9 @@ GameScreen implements Screen {
 
         paused = false;
         useShapeRenderer = true;
+        if (GameMain.soundOn) {
+            jauntyGumption.play();
+        }
     }
 
     public void createPauseMenuButtons() {
@@ -267,13 +322,20 @@ GameScreen implements Screen {
                 player.draw(shapeRenderer);
                 for (Note note : song) {
                     if (note instanceof Slide) {
+                        shapeRenderer.setColor(0, 1, 0, 0);
                         ((Slide) note).draw(shapeRenderer);
                     }
                 }
-                shapeRenderer.setColor(1, 0, 0, 0);
                 //shapeRenderer.line(GameMain.getScreenWidth() / 2, GameMain.getScreenHeight() / 2, 0, Gdx.input.getAccelerometerY() + GameMain.getScreenWidth() / 2, -Gdx.input.getAccelerometerX() + GameMain.getScreenHeight() / 2, -Math.abs(Gdx.input.getAccelerometerZ()));
                 shapeRenderer.end();
             }
+        }
+
+        // Musiikin toiminta pausen kanssa
+        if (paused) {
+            jauntyGumption.pause();
+        } else if (!paused && !jauntyGumption.isPlaying() && !song.isEmpty() && GameMain.soundOn) {
+            jauntyGumption.play();
         }
 
         // Printtaa konsoliin accelerometerin arvoja
@@ -299,7 +361,7 @@ GameScreen implements Screen {
                     iter.remove();
                     points += 5;
                 // Muuten FAIL
-                } else {
+                } else if (note.getDistance() < -0.35f){
                     System.out.println("FAIL!");
                     iter.remove();
                 }
@@ -309,7 +371,7 @@ GameScreen implements Screen {
                     if (note.getSector() == player.getPointerSector()) {
                         iter.remove();
                         points += 10;
-                    } else {
+                    } else if (note.getDistance() < -0.35f){
                         System.out.println("FAIL!");
                         iter.remove();
                     }
@@ -318,7 +380,7 @@ GameScreen implements Screen {
                     if (note.getSector() == player.getPointerSector()) {
                         points += 10;
                         ((Hold) note).setScored(true);
-                    } else {
+                    } else if (note.getDistance() < -0.35f){
                         System.out.println("FAIL!");
                         ((Hold) note).setScored(true);
                     }
@@ -329,7 +391,7 @@ GameScreen implements Screen {
                         if (tick.getSector() == player.getPointerSector()) {
                             points++;
                             tick.setScored(true);
-                        } else {
+                        } else if (note.getDistance() < -0.35f){
                             System.out.println("FAIL!");
                             tick.setScored(true);
                         }
@@ -344,7 +406,7 @@ GameScreen implements Screen {
                         if (point.getSector() == player.getPointerSector()) {
                             points += 10;
                             slideIter.remove();
-                        } else {
+                        } else if (point.getDistance() < -0.35f){
                             System.out.println("FAIL!");
                             slideIter.remove();
                         }
@@ -368,12 +430,15 @@ GameScreen implements Screen {
                 destroyPauseMenuButtons();
             }
             if (playAgainButton.contains(touchPos.x, touchPos.y)) {
+                jauntyGumption.stop();
                 host.setScreen(new GameScreen(host));
             }
             if (backButton.contains(touchPos.x, touchPos.y)) {
+                jauntyGumption.stop();
                 host.setScreen(new MainMenu(host));
             }
             if (settingsButton.contains(touchPos.x, touchPos.y)) {
+                jauntyGumption.stop();
                 host.setScreen(new Settings(host));
             }
         }
