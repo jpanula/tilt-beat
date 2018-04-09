@@ -114,16 +114,38 @@ GameScreen implements Screen {
         settingsButtonTexture = GameMain.getSettingsButtonTexture();
 
         pauseButton = new Rectangle(0.2f, 8.3f, 1.5f, 1.5f);
-        playButton = new Rectangle(6f, 2f, 1.5f, 1.5f);
-        playAgainButton = new Rectangle(8.5f, 2f, 1.5f, 1.5f);
-        backButton = new Rectangle(3.5f, 2f, 1.5f, 1.5f);
-        settingsButton = new Rectangle(11f, 2f, 1.5f, 1.5f);
+
+        destroyPauseMenuButtons();
 
         textBoxTexture = GameMain.getTextBoxTexture();
         resultBox = new Rectangle(2f, 1f, 12f, 8f);
 
         paused = false;
         useShapeRenderer = true;
+    }
+
+    public void createPauseMenuButtons() {
+        playButton = new Rectangle(6f, 2f, 1.5f, 1.5f);
+        playAgainButton = new Rectangle(8.5f, 2f, 1.5f, 1.5f);
+        backButton = new Rectangle(3.5f, 2f, 1.5f, 1.5f);
+        settingsButton = new Rectangle(11f, 2f, 1.5f, 1.5f);
+    }
+
+    public void destroyPauseMenuButtons() {
+        playButton = new Rectangle(11f, 18f, .1f, .1f);
+        playAgainButton = new Rectangle(11f, 18f, .1f, .1f);
+        backButton = new Rectangle(11f, 18f, .1f, .1f);
+        settingsButton = new Rectangle(11f, 18f, .1f, .1f);
+    }
+
+    public void createResultMenuButtons() {
+        playAgainButton = new Rectangle(8.5f, 2f, 1.5f, 1.5f);
+        backButton = new Rectangle(3.5f, 2f, 1.5f, 1.5f);
+    }
+
+    public void destroyResultMenuButtons() {
+        playButton = new Rectangle(11f, 18f, .1f, .1f);
+        playAgainButton = new Rectangle(11f, 18f, .1f, .1f);
     }
 
     public boolean isSectorActive(int a) {
@@ -178,6 +200,7 @@ GameScreen implements Screen {
         }
         //pauseruutu
         if (paused && !song.isEmpty()) {
+            createPauseMenuButtons();
             batch.draw(textBoxTexture, resultBox.x, resultBox.y, resultBox.width, resultBox.height);
             batch.draw(playButtonTexture, playButton.x, playButton.y, playButton.width, playButton.height);
             batch.draw(playAgainButtonTexture, playAgainButton.x, playAgainButton.y, playAgainButton.width, playAgainButton.height);
@@ -186,6 +209,7 @@ GameScreen implements Screen {
         }
         //tulosruutu
         if (song.isEmpty()) {
+            createResultMenuButtons();
             batch.draw(textBoxTexture, resultBox.x, resultBox.y, resultBox.width, resultBox.height);
             batch.draw(playAgainButtonTexture, playAgainButton.x, playAgainButton.y, playAgainButton.width, playAgainButton.height);
             batch.draw(backButtonTexture, backButton.x, backButton.y, backButton.width, backButton.height);
@@ -323,6 +347,7 @@ GameScreen implements Screen {
             }
             if (playButton.contains(touchPos.x, touchPos.y)) {
                 paused = false;
+                destroyPauseMenuButtons();
             }
             if (playAgainButton.contains(touchPos.x, touchPos.y)) {
                 host.setScreen(new GameScreen(host));
