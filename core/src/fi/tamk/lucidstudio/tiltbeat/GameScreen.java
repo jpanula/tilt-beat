@@ -416,7 +416,9 @@ GameScreen implements Screen {
                         }
                     }
                 }
-                iter.remove();
+                if (((Slide) note).getNotes().isEmpty()) {
+                    iter.remove();
+                }
             }
         }
 
