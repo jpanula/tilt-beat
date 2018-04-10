@@ -255,9 +255,10 @@ public class Player {
 
     // Piirtometodi ShapeRendererille, käyttää pisteitä / muotoja
     public void draw(ShapeRenderer shapeRenderer) {
-        shapeRenderer.polygon(getVertices());
+        //shapeRenderer.polygon(getVertices());
         if (getPointerSector() > -1) {
-            shapeRenderer.polygon(getSectorVertices(getPointerSector()));
+            float[] verts = getSectorVertices(getPointerSector());
+            shapeRenderer.triangle(verts[0], verts[1], verts[2], verts[3], verts[4], verts[5]);
         }
         //pointer.draw(shapeRenderer);
     }

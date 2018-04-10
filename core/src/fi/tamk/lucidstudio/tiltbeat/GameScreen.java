@@ -119,19 +119,19 @@ GameScreen implements Screen {
             }
             int randomNoteType = MathUtils.random(0, 7);
             if (randomNoteType < 5) {
-                song.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + 0.5f * noteSpeed / (146 / 60), pointTexture));
+                song.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), pointTexture));
             } else if (randomNoteType < 7) {
-                song.add(new Hold((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + 0.5f * noteSpeed / (146 / 60), holdTexture, noteSpeed / (bpm / 60)));
+                song.add(new Hold((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), holdTexture, noteSpeed / (bpm / 60)));
                 i++;
             } else {
                 ArrayList<Point> slideGen = new ArrayList<Point>();
-                slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + 0.5f * noteSpeed / (146 / 60), slideTexture));
+                slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), slideTexture));
                 randomSector++;
                 randomSector = moveNotes(randomSector % playerSides);
                 while (!isSectorActive(randomSector % playerSides)) {
                     randomSector = MathUtils.random(0, (playerSides - 1));
                 }
-                slideGen.add(new Point((randomSector) % playerSides, (i + 0.5f) * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + 0.5f * noteSpeed / (146 / 60), slideTexture));
+                slideGen.add(new Point((randomSector) % playerSides, (i + 0.5f) * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), slideTexture));
                 i++;
                 if (randomSector == 0) {
                     randomSector = GameMain.getPlayerSides() - 1;
@@ -142,7 +142,7 @@ GameScreen implements Screen {
                 while (!isSectorActive(randomSector % playerSides)) {
                     randomSector = MathUtils.random(0, (playerSides - 1));
                 }
-                slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + 0.5f * noteSpeed / (146 / 60), slideTexture));
+                slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), slideTexture));
                 slideGen.get(1).flip();
                 song.add(new Slide(0, 0, slideGen));
             }
@@ -319,12 +319,14 @@ GameScreen implements Screen {
         if(!song.isEmpty() && !paused) {
             // ShapeRenderer render, piirtää annetuilla pisteillä muotoja
             if (useShapeRenderer) {
-                shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-                shapeRenderer.setColor(1, 0, 1, 1);
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                shapeRenderer.setColor(1, 1, 1, 1);
                 player.draw(shapeRenderer);
+                shapeRenderer.end();
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+                shapeRenderer.setColor(0, 1, 0, 0);
                 for (Note note : song) {
                     if (note instanceof Slide) {
-                        shapeRenderer.setColor(0, 1, 0, 0);
                         ((Slide) note).draw(shapeRenderer);
                     }
                 }
@@ -414,6 +416,7 @@ GameScreen implements Screen {
                         }
                     }
                 }
+                iter.remove();
             }
         }
 
