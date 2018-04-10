@@ -44,6 +44,7 @@ public class Mods implements Screen {
     private Texture backButtonTexture;
     private Rectangle textBox;
     private Texture textBoxTexture;
+    private Vector3 touchPos;
 
     ArrayList<Polygon> sectors;
     float[] vertices;
@@ -77,6 +78,7 @@ public class Mods implements Screen {
         playerDiameter = GameMain.getPlayerDiameter();
         radius = playerDiameter / 2;
         sectors = new ArrayList<Polygon>();
+        touchPos = new Vector3();
 
         makeButtonsAndPolygon();
 
@@ -236,41 +238,42 @@ public class Mods implements Screen {
 
         //nappien toiminnallisuus
         if (Gdx.input.isTouched()) {
-            Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);
-            if (backButton.contains(touchPos.x, touchPos.y)) {
-                host.setScreen(new MainMenu(host));
-            }
-            if (button6.contains(touchPos.x, touchPos.y)) {
-                GameMain.setPlayerSides(6);
-                createSixside();
-                button6Texture = buttonPressedTexture;
-                button8Texture = buttonTexture;
-                button10Texture = buttonTexture;
-            }
-            if (button8.contains(touchPos.x, touchPos.y)) {
-                GameMain.setPlayerSides(8);
-                createEightside();
-                button6Texture = buttonTexture;
-                button8Texture = buttonPressedTexture;
-                button10Texture = buttonTexture;
-            }
-            if (button10.contains(touchPos.x, touchPos.y)) {
-                GameMain.setPlayerSides(10);
-                createTenside();
-                button6Texture = buttonTexture;
-                button8Texture = buttonTexture;
-                button10Texture = buttonPressedTexture;
-            }
-            for (int i=0 ; i<playerSides ; i++) {
-                Polygon polygon = sectors.get(i);
-                if(polygon.contains(touchPos.x, touchPos.y)) {
-                    GameMain.activeSectors[i] ^= true;
-                }
+        }
+        if (backButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            host.setScreen(new MainMenu(host));
+        }
+        if (button6.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            GameMain.setPlayerSides(6);
+            createSixside();
+            button6Texture = buttonPressedTexture;
+            button8Texture = buttonTexture;
+            button10Texture = buttonTexture;
+        }
+        if (button8.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            GameMain.setPlayerSides(8);
+            createEightside();
+            button6Texture = buttonTexture;
+            button8Texture = buttonPressedTexture;
+            button10Texture = buttonTexture;
+        }
+        if (button10.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            GameMain.setPlayerSides(10);
+            createTenside();
+            button6Texture = buttonTexture;
+            button8Texture = buttonTexture;
+            button10Texture = buttonPressedTexture;
+        }
+        for (int i=0 ; i<playerSides ; i++) {
+            Polygon polygon = sectors.get(i);
+            if(polygon.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+                GameMain.activeSectors[i] ^= true;
+                touchPos.setZero();
             }
         }
-
     }
+
 
     public void draw6sectors() {
         if(GameMain.activeSectors[0]) {

@@ -259,7 +259,7 @@ public class Player {
         if (getPointerSector() > -1) {
             shapeRenderer.polygon(getSectorVertices(getPointerSector()));
         }
-        pointer.draw(shapeRenderer);
+        //pointer.draw(shapeRenderer);
     }
 
     public void move(OrthographicCamera camera) {

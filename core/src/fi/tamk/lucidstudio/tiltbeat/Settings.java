@@ -38,6 +38,7 @@ public class Settings implements Screen {
     private Rectangle hugeKitten;
     private boolean kissa=false;
     private boolean changeSound=false;
+    private Vector3 touchPos;
 
     public Settings(GameMain host) {
         this.host = host;
@@ -59,6 +60,7 @@ public class Settings implements Screen {
         backButton = new Rectangle(0.2f, 8.3f, 1.5f, 1.5f);
         hugeKitten = new Rectangle(0f, 0f, 16f, 10f);
         destroySoundButton();
+        touchPos = new Vector3();
     }
     @Override
     public void show() {
@@ -95,7 +97,7 @@ public class Settings implements Screen {
         } else { destroySoundButton(); }
 
         if (Gdx.input.isTouched()) {
-            Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);
             if (kitten.contains(touchPos.x, touchPos.y)) {
                 batch.draw(kittenTexture, hugeKitten.x, hugeKitten.y, hugeKitten.width, hugeKitten.height);
@@ -116,25 +118,28 @@ public class Settings implements Screen {
 
         //nappien toiminnallisuus
         if (Gdx.input.isTouched()) {
-            Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);
-            if (backButton.contains(touchPos.x, touchPos.y)) {
-                host.setScreen(new MainMenu(host));
-            }
-            if (sound.contains(touchPos.x, touchPos.y)) {
-                createSoundButton();
-                changeSound ^= true;
-            }
-            if (soundButton.contains(touchPos.x, touchPos.y)) {
-                GameMain.soundOn ^= true;
-                if (soundButtonTexture==soundOnTexture) {
-                    soundButtonTexture=soundOffTexture;
-                } else { soundButtonTexture=soundOnTexture; }
-            }
-            // Nollapisteen kalibrointi
-            if (calibration.contains(touchPos.x, touchPos.y)) {
-                GameMain.calibrateZeroPoint();
-            }
+        }
+        if (backButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            host.setScreen(new MainMenu(host));
+        }
+        if (sound.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            createSoundButton();
+            changeSound ^= true;
+            touchPos.setZero();
+        }
+        if (soundButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            GameMain.soundOn ^= true;
+            if (soundButtonTexture==soundOnTexture) {
+                soundButtonTexture=soundOffTexture;
+            } else { soundButtonTexture=soundOnTexture; }
+            touchPos.setZero();
+        }
+        // Nollapisteen kalibrointi
+        if (calibration.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            GameMain.calibrateZeroPoint();
+            touchPos.setZero();
         }
     }
 

@@ -34,6 +34,7 @@ GameScreen implements Screen {
     private Texture pointTexture;
     private Texture holdTexture;
     private Texture slideTexture;
+    private Vector3 touchPos;
 
     // Musiikki ja bpm
     private Music jauntyGumption;
@@ -78,6 +79,7 @@ GameScreen implements Screen {
         camera = host.getCamera();
         fontCamera = host.getFontCamera();
         shapeRenderer = host.getShapeRenderer();
+        touchPos = new Vector3();
 
         playerSides = GameMain.getPlayerSides();
         playerDiameter = GameMain.getPlayerDiameter();
@@ -417,33 +419,33 @@ GameScreen implements Screen {
 
         //nappien toiminnot
         if (Gdx.input.isTouched()) {
-            Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);
-            if (pauseButton.contains(touchPos.x, touchPos.y)) {
-                paused = true;
-                // Väliaikainen kalibrointi paussinapissa
-                GameMain.calibrateZeroPoint();
-                //player.pointer.resetSmoothing();
-            }
-            if (playButton.contains(touchPos.x, touchPos.y)) {
-                paused = false;
-                destroyPauseMenuButtons();
-            }
-            if (playAgainButton.contains(touchPos.x, touchPos.y)) {
-                jauntyGumption.stop();
-                host.setScreen(new GameScreen(host));
-            }
-            if (backButton.contains(touchPos.x, touchPos.y)) {
-                jauntyGumption.stop();
-                host.setScreen(new MainMenu(host));
-            }
-            if (settingsButton.contains(touchPos.x, touchPos.y)) {
-                jauntyGumption.stop();
-                host.setScreen(new Settings(host));
-            }
         }
-
+        if (pauseButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            paused = true;
+            // Väliaikainen kalibrointi paussinapissa
+            GameMain.calibrateZeroPoint();
+            //player.pointer.resetSmoothing();
+        }
+        if (playButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            paused = false;
+            destroyPauseMenuButtons();
+        }
+        if (playAgainButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            jauntyGumption.stop();
+            host.setScreen(new GameScreen(host));
+        }
+        if (backButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            jauntyGumption.stop();
+            host.setScreen(new MainMenu(host));
+        }
+        if (settingsButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            jauntyGumption.stop();
+            host.setScreen(new Settings(host));
+        }
     }
+
 
     public void draw6sectors() {
         if(!GameMain.activeSectors[0]) {

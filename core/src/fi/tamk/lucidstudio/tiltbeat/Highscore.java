@@ -32,6 +32,7 @@ public class Highscore implements Screen {
     private Rectangle backButton;
     private Texture backButtonTexture;
     private Texture textBoxTexture;
+    private Vector3 touchPos;
 
     public  Highscore(GameMain host) {
         this.host = host;
@@ -44,6 +45,7 @@ public class Highscore implements Screen {
         buttonTexture = GameMain.getButtonTexture();
         backButtonTexture = GameMain.getBackButtonTexture();
         textBoxTexture = GameMain.getTextBoxTexture();
+        touchPos = new Vector3();
 
         button1 = new Rectangle(1.3f, 1.8f, 3.7f, 2f);
         button2 = new Rectangle(6.15f, 1.8f, 3.7f, 2f);
@@ -86,14 +88,14 @@ public class Highscore implements Screen {
         batch.end();
 
         if (Gdx.input.isTouched()) {
-            Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);
-            if (backButton.contains(touchPos.x, touchPos.y)) {
-                host.setScreen(new MainMenu(host));
-            }
         }
-
+        if (backButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            host.setScreen(new MainMenu(host));
+        }
     }
+
 
     @Override
     public void resize(int width, int height) {

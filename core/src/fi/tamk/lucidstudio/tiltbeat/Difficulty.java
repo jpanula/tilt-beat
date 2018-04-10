@@ -46,6 +46,7 @@ public class Difficulty implements Screen {
     private Texture buttonNormalTexture;
     private Texture buttonHardTexture;
     private Texture buttonBBTexture;
+    private Vector3 touchPos;
 
     public Difficulty(GameMain host) {
         this.host = host;
@@ -62,6 +63,7 @@ public class Difficulty implements Screen {
         backButtonTexture = GameMain.getBackButtonTexture();
         playButtonTexture = GameMain.getPlayButtonTexture();
         textBoxTexture = GameMain.getTextBoxTexture();
+        touchPos = new Vector3();
 
         changeButtonTextures();
 
@@ -176,49 +178,49 @@ public class Difficulty implements Screen {
 
         //nappien toiminnallisuus
         if (Gdx.input.isTouched()) {
-            Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);
-            if (backButton.contains(touchPos.x, touchPos.y)) {
-                host.setScreen(new MainMenu(host));
-            }
-            if (playButton.contains(touchPos.x, touchPos.y)) {
-                host.setScreen(new GameScreen(host));
-            }
-            if (buttonEasy.contains(touchPos.x, touchPos.y)) {
-                GameMain.setDifficulty("easy");
-                GameMain.setNoteSpeed(1);
-                changeButtonTextures();
-            }
-            if (buttonNormal.contains(touchPos.x, touchPos.y)) {
-                GameMain.setDifficulty("normal");
-                GameMain.setNoteSpeed(2);
-                changeButtonTextures();
-            }
-            if (buttonHard.contains(touchPos.x, touchPos.y)) {
-                GameMain.setDifficulty("hard");
-                GameMain.setNoteSpeed(3);
-                changeButtonTextures();
-            }
-            if (buttonBackBreaker.contains(touchPos.x, touchPos.y)) {
-                GameMain.setDifficulty("BACKBREAKER");
-                GameMain.setNoteSpeed(4);
-                changeButtonTextures();
-            }
-            if (buttonSong1.contains(touchPos.x, touchPos.y)) {
-                GameMain.setSongChoice("song 1");
-                changeButtonTextures();
-            }
-            if (buttonSong2.contains(touchPos.x, touchPos.y)) {
-                GameMain.setSongChoice("song 2");
-                changeButtonTextures();
-            }
-            if (buttonSong3.contains(touchPos.x, touchPos.y)) {
-                GameMain.setSongChoice("song 3");
-                changeButtonTextures();
-            }
         }
-
+        if (backButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            host.setScreen(new MainMenu(host));
+        }
+        if (playButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            host.setScreen(new GameScreen(host));
+        }
+        if (buttonEasy.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            GameMain.setDifficulty("easy");
+            GameMain.setNoteSpeed(1);
+            changeButtonTextures();
+        }
+        if (buttonNormal.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            GameMain.setDifficulty("normal");
+            GameMain.setNoteSpeed(2);
+            changeButtonTextures();
+        }
+        if (buttonHard.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            GameMain.setDifficulty("hard");
+            GameMain.setNoteSpeed(3);
+            changeButtonTextures();
+        }
+        if (buttonBackBreaker.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            GameMain.setDifficulty("BACKBREAKER");
+            GameMain.setNoteSpeed(4);
+            changeButtonTextures();
+        }
+        if (buttonSong1.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            GameMain.setSongChoice("song 1");
+            changeButtonTextures();
+        }
+        if (buttonSong2.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            GameMain.setSongChoice("song 2");
+            changeButtonTextures();
+        }
+        if (buttonSong3.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            GameMain.setSongChoice("song 3");
+            changeButtonTextures();
+        }
     }
+
 
     @Override
     public void resize(int width, int height) {

@@ -32,6 +32,7 @@ public class MainMenu implements Screen{
     private Rectangle buttonSettings;
     private Rectangle buttonHighscore;
     private Texture background;
+    private Vector3 touchPos;
 
 
     public MainMenu(GameMain host) {
@@ -49,6 +50,7 @@ public class MainMenu implements Screen{
 
         heading = GameMain.getHeadingFont();
         basic = GameMain.getBasicFont();
+        touchPos = new Vector3();
 
     }
 
@@ -85,22 +87,21 @@ public class MainMenu implements Screen{
 
         //nappien kosketuksesta screeni vaihtuu
         if (Gdx.input.isTouched()) {
-                Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-                camera.unproject(touchPos);
-                if (buttonPlay.contains(touchPos.x, touchPos.y)) {
-                    host.setScreen(new Difficulty(host));
-                }
-                if (buttonSettings.contains(touchPos.x, touchPos.y)) {
-                    host.setScreen(new Settings(host));
-                }
-                if (buttonHighscore.contains(touchPos.x, touchPos.y)) {
-                    host.setScreen(new Highscore(host));
-                }
-                if (buttonMods.contains(touchPos.x, touchPos.y)) {
-                    host.setScreen(new Mods(host));
-                }
+            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            camera.unproject(touchPos);
         }
-
+        if (buttonPlay.contains(touchPos.x, touchPos.y)  && !Gdx.input.isTouched()) {
+            host.setScreen(new Difficulty(host));
+        }
+        if (buttonSettings.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            host.setScreen(new Settings(host));
+        }
+        if (buttonHighscore.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            host.setScreen(new Highscore(host));
+        }
+        if (buttonMods.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            host.setScreen(new Mods(host));
+        }
     }
 
     @Override
