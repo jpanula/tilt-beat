@@ -211,7 +211,7 @@ GameScreen implements Screen {
 
     public boolean isSectorActive(int a) {
         //tarkistaa onko sektori aktiivinen
-        if (GameMain.activeSectors[a]) {
+        if (host.getActiveSectors()[a]) {
             return true;
         } else { return false;}
     }
@@ -219,14 +219,14 @@ GameScreen implements Screen {
     public int moveNotes(int a) {
         int b = a; int goBack=0; int continuousSectors = 0; int r;
 
-        if (!GameMain.activeSectors[a]) {
+        if (!host.getActiveSectors()[a]) {
             //kelataan peräkkäisten aktiviisten sektoreiden ensimmäiseen
-            while (!GameMain.activeSectors[b]) {
+            while (!host.getActiveSectors()[b]) {
                 goBack=b; b--;
                 if (b==-1) { b = (playerSides-1); } //että pysytään järkevissä luvuissa
             }
             //lasketaan montako sektoria putkeen
-            while (!GameMain.activeSectors[goBack]) {
+            while (!host.getActiveSectors()[goBack]) {
                 continuousSectors++; goBack++;
                 if (goBack==playerSides) { goBack = 0; } //epjl
             }
@@ -458,59 +458,59 @@ GameScreen implements Screen {
 
 
     public void draw6sectors() {
-        if(!GameMain.activeSectors[0]) {
+        if(!host.getActiveSectors()[0]) {
             verySmall.draw(batch, "off", 650, 470); }
-        if(!GameMain.activeSectors[1]) {
+        if(!host.getActiveSectors()[1]) {
             verySmall.draw(batch, "off", 680, 410); }
-        if(!GameMain.activeSectors[2]) {
+        if(!host.getActiveSectors()[2]) {
             verySmall.draw(batch, "off", 650, 350); }
-        if(!GameMain.activeSectors[3]) {
+        if(!host.getActiveSectors()[3]) {
             verySmall.draw(batch, "off", 580, 350); }
-        if(!GameMain.activeSectors[4]) {
+        if(!host.getActiveSectors()[4]) {
             verySmall.draw(batch, "off", 550, 410); }
-        if(!GameMain.activeSectors[5]) {
+        if(!host.getActiveSectors()[5]) {
             verySmall.draw(batch, "off", 580, 470); }
     }
 
     public void draw8sectors() {
-        if(!GameMain.activeSectors[0]) {
+        if(!host.getActiveSectors()[0]) {
             verySmall.draw(batch, "off", 650, 480); }
-        if(!GameMain.activeSectors[1]) {
+        if(!host.getActiveSectors()[1]) {
             verySmall.draw(batch, "off", 690, 440); }
-        if(!GameMain.activeSectors[2]) {
+        if(!host.getActiveSectors()[2]) {
             verySmall.draw(batch, "off", 690, 380); }
-        if(!GameMain.activeSectors[3]) {
+        if(!host.getActiveSectors()[3]) {
             verySmall.draw(batch, "off", 650, 330); }
-        if(!GameMain.activeSectors[4]) {
+        if(!host.getActiveSectors()[4]) {
             verySmall.draw(batch, "off", 590, 330); }
-        if(!GameMain.activeSectors[5]) {
+        if(!host.getActiveSectors()[5]) {
             verySmall.draw(batch, "off", 550, 380); }
-        if(!GameMain.activeSectors[6]) {
+        if(!host.getActiveSectors()[6]) {
             verySmall.draw(batch, "off", 550, 440); }
-        if(!GameMain.activeSectors[7]) {
+        if(!host.getActiveSectors()[7]) {
             verySmall.draw(batch, "off", 590, 480); }
     }
 
     public void draw10sectors() {
-        if(!GameMain.activeSectors[0]) {
+        if(!host.getActiveSectors()[0]) {
             verySmall.draw(batch, "off", 650, 490); }
-        if(!GameMain.activeSectors[1]) {
+        if(!host.getActiveSectors()[1]) {
             verySmall.draw(batch, "off", 690, 450); }
-        if(!GameMain.activeSectors[2]) {
+        if(!host.getActiveSectors()[2]) {
             verySmall.draw(batch, "off", 710, 410); }
-        if(!GameMain.activeSectors[3]) {
+        if(!host.getActiveSectors()[3]) {
             verySmall.draw(batch, "off", 690, 360); }
-        if(!GameMain.activeSectors[4]) {
+        if(!host.getActiveSectors()[4]) {
             verySmall.draw(batch, "off", 650, 330); }
-        if(!GameMain.activeSectors[5]) {
+        if(!host.getActiveSectors()[5]) {
             verySmall.draw(batch, "off", 590, 330); }
-        if(!GameMain.activeSectors[6]) {
+        if(!host.getActiveSectors()[6]) {
             verySmall.draw(batch, "off", 550, 360); }
-        if(!GameMain.activeSectors[7]) {
+        if(!host.getActiveSectors()[7]) {
             verySmall.draw(batch, "off", 530, 410); }
-        if(!GameMain.activeSectors[8]) {
+        if(!host.getActiveSectors()[8]) {
             verySmall.draw(batch, "off", 550, 450); }
-        if(!GameMain.activeSectors[9]) {
+        if(!host.getActiveSectors()[9]) {
             verySmall.draw(batch, "off", 590, 490); }
     }
 

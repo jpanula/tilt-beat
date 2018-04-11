@@ -23,7 +23,7 @@ public class GameMain extends Game {
 	private static final float SCREEN_HEIGHT = 10;
 	private static final float SCREEN_WIDTH_PIXELS = 1280;
 	private static final float SCREEN_HEIGHT_PIXELS = 800;
-	public static boolean[] activeSectors;
+	//public static boolean[] activeSectors;
     private static Texture background;
     private static Texture kitten;
     private static Texture button;
@@ -55,17 +55,57 @@ public class GameMain extends Game {
         prefs.putFloat("zeroPointY", 0);
         prefs.putFloat("zeroPointZ", 0);
         prefs.putInteger("smoothingSamples", 23);
-        prefs.putString("activeSectors", "");
+        prefs.putString("activeSectors", "1111111111");
         prefs.flush();
     }
 
-    /*public static boolean[] getActiveSectors() {
+    public boolean[] getActiveSectors() {
 	    boolean[] activeSectors = new boolean[prefs.getInteger("playerSides")];
+	    String prefString = prefs.getString("activeSectors");
+	    for (int i = 0; i < getPlayerSides(); i++) {
+	        if (prefString.charAt(i) == '0') {
+	            activeSectors[i] = false;
+            } else {
+	            activeSectors[i] = true;
+            }
+        }
         return activeSectors;
-    }*/
+    }
 
-    public static void setActiveSectors(boolean[] activeSectors) {
-        GameMain.activeSectors = activeSectors;
+    public void setActiveSectors(boolean[] activeSectors) {
+	    String currentPrefs = prefs.getString("activeSectors");
+	    String prefString = "";
+	    for (int i = 0; i < currentPrefs.length(); i++) {
+	        if (i < activeSectors.length) {
+                if (activeSectors[i]) {
+                    prefString += 1;
+                } else {
+                    prefString += 0;
+                }
+            } else {
+	            prefString += currentPrefs.charAt(i);
+            }
+        }
+        prefs.putString("activeSectors", prefString);
+	    prefs.flush();
+    }
+
+    public void setActiveSector(int sector, boolean active) {
+        String currentSetting = prefs.getString("activeSectors");
+        String newSetting = "";
+        for (int i = 0; i < currentSetting.length(); i++) {
+            if (sector == i) {
+                if (active) {
+                    newSetting += 1;
+                } else {
+                    newSetting += 0;
+                }
+            } else {
+                newSetting += currentSetting.charAt(i);
+            }
+        }
+        prefs.putString("activeSectors", newSetting);
+        prefs.flush();
     }
 
     public boolean isSoundOn() {
@@ -220,8 +260,8 @@ public class GameMain extends Game {
 		fontCamera = new OrthographicCamera();
 		fontCamera.setToOrtho(false, SCREEN_WIDTH_PIXELS, SCREEN_HEIGHT_PIXELS);
 
-		activeSectors = new boolean[prefs.getInteger("playerSides")];
-		for (int i=0 ; i<prefs.getInteger("playerSides") ; i++) {activeSectors[i] = true; }
+		setActiveSectors(new boolean[prefs.getInteger("playerSides")]);
+		for (int i=0 ; i<prefs.getInteger("playerSides") ; i++) {setActiveSector(i, true); }
 
 		background = new Texture(Gdx.files.internal("Galaxy blue.png"));
         kitten = new Texture(Gdx.files.internal("kitten.jpg"));
