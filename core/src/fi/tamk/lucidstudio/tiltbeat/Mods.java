@@ -74,8 +74,8 @@ public class Mods implements Screen {
         backButton = new Rectangle(0.2f, 8.3f, 1.5f, 1.5f);
         textBox = new Rectangle(10.5f, 2.5f, 5.4f, 3f);
 
-        playerSides = GameMain.getPlayerSides();
-        playerDiameter = GameMain.getPlayerDiameter();
+        playerSides = host.getPlayerSides();
+        playerDiameter = host.getPlayerDiameter();
         radius = playerDiameter / 2;
         sectors = new ArrayList<Polygon>();
         touchPos = new Vector3();
@@ -172,7 +172,7 @@ public class Mods implements Screen {
 
     public void createSectors(float[] vertices) {
         sectors = new ArrayList<Polygon>();
-        playerSides = GameMain.getPlayerSides();
+        playerSides = host.getPlayerSides();
         for (int i = 0; i < playerSides; i++) {
             float[] triangleVerts = {
                     vertices[i * 2], vertices[i * 2 + 1],
@@ -245,21 +245,21 @@ public class Mods implements Screen {
             host.setScreen(new MainMenu(host));
         }
         if (button6.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
-            GameMain.setPlayerSides(6);
+            host.setPlayerSides(6);
             createSixside();
             button6Texture = buttonPressedTexture;
             button8Texture = buttonTexture;
             button10Texture = buttonTexture;
         }
         if (button8.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
-            GameMain.setPlayerSides(8);
+            host.setPlayerSides(8);
             createEightside();
             button6Texture = buttonTexture;
             button8Texture = buttonPressedTexture;
             button10Texture = buttonTexture;
         }
         if (button10.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
-            GameMain.setPlayerSides(10);
+            host.setPlayerSides(10);
             createTenside();
             button6Texture = buttonTexture;
             button8Texture = buttonTexture;

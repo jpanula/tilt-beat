@@ -2,6 +2,7 @@ package fi.tamk.lucidstudio.tiltbeat;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,8 +11,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-// TODO siirrä asetusmuuttujat johonkin asetustiedostoon tms. ja katso mitä muita sinne voisi lisätä
 public class GameMain extends Game {
+	private Preferences prefs;
 	private SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
 	private OrthographicCamera camera;
@@ -22,14 +23,6 @@ public class GameMain extends Game {
 	private static final float SCREEN_HEIGHT = 10;
 	private static final float SCREEN_WIDTH_PIXELS = 1280;
 	private static final float SCREEN_HEIGHT_PIXELS = 800;
-	private static int playerSides = 8;
-	private static float noteSpeed = 2f;
-	private static float playerDiameter = 3;
-    private static float accelerometerDeadzone = 0.25f;
-	private static float accelerometerMax = 3f;
-    private static String songChoice = "song 1";
-    private static String difficulty = "normal";
-    public static boolean soundOn = true;
 	public static boolean[] activeSectors;
     private static Texture background;
     private static Texture kitten;
@@ -48,18 +41,61 @@ public class GameMain extends Game {
 	private static BitmapFont headingFont;
     private static BitmapFont smallerHeadingFont;
 	private FreeTypeFontGenerator generator;
-	private static float zeroPointX = 0;
-	private static float zeroPointY = 0;
-	private static float zeroPointZ = 0;
-	private static int smoothingSamples = 23;
 
-	public static void setPlayerSides(int a) { playerSides = a; }
+	public void setDefaultPreferences(Preferences prefs) {
+        prefs.putInteger("playerSides", 8);
+        prefs.putFloat("noteSpeed", 2f);
+        prefs.putFloat("playerDiameter", 3f);
+        prefs.putFloat("accelerometerDeadzone", 0.25f);
+        prefs.putFloat("accelerometerMax", 3f);
+        prefs.putString("songChoice", "song 1");
+        prefs.putString("difficulty", "normal");
+        prefs.putBoolean("soundOn", true);
+        prefs.putFloat("zeroPointX", 0);
+        prefs.putFloat("zeroPointY", 0);
+        prefs.putFloat("zeroPointZ", 0);
+        prefs.putInteger("smoothingSamples", 23);
+        prefs.putString("activeSectors", "");
+        prefs.flush();
+    }
 
-	public static void setSongChoice(String a) { songChoice = a; }
+    /*public static boolean[] getActiveSectors() {
+	    boolean[] activeSectors = new boolean[prefs.getInteger("playerSides")];
+        return activeSectors;
+    }*/
 
-    public static void setDifficulty(String a) { difficulty = a; }
+    public static void setActiveSectors(boolean[] activeSectors) {
+        GameMain.activeSectors = activeSectors;
+    }
 
-    public static void setNoteSpeed(int a) { noteSpeed = a; }
+    public boolean isSoundOn() {
+        return prefs.getBoolean("soundOn");
+    }
+
+    public void setSoundOn(boolean soundOn) {
+        prefs.putBoolean("soundOn", soundOn);
+        prefs.flush();
+    }
+
+    public void setPlayerSides(int a) {
+	    prefs.putInteger("playerSides", a);
+	    prefs.flush();
+	}
+
+	public void setSongChoice(String a) {
+	    prefs.putString("songChoice", a);
+	    prefs.flush();
+	}
+
+    public void setDifficulty(String a) {
+	    prefs.putString("difficulty", a);
+        prefs.flush();
+	}
+
+    public void setNoteSpeed(float a) {
+	    prefs.putFloat("noteSpeed", a);
+	    prefs.flush();
+	}
 
 	public SpriteBatch getBatch() {
 	    return batch;
@@ -85,26 +121,26 @@ public class GameMain extends Game {
         return SCREEN_HEIGHT;
     }
 
-    public static int getPlayerSides() {
-		return playerSides;
+    public int getPlayerSides() {
+		return prefs.getInteger("playerSides");
 	}
 
-	public static float getNoteSpeed() {
-		return noteSpeed;
+	public float getNoteSpeed() {
+		return prefs.getFloat("noteSpeed");
 	}
 
-	public static float getPlayerDiameter() {
-		return playerDiameter;
+	public float getPlayerDiameter() {
+		return prefs.getFloat("playerDiameter");
 	}
 
-	public static float getPlayerInradius() {
-		float playerInradius = (float) (getPlayerDiameter() / 2 * Math.cos(Math.PI/getPlayerSides()));
+	public static float getPlayerInradius(float playerDiameter, int playerSides) {
+		float playerInradius = (float) (playerDiameter / 2 * Math.cos(Math.PI/playerSides));
 		return playerInradius;
 	}
 
-	public static String getSongChoice() { return songChoice; }
+	public String getSongChoice() { return prefs.getString("songChoice"); }
 
-    public static String getDifficulty() { return difficulty; }
+    public String getDifficulty() { return prefs.getString("difficulty"); }
 
     public static Texture getBackgroundTexture() { return background; }
 
@@ -138,39 +174,45 @@ public class GameMain extends Game {
 
     public static BitmapFont getSmallerHeadingFont() { return smallerHeadingFont; }
 
-    public static float getAccelerometerDeadzone() {
-        return accelerometerDeadzone;
+    public float getAccelerometerDeadzone() {
+        return prefs.getFloat("accelerometerDeadzone");
     }
 
-    public static float getAccelerometerMax() {
-        return accelerometerMax;
+    public float getAccelerometerMax() {
+        return prefs.getFloat("accelerometerMax");
     }
 
-    public static float getZeroPointX() {
-        return zeroPointX;
+    public float getZeroPointX() {
+        return prefs.getFloat("zeroPointX");
     }
 
-    public static float getZeroPointY() {
-        return zeroPointY;
+    public float getZeroPointY() {
+        return prefs.getFloat("zeroPointY");
     }
 
-    public static float getZeroPointZ() {
-        return zeroPointZ;
+    public float getZeroPointZ() {
+        return prefs.getFloat("zeroPointZ");
     }
 
-	public static int getSmoothingSamples() {
-		return smoothingSamples;
+	public int getSmoothingSamples() {
+		return prefs.getInteger("smoothingSamples");
 	}
 
 	// Kalibroi nollapistearvot nykyisiin
-    public static void calibrateZeroPoint() {
-		zeroPointX = Gdx.input.getAccelerometerX();
-		zeroPointY = Gdx.input.getAccelerometerY();
-        zeroPointZ = Gdx.input.getAccelerometerZ();
+    public void calibrateZeroPoint() {
+		prefs.putFloat("accelerometerX", Gdx.input.getAccelerometerX());
+        prefs.putFloat("accelerometerY", Gdx.input.getAccelerometerY());
+        prefs.putFloat("accelerometerZ", Gdx.input.getAccelerometerZ());
+        prefs.flush();
 	}
 
     @Override
 	public void create () {
+	    prefs = Gdx.app.getPreferences("default");
+	    if (!prefs.contains("firstTime")) {
+	        prefs.putBoolean("firstTime", true);
+	        setDefaultPreferences(prefs);
+        }
 	    batch = new SpriteBatch();
 	    shapeRenderer = new ShapeRenderer();
 		camera = new OrthographicCamera();
@@ -178,8 +220,8 @@ public class GameMain extends Game {
 		fontCamera = new OrthographicCamera();
 		fontCamera.setToOrtho(false, SCREEN_WIDTH_PIXELS, SCREEN_HEIGHT_PIXELS);
 
-		activeSectors = new boolean[playerSides];
-		for (int i=0 ; i<playerSides ; i++) {activeSectors[i] = true; }
+		activeSectors = new boolean[prefs.getInteger("playerSides")];
+		for (int i=0 ; i<prefs.getInteger("playerSides") ; i++) {activeSectors[i] = true; }
 
 		background = new Texture(Gdx.files.internal("Galaxy blue.png"));
         kitten = new Texture(Gdx.files.internal("kitten.jpg"));

@@ -2,6 +2,7 @@ package fi.tamk.lucidstudio.tiltbeat;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -27,6 +28,7 @@ public class Player {
     float radius;
     float[] vertices;
     Pointer pointer;
+    Preferences prefs = Gdx.app.getPreferences("default");
 
     // Pelaajan osoittimen luokka
     class Pointer {
@@ -44,8 +46,8 @@ public class Player {
             @Override
             public void run() {
                 while(true) {
-                    xSmoother[smoothIndex % smoothingSamples] = Gdx.input.getAccelerometerY() - GameMain.getZeroPointY();
-                    ySmoother[smoothIndex % smoothingSamples] = Gdx.input.getAccelerometerZ() - GameMain.getZeroPointZ();
+                    xSmoother[smoothIndex % smoothingSamples] = Gdx.input.getAccelerometerY() - prefs.getFloat("zeroPointY");
+                    ySmoother[smoothIndex % smoothingSamples] = Gdx.input.getAccelerometerZ() - prefs.getFloat("zeroPointZ");
                     smoothIndex++;
                     try {
                         Thread.sleep(5);
@@ -60,7 +62,7 @@ public class Player {
             speed = 8;
             pointerTexture = new Texture("pointer.png");
             hitbox = new Circle(GameMain.getScreenWidth() / 2, GameMain.getScreenHeight() / 2, radius);
-            smoothingSamples = GameMain.getSmoothingSamples();
+            smoothingSamples = prefs.getInteger("smoothingSamples");
             xSmoother = new float[smoothingSamples];
             ySmoother = new float[smoothingSamples];
             smoothIndex = 0;
@@ -79,22 +81,22 @@ public class Player {
 
         public void resetSmoothing() {
             for (int i = 0; i < xSmoother.length; i++) {
-                xSmoother[i] = GameMain.getZeroPointY();
+                xSmoother[i] = prefs.getFloat("zeroPointY");
             }
             for (int i = 0; i < ySmoother.length; i++) {
-                ySmoother[i] = GameMain.getZeroPointZ();
+                ySmoother[i] = prefs.getFloat("zeroPointZ");
             }
         }
 
         public void move(OrthographicCamera camera) {
             // Osoittimen ohjaus nuolinäppäimillä
-            if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT) && hitbox.x < GameMain.getScreenWidth() / 2 + GameMain.getPlayerInradius() - radius * 2.5f) {
+            if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT) && hitbox.x < GameMain.getScreenWidth() / 2 + GameMain.getPlayerInradius(prefs.getFloat("playerDiameter"), prefs.getInteger("playerSides")) - radius * 2.5f) {
                 hitbox.x += speed * Gdx.graphics.getDeltaTime();
-            } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT) && hitbox.x > GameMain.getScreenWidth() / 2 - GameMain.getPlayerInradius() + radius * 2.5f) {
+            } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT) && hitbox.x > GameMain.getScreenWidth() / 2 - GameMain.getPlayerInradius(prefs.getFloat("playerDiameter"), prefs.getInteger("playerSides")) + radius * 2.5f) {
                 hitbox.x -= speed * Gdx.graphics.getDeltaTime();
-            } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_UP) && hitbox.y < GameMain.getScreenHeight() / 2 + GameMain.getPlayerInradius() - radius * 2.5f) {
+            } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_UP) && hitbox.y < GameMain.getScreenHeight() / 2 + GameMain.getPlayerInradius(prefs.getFloat("playerDiameter"), prefs.getInteger("playerSides")) - radius * 2.5f) {
                 hitbox.y += speed * Gdx.graphics.getDeltaTime();
-            } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN) && hitbox.y > GameMain.getScreenHeight() / 2 - GameMain.getPlayerInradius() + radius * 2.5f) {
+            } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN) && hitbox.y > GameMain.getScreenHeight() / 2 - GameMain.getPlayerInradius(prefs.getFloat("playerDiameter"), prefs.getInteger("playerSides")) + radius * 2.5f) {
                 hitbox.y -= speed * Gdx.graphics.getDeltaTime();
             }
             // Osoittimen ohjaus kosketuksella / hiirellä
@@ -108,10 +110,10 @@ public class Player {
             }
             // Osoittimen ohjaus accelerometrillä
             /*if (Math.abs(Gdx.input.getAccelerometerY()) > GameMain.getAccelerometerDeadzone() || Math.abs(Gdx.input.getAccelerometerX()) > GameMain.getAccelerometerDeadzone()) {
-                hitbox.y = GameMain.getScreenHeight() / 2 - Math.min((Gdx.input.getAccelerometerX() / GameMain.getAccelerometerMax() * (GameMain.getPlayerInradius() - hitbox.radius * 2)), (GameMain.getPlayerInradius() - hitbox.radius * 2));
-                hitbox.x = GameMain.getScreenWidth() / 2 + Math.min((Gdx.input.getAccelerometerY() / GameMain.getAccelerometerMax() * (GameMain.getPlayerInradius() - hitbox.radius * 2)), (GameMain.getPlayerInradius() - hitbox.radius * 2));
+                hitbox.y = GameMain.getScreenHeight() / 2 - Math.min((Gdx.input.getAccelerometerX() / GameMain.getAccelerometerMax() * (GameMain.getPlayerInradius(prefs.getFloat("playerDiameter"), prefs.getInteger("playerSides")) - hitbox.radius * 2)), (GameMain.getPlayerInradius(prefs.getFloat("playerDiameter"), prefs.getInteger("playerSides")) - hitbox.radius * 2));
+                hitbox.x = GameMain.getScreenWidth() / 2 + Math.min((Gdx.input.getAccelerometerY() / GameMain.getAccelerometerMax() * (GameMain.getPlayerInradius(prefs.getFloat("playerDiameter"), prefs.getInteger("playerSides")) - hitbox.radius * 2)), (GameMain.getPlayerInradius(prefs.getFloat("playerDiameter"), prefs.getInteger("playerSides")) - hitbox.radius * 2));
             }*/
-            if (Math.abs(GameMain.getZeroPointZ() - Gdx.input.getAccelerometerZ()) > GameMain.getAccelerometerDeadzone() || Math.abs(GameMain.getZeroPointY() - Gdx.input.getAccelerometerY()) > GameMain.getAccelerometerDeadzone()) {
+            if (Math.abs(prefs.getFloat("zeroPointZ") - Gdx.input.getAccelerometerZ()) > prefs.getFloat("accelerometerDeadzone") || Math.abs(prefs.getFloat("zeroPointY") - Gdx.input.getAccelerometerY()) > prefs.getFloat("accelerometerDeadzone")) {
                 float avgX = 0;
                 float avgY = 0;
 
@@ -125,8 +127,8 @@ public class Player {
                 hitbox.x = GameMain.getScreenWidth() / 2 + avgX;
                 hitbox.y =  GameMain.getScreenHeight() / 2 + avgY;
                 Vector2 vector = new Vector2(hitbox.x - GameMain.getScreenWidth() / 2, hitbox.y - GameMain.getScreenHeight() / 2);
-                if (vector.len() > GameMain.getPlayerInradius() * 0.8f) {
-                    vector.setLength(GameMain.getPlayerInradius() * 0.8f);
+                if (vector.len() > GameMain.getPlayerInradius(prefs.getFloat("playerDiameter"), prefs.getInteger("playerSides")) * 0.8f) {
+                    vector.setLength(GameMain.getPlayerInradius(prefs.getFloat("playerDiameter"), prefs.getInteger("playerSides")) * 0.8f);
                     hitbox.x = GameMain.getScreenWidth() / 2 + vector.x;
                     hitbox.y = GameMain.getScreenHeight() / 2 + vector.y;
                 }

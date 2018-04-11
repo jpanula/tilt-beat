@@ -2,8 +2,11 @@ package fi.tamk.lucidstudio.tiltbeat;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
@@ -16,10 +19,13 @@ import java.util.ArrayList;
 public abstract class Note {
     private int sector;
     private float distance;
+    private boolean hit;
+    Preferences prefs = Gdx.app.getPreferences("default");
 
     public Note(int sector, float distance) {
         this.sector = sector;
         this.distance = distance;
+        hit = false;
     }
 
     public int getSector() {
@@ -38,8 +44,18 @@ public abstract class Note {
         this.distance = distance;
     }
 
+    public boolean isHit() {
+        return hit;
+    }
+
+    public void setHit(boolean hit) {
+        this.hit = hit;
+    }
+
     public void move(float noteSpeed) {
+        if (!isHit()) {
             distance -= noteSpeed * Gdx.graphics.getDeltaTime();
+        }
     }
 
     abstract void draw(SpriteBatch batch);
@@ -47,23 +63,40 @@ public abstract class Note {
 
 class Point extends Note {
     private Texture texture;
+    private Texture scoreAnimationSheet;
+    private TextureRegion[] scoreAnimationFrames;
+    private Animation<TextureRegion> scoreAnimation;
     private Vector2 vector;
     private float width;
     private float height;
     private boolean flipped;
+    private float stateTime;
+
 
     public Point(int sector, float distance, Texture texture) {
         super(sector, distance);
         this.texture = texture;
+        scoreAnimationSheet = new Texture("Sprite.png");
+        TextureRegion[][] tmp = TextureRegion.split(scoreAnimationSheet, scoreAnimationSheet.getWidth()/5, scoreAnimationSheet.getHeight());
+        scoreAnimationFrames = new TextureRegion[5];
+        for (int i = 0; i < 5; i++) {
+            scoreAnimationFrames[i] = tmp[0][i];
+        }
+        scoreAnimation = new Animation<TextureRegion>(0.1f, scoreAnimationFrames);
         width = 1;
         height = (float) 0.7 * width;
         vector = new Vector2(distance, 0);
         flipped = false;
+        stateTime = 0;
+    }
+
+    public boolean isAnimationFinished() {
+        return scoreAnimation.isAnimationFinished(stateTime);
     }
 
     public Vector2 getVector() {
-        vector.setLength(getDistance() + GameMain.getPlayerInradius());
-        vector.setAngle(90 - (360 / GameMain.getPlayerSides()) * getSector() - (360 / GameMain.getPlayerSides()) / 2);
+        vector.setLength(getDistance() + GameMain.getPlayerInradius(prefs.getFloat("playerDiameter"), prefs.getInteger("playerSides")));
+        vector.setAngle(90 - (360 / prefs.getInteger("playerSides")) * getSector() - (360 / prefs.getInteger("playerSides")) / 2);
         return vector;
     }
 
@@ -80,13 +113,19 @@ class Point extends Note {
     public void draw(SpriteBatch batch) {
         // Vektorilla lasketaan pelaajan kulmion kulmien perusteella nuottien liikerata kohti niiden
         // sektoreita
-        vector.setLength(getDistance() + GameMain.getPlayerInradius());
-        vector.setAngle(90 - (360 / GameMain.getPlayerSides()) * getSector() - (360 / GameMain.getPlayerSides()) / 2);
-        batch.draw(texture, GameMain.getScreenWidth() / 2 + vector.x - width / 2, GameMain.getScreenHeight() / 2 + vector.y - height / 2, width / 2, height / 2, width, height, 1, 1, vector.angle() - 90, 0, 0, texture.getWidth(), texture.getHeight(), flipped, false);
+        vector.setLength(getDistance() + GameMain.getPlayerInradius(prefs.getFloat("playerDiameter"), prefs.getInteger("playerSides")));
+        vector.setAngle(90 - (360 / prefs.getInteger("playerSides")) * getSector() - (360 / prefs.getInteger("playerSides")) / 2);
+        if (!isHit()) {
+            batch.draw(texture, GameMain.getScreenWidth() / 2 + vector.x - width / 2, GameMain.getScreenHeight() / 2 + vector.y - height / 2, width / 2, height / 2, width, height, 1, 1, vector.angle() - 90, 0, 0, texture.getWidth(), texture.getHeight(), flipped, false);
+        } else {
+            TextureRegion keyframe = new TextureRegion(scoreAnimation.getKeyFrame(stateTime));
+            batch.draw(keyframe, GameMain.getScreenWidth() / 2 + vector.x - width / 2, GameMain.getScreenHeight() / 2 + vector.y - height / 2, width / 2, height / 2, width, height, width, height, vector.angle(), false);
+            stateTime += Gdx.graphics.getDeltaTime();
+        }
     }
     public void drawInBackground(SpriteBatch batch) {
-        vector.setLength(getDistance() + GameMain.getPlayerInradius());
-        vector.setAngle(90 - (360 / GameMain.getPlayerSides()) * getSector() - (360 / GameMain.getPlayerSides()) / 2);
+        vector.setLength(getDistance() + GameMain.getPlayerInradius(prefs.getFloat("playerDiameter"), prefs.getInteger("playerSides")));
+        vector.setAngle(90 - (360 / prefs.getInteger("playerSides")) * getSector() - (360 / prefs.getInteger("playerSides")) / 2);
     }
 }
 
@@ -126,8 +165,8 @@ class Hold extends Note {
 
         @Override
         public void draw(SpriteBatch batch) {
-            vector.setLength(getDistance() + GameMain.getPlayerInradius());
-            vector.setAngle(90 - (360 / GameMain.getPlayerSides()) * getSector() - (360 / GameMain.getPlayerSides()) / 2);
+            vector.setLength(getDistance() + GameMain.getPlayerInradius(prefs.getFloat("playerDiameter"), prefs.getInteger("playerSides")));
+            vector.setAngle(90 - (360 / prefs.getInteger("playerSides")) * getSector() - (360 / prefs.getInteger("playerSides")) / 2);
             if (getDistance() > 0)
             batch.draw(texture, GameMain.getScreenWidth() / 2 + vector.x - tickDiameter / 2, GameMain.getScreenHeight() / 2 + vector.y - tickDiameter / 2, tickDiameter, tickDiameter);
         }
@@ -141,12 +180,12 @@ class Hold extends Note {
         width = 1;
         tickDiameter = 0.2f;
         height = 0.7f * width;
-        tickAmount = (int) (length / (tickDiameter * GameMain.getNoteSpeed()));
-        if (GameMain.getDifficulty().equals("normal")) {
+        tickAmount = (int) (length / (tickDiameter * prefs.getFloat("noteSpeed")));
+        if (prefs.getString("difficulty").equals("normal")) {
             tickAmount *= 2;
-        } else if (GameMain.getDifficulty().equals("hard")) {
+        } else if (prefs.getString("difficulty").equals("hard")) {
             tickAmount *= 3;
-        } else if (GameMain.getDifficulty().equals("BACKBREAKER")) {
+        } else if (prefs.getString("difficulty").equals("BACKBREAKER")) {
             tickAmount *= 5;
         }
         tickAmount -= 2;
@@ -182,13 +221,13 @@ class Hold extends Note {
          for (Tick tick : ticks) {
              tick.draw(batch);
          }
-        startPoint.setLength(getDistance() + GameMain.getPlayerInradius());
-        startPoint.setAngle(90 - (360 / GameMain.getPlayerSides()) * getSector() - (360 / GameMain.getPlayerSides()) / 2);
+        startPoint.setLength(getDistance() + GameMain.getPlayerInradius(prefs.getFloat("playerDiameter"), prefs.getInteger("playerSides")));
+        startPoint.setAngle(90 - (360 / prefs.getInteger("playerSides")) * getSector() - (360 / prefs.getInteger("playerSides")) / 2);
         if (getDistance() > 0) {
             batch.draw(texture, GameMain.getScreenWidth() / 2 + startPoint.x - width / 2, GameMain.getScreenHeight() / 2 + startPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, startPoint.angle() - 90, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
         }
-        endPoint.setLength(getDistance() + length + GameMain.getPlayerInradius());
-        endPoint.setAngle(90 - (360 / GameMain.getPlayerSides()) * getSector() - (360 / GameMain.getPlayerSides()) / 2);
+        endPoint.setLength(getDistance() + length + GameMain.getPlayerInradius(prefs.getFloat("playerDiameter"), prefs.getInteger("playerSides")));
+        endPoint.setAngle(90 - (360 / prefs.getInteger("playerSides")) * getSector() - (360 / prefs.getInteger("playerSides")) / 2);
         batch.draw(texture, GameMain.getScreenWidth() / 2 + endPoint.x - width / 2, GameMain.getScreenHeight() / 2 + endPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, endPoint.angle() - 90, 0, 0, texture.getWidth(), texture.getHeight(), false, true);
     }
 
@@ -209,7 +248,7 @@ class Slide extends Note {
         // Muutetaan annetun nuottikasan sektorit ja etäisyys koko Sliden mukaan
         for (int i = 0; i < notes.size(); i++) {
             Point note = notes.get(i);
-            note.setSector((note.getSector() + sector) % GameMain.getPlayerSides());
+            note.setSector((note.getSector() + sector) % prefs.getInteger("playerSides"));
             note.setDistance(note.getDistance() + distance);
         }
         this.notes = notes;

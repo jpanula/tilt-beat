@@ -81,17 +81,17 @@ public class Difficulty implements Screen {
 
     public void changeButtonTextures() {
 
-        if (GameMain.getDifficulty().equals("easy")) {
+        if (host.getDifficulty().equals("easy")) {
             buttonEasyTexture = buttonPressedTexture;
             buttonNormalTexture = buttonTexture;
             buttonHardTexture = buttonTexture;
             buttonBBTexture = buttonTexture;
-        } else if (GameMain.getDifficulty().equals("normal")) {
+        } else if (host.getDifficulty().equals("normal")) {
             buttonEasyTexture = buttonTexture;
             buttonNormalTexture = buttonPressedTexture;
             buttonHardTexture = buttonTexture;
             buttonBBTexture = buttonTexture;
-        } else if (GameMain.getDifficulty().equals("hard")) {
+        } else if (host.getDifficulty().equals("hard")) {
             buttonEasyTexture = buttonTexture;
             buttonNormalTexture = buttonTexture;
             buttonHardTexture = buttonPressedTexture;
@@ -103,11 +103,11 @@ public class Difficulty implements Screen {
             buttonBBTexture = buttonPressedTexture;
         }
 
-        if (GameMain.getSongChoice().equals("song 1")) {
+        if (host.getSongChoice().equals("song 1")) {
             buttonSong1Texture = buttonPressedTexture;
             buttonSong2Texture = buttonTexture;
             buttonSong3Texture = buttonTexture;
-        } else if (GameMain.getSongChoice().equals("song 2")) {
+        } else if (host.getSongChoice().equals("song 2")) {
             buttonSong1Texture = buttonTexture;
             buttonSong2Texture = buttonPressedTexture;
             buttonSong3Texture = buttonTexture;
@@ -155,21 +155,21 @@ public class Difficulty implements Screen {
         small.draw(batch, "song 3" , 900, 320);
         small.draw(batch, "song 2" , 900, 490);
         small.draw(batch, "song 1" , 900, 650);
-        heading.draw(batch, GameMain.getDifficulty() + "" , 150, 580);
-        if (GameMain.getDifficulty().equals("easy")) {
+        heading.draw(batch, host.getDifficulty() + "" , 150, 580);
+        if (host.getDifficulty().equals("easy")) {
             basic.draw(batch, "fun! fun! fun!" , 150, 420);
             basic.draw(batch, "for beginners" , 150, 350);
         }
-        else if (GameMain.getDifficulty().equals("normal")) {
+        else if (host.getDifficulty().equals("normal")) {
             basic.draw(batch, "fun!" , 150, 420);
             basic.draw(batch, "basic mode" , 150, 350);
         }
-        else if (GameMain.getDifficulty().equals("hard")) {
+        else if (host.getDifficulty().equals("hard")) {
             basic.draw(batch, "fun?" , 150, 490);
             basic.draw(batch, "for experienced" , 150, 420);
             basic.draw(batch, "players only" , 150, 350);
         }
-        else if (GameMain.getDifficulty().equals("BACKBREAKER")) {
+        else if (host.getDifficulty().equals("BACKBREAKER")) {
             basic.draw(batch, "not fun" , 150, 420);
             basic.draw(batch, "you will die" , 150, 350);
         }
@@ -188,35 +188,35 @@ public class Difficulty implements Screen {
             host.setScreen(new GameScreen(host));
         }
         if (buttonEasy.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
-            GameMain.setDifficulty("easy");
-            GameMain.setNoteSpeed(1);
+            host.setDifficulty("easy");
+            host.setNoteSpeed(1);
             changeButtonTextures();
         }
         if (buttonNormal.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
-            GameMain.setDifficulty("normal");
-            GameMain.setNoteSpeed(2);
+            host.setDifficulty("normal");
+            host.setNoteSpeed(2);
             changeButtonTextures();
         }
         if (buttonHard.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
-            GameMain.setDifficulty("hard");
-            GameMain.setNoteSpeed(3);
+            host.setDifficulty("hard");
+            host.setNoteSpeed(3);
             changeButtonTextures();
         }
         if (buttonBackBreaker.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
-            GameMain.setDifficulty("BACKBREAKER");
-            GameMain.setNoteSpeed(4);
+            host.setDifficulty("BACKBREAKER");
+            host.setNoteSpeed(4);
             changeButtonTextures();
         }
         if (buttonSong1.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
-            GameMain.setSongChoice("song 1");
+            host.setSongChoice("song 1");
             changeButtonTextures();
         }
         if (buttonSong2.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
-            GameMain.setSongChoice("song 2");
+            host.setSongChoice("song 2");
             changeButtonTextures();
         }
         if (buttonSong3.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
-            GameMain.setSongChoice("song 3");
+            host.setSongChoice("song 3");
             changeButtonTextures();
         }
     }

@@ -130,7 +130,7 @@ public class Settings implements Screen {
             touchPos.setZero();
         }
         if (soundButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
-            GameMain.soundOn ^= true;
+            host.setSoundOn(true);
             if (soundButtonTexture==soundOnTexture) {
                 soundButtonTexture=soundOffTexture;
             } else { soundButtonTexture=soundOnTexture; }
@@ -138,7 +138,7 @@ public class Settings implements Screen {
         }
         // Nollapisteen kalibrointi
         if (calibration.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
-            GameMain.calibrateZeroPoint();
+            host.calibrateZeroPoint();
             touchPos.setZero();
         }
     }
