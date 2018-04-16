@@ -30,6 +30,7 @@ public class Settings implements Screen {
     BitmapFont basic;
     private Button calibration;
     private Button sound;
+    private Button restore;
     private Button backButton;
     private Button soundButton;
     private boolean changeSound=false;
@@ -49,7 +50,8 @@ public class Settings implements Screen {
         soundButtonTexture = soundOnTexture;
         sound = new Button(1.3f, 1.8f, 3.7f, 2f, buttonTexture);
         calibration = new Button(11f, 1.8f, 3.7f, 2f, buttonTexture);
-        backButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, buttonTexture);
+        restore = new Button(6.2f, 1.8f, 3.7f, 2f, buttonTexture);
+        backButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, GameMain.getBackButtonTexture());
         destroySoundButton();
         touchPos = new Vector3();
     }
@@ -78,6 +80,7 @@ public class Settings implements Screen {
         batch.draw(background, 0, 0, 16, 10);
         calibration.draw(batch);
         sound.draw(batch);
+        restore.draw(batch);
         backButton.draw(batch);
 
         if(changeSound) {
@@ -88,8 +91,10 @@ public class Settings implements Screen {
         //piirrellään fontit
         heading.draw(batch, "Settings", 250, 700);
         basic.draw(batch, "sound", 180, 250);
-        basic.draw(batch, "kitten", 565, 250);
-        basic.draw(batch, "calibration", 907, 250);
+        basic.draw(batch, "calibration", 520, 250);
+        basic.draw(batch, "restore", 930, 290);
+        basic.draw(batch, "default", 930, 250);
+        basic.draw(batch, "settings", 930, 210);
 
         batch.end();
 
@@ -101,6 +106,9 @@ public class Settings implements Screen {
         if (backButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setScreen(new MainMenu(host));
         }
+        if (restore.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            restoreSettings();
+        }
         if (sound.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             createSoundButton();
             changeSound ^= true;
@@ -108,9 +116,9 @@ public class Settings implements Screen {
         }
         if (soundButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setSoundOn(true);
-            if (soundButtonTexture==soundOnTexture) {
-                soundButtonTexture=soundOffTexture;
-            } else { soundButtonTexture=soundOnTexture; }
+            if (soundButton.getTexture()==soundOnTexture) {
+                soundButton.setTexture(soundOffTexture);
+            } else { soundButton.setTexture(soundOnTexture); }
             touchPos.setZero();
         }
         // Nollapisteen kalibrointi
@@ -118,6 +126,10 @@ public class Settings implements Screen {
             host.calibrateZeroPoint();
             touchPos.setZero();
         }
+    }
+
+    public void restoreSettings() {
+        //oletusasetukset tänne
     }
 
     @Override

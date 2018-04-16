@@ -71,10 +71,10 @@ public class Highscore implements Screen {
         batch.setProjectionMatrix(camera.combined);
         //piirrellään tausta ja napit
         batch.draw(background, 0, 0 , 16, 10);
-        batch.draw(backButtonTexture, backButton.x, backButton.y, backButton.width, backButton.height);
+        backButton.draw(batch);
         batch.draw(textBoxTexture, 1.5f, 1, 10, 5);
 
-        button1.draw(batch);
+        //button1.draw(batch);
         /*
         batch.draw(buttonTexture, button1.x, button1.y, button1.width, button1.height);
         batch.draw(buttonTexture, button2.x, button2.y, button2.width, button2.height);
