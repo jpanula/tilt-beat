@@ -26,11 +26,10 @@ public class MainMenu implements Screen{
     private OrthographicCamera fontCamera;
     private BitmapFont heading;
     private BitmapFont basic;
-    private Texture button;
-    private Rectangle buttonPlay;
-    private Rectangle buttonMods;
-    private Rectangle buttonSettings;
-    private Rectangle buttonHighscore;
+    private Button playButton;
+    private Button modsButton;
+    private Button settingsButton;
+    private Button highscoreButton;
     private Texture background;
     private Vector3 touchPos;
 
@@ -40,13 +39,12 @@ public class MainMenu implements Screen{
         batch = host.getBatch();
         camera = host.getCamera();
         fontCamera = host.getFontCamera();
-        button = GameMain.getButtonTexture();
         background = GameMain.getBackgroundTexture();
 
-        buttonPlay = new Rectangle(2.8f, 4f, 4f, 1.7f);
-        buttonMods = new Rectangle(8.5f, 4f, 4f, 1.7f);
-        buttonSettings = new Rectangle(2.8f, 1f, 4f, 1.7f);
-        buttonHighscore = new Rectangle(8.5f, 1f, 4f, 1.7f);
+        playButton = new Button(2.8f, 4f, 4f, 1.7f, GameMain.getButtonTexture());
+        modsButton = new Button(8.5f, 4f, 4f, 1.7f, GameMain.getButtonTexture());
+        settingsButton = new Button(2.8f, 1f, 4f, 1.7f, GameMain.getButtonTexture());
+        highscoreButton = new Button(8.5f, 1f, 4f, 1.7f, GameMain.getButtonTexture());
 
         heading = GameMain.getHeadingFont();
         basic = GameMain.getBasicFont();
@@ -69,10 +67,10 @@ public class MainMenu implements Screen{
         batch.setProjectionMatrix(camera.combined);
         //piirrellään tausta ja napit
         batch.draw(background, 0, 0 , 16, 10);
-        batch.draw(button, buttonPlay.x, buttonPlay.y, buttonPlay.width, buttonPlay.height);
-        batch.draw(button, buttonSettings.x, buttonSettings.y, buttonSettings.width, buttonSettings.height);
-        batch.draw(button, buttonHighscore.x, buttonHighscore.y, buttonHighscore.width, buttonHighscore.height);
-        batch.draw(button, buttonMods.x, buttonMods.y, buttonMods.width, buttonMods.height);
+        playButton.draw(batch);
+        settingsButton.draw(batch);
+        highscoreButton.draw(batch);
+        modsButton.draw(batch);
 
         batch.setProjectionMatrix(fontCamera.combined);
         //piirrellään fontit
@@ -90,16 +88,16 @@ public class MainMenu implements Screen{
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);
         }
-        if (buttonPlay.contains(touchPos.x, touchPos.y)  && !Gdx.input.isTouched()) {
+        if (playButton.contains(touchPos.x, touchPos.y)  && !Gdx.input.isTouched()) {
             host.setScreen(new Difficulty(host));
         }
-        if (buttonSettings.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+        if (settingsButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setScreen(new Settings(host));
         }
-        if (buttonHighscore.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+        if (highscoreButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setScreen(new Highscore(host));
         }
-        if (buttonMods.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+        if (modsButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setScreen(new Mods(host));
         }
     }

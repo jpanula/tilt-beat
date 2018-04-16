@@ -22,30 +22,20 @@ public class Difficulty implements Screen {
     private BitmapFont heading;
     private OrthographicCamera camera;
     private OrthographicCamera fontCamera;
-    private Rectangle textBox;
-    private Rectangle backButton;
-    private Rectangle playButton;
-    private Rectangle buttonEasy;
-    private Rectangle buttonNormal;
-    private Rectangle buttonHard;
-    private Rectangle buttonBackBreaker;
-    private Rectangle buttonSong1;
-    private Rectangle buttonSong2;
-    private Rectangle buttonSong3;
+    private Button textBox;
+    private Button backButton;
+    private Button playButton;
+    private Button easyButton;
+    private Button normalButton;
+    private Button hardButton;
+    private Button backBreakerButton;
+    private Button song1Button;
+    private Button song2Button;
+    private Button song3Button;
     private Texture background;
-    private Texture textBoxTexture;
-    private Texture backButtonTexture;
-    private Texture playButtonTexture;
     private Texture buttonTexture;
     private Texture buttonHighTexture;
     private Texture buttonPressedTexture;
-    private Texture buttonSong1Texture;
-    private Texture buttonSong2Texture;
-    private Texture buttonSong3Texture;
-    private Texture buttonEasyTexture;
-    private Texture buttonNormalTexture;
-    private Texture buttonHardTexture;
-    private Texture buttonBBTexture;
     private Vector3 touchPos;
 
     public Difficulty(GameMain host) {
@@ -60,61 +50,59 @@ public class Difficulty implements Screen {
         buttonTexture = GameMain.getButtonTexture();
         buttonHighTexture = GameMain.getButtonHighTexture();
         buttonPressedTexture = GameMain.getButtonPressedTexture();
-        backButtonTexture = GameMain.getBackButtonTexture();
-        playButtonTexture = GameMain.getPlayButtonTexture();
-        textBoxTexture = GameMain.getTextBoxTexture();
         touchPos = new Vector3();
 
-        changeButtonTextures();
 
-        buttonEasy = new Rectangle(.5f, .5f, 2.6f, 2f);
-        buttonNormal = new Rectangle(4f, .5f, 2.6f, 2f);
-        buttonHard = new Rectangle(7.5f, .5f, 2.6f, 2f);
-        buttonBackBreaker = new Rectangle(11f, .5f, 2.6f, 2f);
-        backButton = new Rectangle(0.2f, 8.3f, 1.5f, 1.5f);
-        playButton = new Rectangle(14f, 0.5f, 1.5f, 1.5f);
-        textBox = new Rectangle(1f, 3f, 7f, 4.6f);
-        buttonSong1 = new Rectangle(10f, 7f, 5f, 1.5f);
-        buttonSong2 = new Rectangle(10f, 5f, 5f, 1.5f);
-        buttonSong3 = new Rectangle(10f, 3f, 5f, 1.5f);
+        easyButton = new Button(.5f, .5f, 2.6f, 2f, buttonTexture);
+        normalButton = new Button(4f, .5f, 2.6f, 2f, buttonTexture);
+        hardButton = new Button(7.5f, .5f, 2.6f, 2f, buttonTexture);
+        backBreakerButton = new Button(11f, .5f, 2.6f, 2f, buttonTexture);
+        backButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, GameMain.getBackButtonTexture());
+        playButton = new Button(14f, 0.5f, 1.5f, 1.5f, GameMain.getPlayButtonTexture());
+        textBox = new Button(1f, 3f, 7f, 4.6f, GameMain.getTextBoxTexture());
+        song1Button = new Button(10f, 7f, 5f, 1.5f, buttonTexture);
+        song2Button = new Button(10f, 5f, 5f, 1.5f, buttonTexture);
+        song3Button = new Button(10f, 3f, 5f, 1.5f, buttonTexture);
+
+        changeButtonTextures();
     }
 
     public void changeButtonTextures() {
 
         if (host.getDifficulty().equals("easy")) {
-            buttonEasyTexture = buttonPressedTexture;
-            buttonNormalTexture = buttonTexture;
-            buttonHardTexture = buttonTexture;
-            buttonBBTexture = buttonTexture;
+            easyButton.setTexture(buttonPressedTexture);
+            normalButton.setTexture(buttonTexture);
+            hardButton.setTexture(buttonTexture);
+            backBreakerButton.setTexture(buttonTexture);
         } else if (host.getDifficulty().equals("normal")) {
-            buttonEasyTexture = buttonTexture;
-            buttonNormalTexture = buttonPressedTexture;
-            buttonHardTexture = buttonTexture;
-            buttonBBTexture = buttonTexture;
+            easyButton.setTexture(buttonTexture);
+            normalButton.setTexture(buttonPressedTexture);
+            hardButton.setTexture(buttonTexture);
+            backBreakerButton.setTexture(buttonTexture);
         } else if (host.getDifficulty().equals("hard")) {
-            buttonEasyTexture = buttonTexture;
-            buttonNormalTexture = buttonTexture;
-            buttonHardTexture = buttonPressedTexture;
-            buttonBBTexture = buttonTexture;
+            easyButton.setTexture(buttonTexture);
+            normalButton.setTexture(buttonTexture);
+            hardButton.setTexture(buttonPressedTexture);
+            backBreakerButton.setTexture(buttonTexture);
         } else {
-            buttonEasyTexture = buttonTexture;
-            buttonNormalTexture = buttonTexture;
-            buttonHardTexture = buttonTexture;
-            buttonBBTexture = buttonPressedTexture;
+            easyButton.setTexture(buttonTexture);
+            normalButton.setTexture(buttonTexture);
+            hardButton.setTexture(buttonTexture);
+            backBreakerButton.setTexture(buttonPressedTexture);
         }
 
         if (host.getSongChoice().equals("song 1")) {
-            buttonSong1Texture = buttonPressedTexture;
-            buttonSong2Texture = buttonTexture;
-            buttonSong3Texture = buttonTexture;
+            song1Button.setTexture(buttonPressedTexture);
+            song2Button.setTexture(buttonTexture);
+            song3Button.setTexture(buttonTexture);
         } else if (host.getSongChoice().equals("song 2")) {
-            buttonSong1Texture = buttonTexture;
-            buttonSong2Texture = buttonPressedTexture;
-            buttonSong3Texture = buttonTexture;
+            song1Button.setTexture(buttonTexture);
+            song2Button.setTexture(buttonPressedTexture);
+            song3Button.setTexture(buttonTexture);
         } else {
-            buttonSong1Texture = buttonTexture;
-            buttonSong2Texture = buttonTexture;
-            buttonSong3Texture = buttonPressedTexture;
+            song1Button.setTexture(buttonTexture);
+            song2Button.setTexture(buttonTexture);
+            song3Button.setTexture(buttonPressedTexture);
         }
 
     }
@@ -133,16 +121,16 @@ public class Difficulty implements Screen {
         batch.setProjectionMatrix(camera.combined);
         //piirrellään tausta ja napit
         batch.draw(background, 0, 0 , 16, 10);
-        batch.draw(backButtonTexture, backButton.x, backButton.y, backButton.width, backButton.height);
-        batch.draw(playButtonTexture, playButton.x, playButton.y, playButton.width, playButton.height);
-        batch.draw(buttonEasyTexture, buttonEasy.x, buttonEasy.y, buttonEasy.width, buttonEasy.height);
-        batch.draw(buttonNormalTexture, buttonNormal.x, buttonNormal.y, buttonNormal.width, buttonNormal.height);
-        batch.draw(buttonHardTexture, buttonHard.x, buttonHard.y, buttonHard.width, buttonHard.height);
-        batch.draw(buttonBBTexture, buttonBackBreaker.x, buttonBackBreaker.y, buttonBackBreaker.width, buttonBackBreaker.height);
-        batch.draw(textBoxTexture, textBox.x, textBox.y, textBox.width, textBox.height);
-        batch.draw(buttonSong1Texture, buttonSong1.x, buttonSong1.y, buttonSong1.width, buttonSong1.height);
-        batch.draw(buttonSong2Texture, buttonSong2.x, buttonSong2.y, buttonSong2.width, buttonSong2.height);
-        batch.draw(buttonSong3Texture, buttonSong3.x, buttonSong3.y, buttonSong3.width, buttonSong3.height);
+        backButton.draw(batch);
+        playButton.draw(batch);
+        easyButton.draw(batch);
+        normalButton.draw(batch);
+        hardButton.draw(batch);
+        backBreakerButton.draw(batch);
+        textBox.draw(batch);
+        song1Button.draw(batch);
+        song2Button.draw(batch);
+        song3Button.draw(batch);
 
         batch.setProjectionMatrix(fontCamera.combined);
         //piirrellään fontit
@@ -187,35 +175,35 @@ public class Difficulty implements Screen {
         if (playButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setScreen(new GameScreen(host));
         }
-        if (buttonEasy.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+        if (easyButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setDifficulty("easy");
             host.setNoteSpeed(1);
             changeButtonTextures();
         }
-        if (buttonNormal.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+        if (normalButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setDifficulty("normal");
             host.setNoteSpeed(2);
             changeButtonTextures();
         }
-        if (buttonHard.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+        if (hardButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setDifficulty("hard");
             host.setNoteSpeed(3);
             changeButtonTextures();
         }
-        if (buttonBackBreaker.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+        if (backBreakerButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setDifficulty("BACKBREAKER");
             host.setNoteSpeed(4);
             changeButtonTextures();
         }
-        if (buttonSong1.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+        if (song1Button.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setSongChoice("song 1");
             changeButtonTextures();
         }
-        if (buttonSong2.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+        if (song2Button.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setSongChoice("song 2");
             changeButtonTextures();
         }
-        if (buttonSong3.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+        if (song3Button.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setSongChoice("song 3");
             changeButtonTextures();
         }

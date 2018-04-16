@@ -54,18 +54,12 @@ GameScreen implements Screen {
     private BitmapFont heading;
 
     private Texture background;
-    private Texture pauseButtonTexture;
-    private Texture playAgainButtonTexture;
-    private Texture playButtonTexture;
-    private Texture backButtonTexture;
-    private Texture settingsButtonTexture;
-    private Rectangle pauseButton;
-    private Rectangle playAgainButton;
-    private Rectangle playButton;
-    private Rectangle backButton;
-    private Rectangle settingsButton;
-    private Texture textBoxTexture;
-    private Rectangle resultBox;
+    private Button pauseButton;
+    private Button playAgainButton;
+    private Button playButton;
+    private Button backButton;
+    private Button settingsButton;
+    private Button resultBox;
 
     /**
      * Peliruutu, asetukset haetaan GameMainistä, joka toimii "hostina"
@@ -165,18 +159,10 @@ GameScreen implements Screen {
         heading = GameMain.getHeadingFont();
         background = new Texture(Gdx.files.internal("Galaxy dark purple.png"));
 
-        pauseButtonTexture = GameMain.getPauseButtonTexture();
-        playButtonTexture = GameMain.getPlayButtonTexture();
-        playAgainButtonTexture = GameMain.getPlayAgainButtonTexture();
-        backButtonTexture = GameMain.getBackButtonTexture();
-        settingsButtonTexture = GameMain.getSettingsButtonTexture();
-
-        pauseButton = new Rectangle(0.2f, 8.3f, 1.5f, 1.5f);
-
+        pauseButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, GameMain.getPauseButtonTexture());
         destroyPauseMenuButtons();
 
-        textBoxTexture = GameMain.getTextBoxTexture();
-        resultBox = new Rectangle(2f, 1f, 12f, 8f);
+        resultBox = new Button(2f, 1f, 12f, 8f, GameMain.getTextBoxTexture());
 
         paused = false;
         useShapeRenderer = true;
@@ -186,27 +172,27 @@ GameScreen implements Screen {
     }
 
     public void createPauseMenuButtons() {
-        playButton = new Rectangle(6f, 2f, 1.5f, 1.5f);
-        playAgainButton = new Rectangle(8.5f, 2f, 1.5f, 1.5f);
-        backButton = new Rectangle(3.5f, 2f, 1.5f, 1.5f);
-        settingsButton = new Rectangle(11f, 2f, 1.5f, 1.5f);
+        playButton = new Button(6f, 2f, 1.5f, 1.5f, GameMain.getPlayButtonTexture());
+        playAgainButton = new Button(8.5f, 2f, 1.5f, 1.5f, GameMain.getPlayAgainButtonTexture());
+        backButton = new Button(3.5f, 2f, 1.5f, 1.5f, GameMain.getBackButtonTexture());
+        settingsButton = new Button(11f, 2f, 1.5f, 1.5f, GameMain.getSettingsButtonTexture());
     }
 
     public void destroyPauseMenuButtons() {
-        playButton = new Rectangle(11f, 18f, .1f, .1f);
-        playAgainButton = new Rectangle(11f, 18f, .1f, .1f);
-        backButton = new Rectangle(11f, 18f, .1f, .1f);
-        settingsButton = new Rectangle(11f, 18f, .1f, .1f);
+        playButton = new Button(11f, 18f, .1f, .1f, GameMain.getPlayButtonTexture());
+        playAgainButton = new Button(11f, 18f, .1f, .1f, GameMain.getPlayAgainButtonTexture());
+        backButton = new Button(11f, 18f, .1f, .1f, GameMain.getBackButtonTexture());
+        settingsButton = new Button(11f, 18f, .1f, .1f, GameMain.getSettingsButtonTexture());
     }
 
     public void createResultMenuButtons() {
-        playAgainButton = new Rectangle(8.5f, 2f, 1.5f, 1.5f);
-        backButton = new Rectangle(3.5f, 2f, 1.5f, 1.5f);
+        playAgainButton = new Button(8.5f, 2f, 1.5f, 1.5f, GameMain.getPlayAgainButtonTexture());
+        backButton = new Button(3.5f, 2f, 1.5f, 1.5f, GameMain.getBackButtonTexture());
     }
 
     public void destroyResultMenuButtons() {
-        playButton = new Rectangle(11f, 18f, .1f, .1f);
-        playAgainButton = new Rectangle(11f, 18f, .1f, .1f);
+        playButton = new Button(11f, 18f, .1f, .1f, GameMain.getPlayButtonTexture());
+        playAgainButton = new Button(11f, 18f, .1f, .1f, GameMain.getPlayAgainButtonTexture());
     }
 
     public boolean isSectorActive(int a) {
@@ -253,7 +239,7 @@ GameScreen implements Screen {
         batch.setProjectionMatrix(camera.combined);
 
         batch.draw(background, 0, 0, 16, 10);
-        batch.draw(pauseButtonTexture, pauseButton.x, pauseButton.y, pauseButton.width, pauseButton.height);
+        pauseButton.draw(batch);
 
         player.draw(batch);
         for (Note note : song) {
@@ -262,18 +248,18 @@ GameScreen implements Screen {
         //pauseruutu
         if (paused && !song.isEmpty()) {
             createPauseMenuButtons();
-            batch.draw(textBoxTexture, resultBox.x, resultBox.y, resultBox.width, resultBox.height);
-            batch.draw(playButtonTexture, playButton.x, playButton.y, playButton.width, playButton.height);
-            batch.draw(playAgainButtonTexture, playAgainButton.x, playAgainButton.y, playAgainButton.width, playAgainButton.height);
-            batch.draw(backButtonTexture, backButton.x, backButton.y, backButton.width, backButton.height);
-            batch.draw(settingsButtonTexture, settingsButton.x, settingsButton.y, settingsButton.width, settingsButton.height);
+            resultBox.draw(batch);
+            playButton.draw(batch);
+            playAgainButton.draw(batch);
+            backButton.draw(batch);
+            settingsButton.draw(batch);
         }
         //tulosruutu
         if (song.isEmpty()) {
             createResultMenuButtons();
-            batch.draw(textBoxTexture, resultBox.x, resultBox.y, resultBox.width, resultBox.height);
-            batch.draw(playAgainButtonTexture, playAgainButton.x, playAgainButton.y, playAgainButton.width, playAgainButton.height);
-            batch.draw(backButtonTexture, backButton.x, backButton.y, backButton.width, backButton.height);
+            resultBox.draw(batch);
+            playAgainButton.draw(batch);
+            backButton.draw(batch);
         }
 
         batch.setProjectionMatrix(fontCamera.combined);

@@ -22,21 +22,16 @@ public class Settings implements Screen {
     private OrthographicCamera camera;
     private OrthographicCamera fontCamera;
     private Texture background;
-    private Texture kittenTexture;
     private Texture buttonTexture;
-    private Texture backButtonTexture;
     private Texture soundButtonTexture;
     private Texture soundOnTexture;
     private Texture soundOffTexture;
     BitmapFont heading;
     BitmapFont basic;
-    private Rectangle kitten;
-    private Rectangle calibration;
-    private Rectangle sound;
-    private Rectangle backButton;
-    private Rectangle soundButton;
-    private Rectangle hugeKitten;
-    private boolean kissa=false;
+    private Button calibration;
+    private Button sound;
+    private Button backButton;
+    private Button soundButton;
     private boolean changeSound=false;
     private Vector3 touchPos;
 
@@ -45,20 +40,16 @@ public class Settings implements Screen {
         batch = host.getBatch();
         camera = host.getCamera();
         background = GameMain.getBackgroundTexture();
-        kittenTexture = GameMain.getKittenTexture();
         buttonTexture = GameMain.getButtonTexture();
-        backButtonTexture = GameMain.getBackButtonTexture();
         fontCamera = host.getFontCamera();
         heading = GameMain.getSmallerHeadingFont();
         basic = GameMain.getBasicFont();
         soundOnTexture = new Texture("soundOn.png");
         soundOffTexture = new Texture("soundOff.png");
         soundButtonTexture = soundOnTexture;
-        sound = new Rectangle(1.3f, 1.8f, 3.7f, 2f);
-        kitten = new Rectangle(6.15f, 1.8f, 3.7f, 2f);
-        calibration = new Rectangle(11f, 1.8f, 3.7f, 2f);
-        backButton = new Rectangle(0.2f, 8.3f, 1.5f, 1.5f);
-        hugeKitten = new Rectangle(0f, 0f, 16f, 10f);
+        sound = new Button(1.3f, 1.8f, 3.7f, 2f, buttonTexture);
+        calibration = new Button(11f, 1.8f, 3.7f, 2f, buttonTexture);
+        backButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, buttonTexture);
         destroySoundButton();
         touchPos = new Vector3();
     }
@@ -68,11 +59,11 @@ public class Settings implements Screen {
     }
 
     public void createSoundButton() {
-        soundButton = new Rectangle(2f, 4.5f, 2f, 2f);
+        soundButton = new Button(2f, 4.5f, 2f, 2f, soundOnTexture);
     }
 
     public void destroySoundButton() {
-        soundButton = new Rectangle(11f, 18f, .1f, .1f);
+        soundButton = new Button(11f, 18f, .1f, .1f, soundOnTexture);
     }
 
     @Override
@@ -85,34 +76,20 @@ public class Settings implements Screen {
         batch.setProjectionMatrix(camera.combined);
         //piirrellään tausta ja napit
         batch.draw(background, 0, 0, 16, 10);
-        if(!kissa) {
-            batch.draw(buttonTexture, kitten.x, kitten.y, kitten.width, kitten.height);
-            batch.draw(buttonTexture, calibration.x, calibration.y, calibration.width, calibration.height);
-            batch.draw(buttonTexture, sound.x, sound.y, sound.width, sound.height);
-            batch.draw(backButtonTexture, backButton.x, backButton.y, backButton.width, backButton.height);
-        }
+        calibration.draw(batch);
+        sound.draw(batch);
+        backButton.draw(batch);
 
         if(changeSound) {
-            batch.draw(soundButtonTexture, soundButton.x, soundButton.y, soundButton.width, soundButton.height);
+            soundButton.draw(batch);
         } else { destroySoundButton(); }
-
-        if (Gdx.input.isTouched()) {
-            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            camera.unproject(touchPos);
-            if (kitten.contains(touchPos.x, touchPos.y)) {
-                batch.draw(kittenTexture, hugeKitten.x, hugeKitten.y, hugeKitten.width, hugeKitten.height);
-                kissa=true;
-            }
-        } else { kissa=false; }
 
         batch.setProjectionMatrix(fontCamera.combined);
         //piirrellään fontit
-        if(!kissa) {
-            heading.draw(batch, "Settings", 250, 700);
-            basic.draw(batch, "sound", 180, 250);
-            basic.draw(batch, "kitten", 565, 250);
-            basic.draw(batch, "calibration", 907, 250);
-        }
+        heading.draw(batch, "Settings", 250, 700);
+        basic.draw(batch, "sound", 180, 250);
+        basic.draw(batch, "kitten", 565, 250);
+        basic.draw(batch, "calibration", 907, 250);
 
         batch.end();
 

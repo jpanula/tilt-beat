@@ -34,16 +34,11 @@ public class Mods implements Screen {
     private Texture background;
     private Texture buttonTexture;
     private Texture buttonPressedTexture;
-    private Rectangle button6;
-    private Rectangle button8;
-    private Rectangle button10;
-    private Texture button6Texture;
-    private Texture button8Texture;
-    private Texture button10Texture;
-    private Rectangle backButton;
-    private Texture backButtonTexture;
-    private Rectangle textBox;
-    private Texture textBoxTexture;
+    private Button button6;
+    private Button button8;
+    private Button button10;
+    private Button backButton;
+    private Button textBox;
     private Vector3 touchPos;
 
     ArrayList<Polygon> sectors;
@@ -65,14 +60,12 @@ public class Mods implements Screen {
         background = GameMain.getBackgroundTexture();
         buttonTexture = GameMain.getButtonTexture();
         buttonPressedTexture = GameMain.getButtonPressedTexture();
-        backButtonTexture = GameMain.getBackButtonTexture();
-        textBoxTexture = GameMain.getTextBoxTexture();
 
-        button6 = new Rectangle(1f, 4.5f, 3f, 1.5f);
-        button8 = new Rectangle(1f, 2.5f, 3f, 1.5f);
-        button10 = new Rectangle(1f, 0.5f, 3f, 1.5f);
-        backButton = new Rectangle(0.2f, 8.3f, 1.5f, 1.5f);
-        textBox = new Rectangle(10.5f, 2.5f, 5.4f, 3f);
+        button6 = new Button(1f, 4.5f, 3f, 1.5f, buttonTexture);
+        button8 = new Button(1f, 2.5f, 3f, 1.5f, buttonTexture);
+        button10 = new Button(1f, 0.5f, 3f, 1.5f, buttonTexture);
+        backButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, GameMain.getBackButtonTexture());
+        textBox = new Button(10.5f, 2.5f, 5.4f, 3f, GameMain.getTextBoxTexture());
 
         playerSides = host.getPlayerSides();
         playerDiameter = host.getPlayerDiameter();
@@ -87,19 +80,13 @@ public class Mods implements Screen {
     public void makeButtonsAndPolygon() {
         if(playerSides==6) {
             createSixside();
-            button6Texture = buttonPressedTexture;
-            button8Texture = buttonTexture;
-            button10Texture = buttonTexture;
+            button6.setTexture(buttonPressedTexture);
         } else if (playerSides==8) {
             createEightside();
-            button6Texture = buttonTexture;
-            button8Texture = buttonPressedTexture;
-            button10Texture = buttonTexture;
+            button8.setTexture(buttonPressedTexture);
         } else {
             createTenside();
-            button6Texture = buttonTexture;
-            button8Texture = buttonTexture;
-            button10Texture = buttonPressedTexture;
+            button10.setTexture(buttonPressedTexture);
         }
 
     }
@@ -207,11 +194,11 @@ public class Mods implements Screen {
         batch.setProjectionMatrix(camera.combined);
         //piirrellään tausta ja napit
         batch.draw(background, 0, 0 , 16, 10);
-        batch.draw(backButtonTexture, backButton.x, backButton.y, backButton.width, backButton.height);
-        batch.draw(button6Texture, button6.x, button6.y, button6.width, button6.height);
-        batch.draw(button8Texture, button8.x, button8.y, button8.width, button8.height);
-        batch.draw(button10Texture, button10.x, button10.y, button10.width, button10.height);
-        batch.draw(textBoxTexture, textBox.x, textBox.y, textBox.width, textBox.height);
+        backButton.draw(batch);
+        button6.draw(batch);
+        button8.draw(batch);
+        button10.draw(batch);
+        textBox.draw(batch);
         batch.draw(texture, hitbox.getX(), hitbox.getY(), hitbox.getScaleX(), hitbox.getScaleY());
 
         batch.setProjectionMatrix(fontCamera.combined);
@@ -247,23 +234,23 @@ public class Mods implements Screen {
         if (button6.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setPlayerSides(6);
             createSixside();
-            button6Texture = buttonPressedTexture;
-            button8Texture = buttonTexture;
-            button10Texture = buttonTexture;
+            button6.setTexture(buttonPressedTexture);
+            button8.setTexture(buttonTexture);
+            button10.setTexture(buttonTexture);
         }
         if (button8.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setPlayerSides(8);
             createEightside();
-            button6Texture = buttonTexture;
-            button8Texture = buttonPressedTexture;
-            button10Texture = buttonTexture;
+            button6.setTexture(buttonTexture);
+            button8.setTexture(buttonPressedTexture);
+            button10.setTexture(buttonTexture);
         }
         if (button10.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setPlayerSides(10);
             createTenside();
-            button6Texture = buttonTexture;
-            button8Texture = buttonTexture;
-            button10Texture = buttonPressedTexture;
+            button6.setTexture(buttonTexture);
+            button8.setTexture(buttonTexture);
+            button10.setTexture(buttonPressedTexture);
         }
         for (int i=0 ; i<playerSides ; i++) {
             Polygon polygon = sectors.get(i);
