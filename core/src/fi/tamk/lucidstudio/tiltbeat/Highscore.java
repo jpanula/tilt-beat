@@ -99,6 +99,9 @@ public class Highscore implements Screen {
         if (backButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setScreen(new MainMenu(host));
         }
+        //ottaa napin painalluksen vain kerran
+        if (!Gdx.input.isTouched()) {touchPos.set(0, 0, 0);}
+
     }
 
 

@@ -30,6 +30,7 @@ GameScreen implements Screen {
     private Player player;
     private ArrayList<Note> song;
     private boolean paused;
+    private boolean changeSettings;
     private boolean useShapeRenderer;
     private Texture pointTexture;
     private Texture holdTexture;
@@ -60,6 +61,12 @@ GameScreen implements Screen {
     private Button backButton;
     private Button settingsButton;
     private Button resultBox;
+    private Button calibration;
+    private Button secondSetting;
+    private Button backToPauseMenu;
+    private Button soundButton;
+    private Texture soundOnTexture;
+    private Texture soundOffTexture;
 
     /**
      * Peliruutu, asetukset haetaan GameMainistä, joka toimii "hostina"
@@ -68,6 +75,7 @@ GameScreen implements Screen {
     public GameScreen(GameMain host) {
         // Katotaan jos toimii purkkakorjauksena ettei heti alussa skippaa eteenpäi
         paused = true;
+        changeSettings = false;
         this.host = host;
         batch = host.getBatch();
         camera = host.getCamera();
@@ -158,10 +166,21 @@ GameScreen implements Screen {
         basic = GameMain.getBasicFont();
         heading = GameMain.getHeadingFont();
         background = new Texture(Gdx.files.internal("Galaxy dark purple.png"));
+        soundOnTexture = new Texture("soundOn.png");
+        soundOffTexture = new Texture("soundOff.png");
 
         pauseButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, GameMain.getPauseButtonTexture());
-        destroyPauseMenuButtons();
-
+        playButton = new Button(18f, 18f, 1.5f, 1.5f, GameMain.getPlayButtonTexture());
+        playAgainButton = new Button(18f, 18f, 1.5f, 1.5f, GameMain.getPlayAgainButtonTexture());
+        backButton = new Button(18f, 18f, 1.5f, 1.5f, GameMain.getBackButtonTexture());
+        settingsButton = new Button(18f, 18f, 1.5f, 1.5f, GameMain.getSettingsButtonTexture());
+        calibration = new Button(18f, 18f, 4f, 2f, GameMain.getButtonTexture());
+        secondSetting = new Button(18f, 18f, 4f, 2f, GameMain.getButtonTexture());
+        backToPauseMenu = new Button(18f, 18f, 1.5f, 1.5f, GameMain.getBackButtonTexture());
+        soundButton = new Button(18f, 18f, 2f, 2f, soundOnTexture);
+        if (!host.isSoundOn()) {
+            soundButton.setTexture(soundOffTexture);
+        }
         resultBox = new Button(2f, 1f, 12f, 8f, GameMain.getTextBoxTexture());
 
         paused = false;
@@ -171,23 +190,37 @@ GameScreen implements Screen {
         }
     }
 
-    public void createPauseMenuButtons() {
-        playButton = new Button(6f, 2f, 1.5f, 1.5f, GameMain.getPlayButtonTexture());
-        playAgainButton = new Button(8.5f, 2f, 1.5f, 1.5f, GameMain.getPlayAgainButtonTexture());
-        backButton = new Button(3.5f, 2f, 1.5f, 1.5f, GameMain.getBackButtonTexture());
-        settingsButton = new Button(11f, 2f, 1.5f, 1.5f, GameMain.getSettingsButtonTexture());
+    public void moveHerePauseMenuButtons() {
+        playButton.setPosition(6f, 2f);
+        playAgainButton.setPosition(8.5f, 2f);
+        backButton.setPosition(3.5f, 2f);
+        settingsButton.setPosition(11f, 2f);
     }
 
-    public void destroyPauseMenuButtons() {
-        playButton = new Button(11f, 18f, .1f, .1f, GameMain.getPlayButtonTexture());
-        playAgainButton = new Button(11f, 18f, .1f, .1f, GameMain.getPlayAgainButtonTexture());
-        backButton = new Button(11f, 18f, .1f, .1f, GameMain.getBackButtonTexture());
-        settingsButton = new Button(11f, 18f, .1f, .1f, GameMain.getSettingsButtonTexture());
+    public void moveAwayPauseMenuButtons() {
+        playButton.setPosition(11f, 18f);
+        playAgainButton.setPosition(11f, 18f);
+        backButton.setPosition(11f, 18f);
+        settingsButton.setPosition(11f, 18f);
     }
 
-    public void createResultMenuButtons() {
-        playAgainButton = new Button(8.5f, 2f, 1.5f, 1.5f, GameMain.getPlayAgainButtonTexture());
-        backButton = new Button(3.5f, 2f, 1.5f, 1.5f, GameMain.getBackButtonTexture());
+    public void moveHereSettingsButtons() {
+        calibration.setPosition(5.7f, 4f);
+        secondSetting.setPosition(5.7f, 2f);
+        backToPauseMenu.setPosition(3.5f, 2f);
+        soundButton.setPosition(10.5f, 3.3f);
+    }
+
+    public void moveAwaySettingsButtons() {
+        calibration.setPosition(11f, 18f);
+        secondSetting.setPosition(11f, 18f);
+        backToPauseMenu.setPosition(11f, 18f);
+        soundButton.setPosition(11f, 18f);
+    }
+
+    public void moveHereResultMenuButtons() {
+        playAgainButton.setPosition(8.5f, 2f);
+        backButton.setPosition(3.5f, 2f);
     }
 
     public void destroyResultMenuButtons() {
@@ -246,8 +279,7 @@ GameScreen implements Screen {
             note.draw(batch);
         }
         //pauseruutu
-        if (paused && !song.isEmpty()) {
-            createPauseMenuButtons();
+        if (paused && !song.isEmpty() && !changeSettings) {
             resultBox.draw(batch);
             playButton.draw(batch);
             playAgainButton.draw(batch);
@@ -256,10 +288,18 @@ GameScreen implements Screen {
         }
         //tulosruutu
         if (song.isEmpty()) {
-            createResultMenuButtons();
+            moveHereResultMenuButtons();
             resultBox.draw(batch);
             playAgainButton.draw(batch);
             backButton.draw(batch);
+        }
+        //asetusruutu
+        if(changeSettings) {
+            resultBox.draw(batch);
+            backToPauseMenu.draw(batch);
+            calibration.draw(batch);
+            secondSetting.draw(batch);
+            soundButton.draw(batch);
         }
 
         batch.setProjectionMatrix(fontCamera.combined);
@@ -282,9 +322,10 @@ GameScreen implements Screen {
         /*basic.draw(batch, "X: " + Gdx.input.getAccelerometerX(), 50, 300);
         basic.draw(batch, " Y: " + Gdx.input.getAccelerometerY(), 50, 250);
         basic.draw(batch, " Z: " + Gdx.input.getAccelerometerZ(), 50, 200);*/
+
         //pauseruudun tekstit
-        if (paused && !song.isEmpty()) {
-            heading.draw(batch, "PAUSE", 300, 600);
+        if (paused && !song.isEmpty() && !changeSettings) {
+            heading.draw(batch, "PAUSE", 400, 600);
             basic.draw(batch, "main", 280, 400);
             basic.draw(batch, "menu", 280, 350);
             basic.draw(batch, "continue", 440, 380);
@@ -297,6 +338,13 @@ GameScreen implements Screen {
             basic.draw(batch, "you got " + points + " points!!", 300, 400);
             basic.draw(batch, "main menu", 410, 230);
             basic.draw(batch, "start again?", 820, 230);
+        }
+        //asetusruudun tekstit
+        if (changeSettings) {
+            heading.draw(batch, "Settings", 320, 630);
+            basic.draw(batch, "calibrate" , 510, 420);
+            basic.draw(batch, "do something" , 470, 270);
+            basic.draw(batch, "back", 295, 330);
         }
 
         batch.end();
@@ -418,28 +466,53 @@ GameScreen implements Screen {
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);
         }
-        if (pauseButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
-            paused = true;
-            // Väliaikainen kalibrointi paussinapissa
-            host.calibrateZeroPoint();
-            //player.pointer.resetSmoothing();
-        }
-        if (playButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
-            paused = false;
-            destroyPauseMenuButtons();
-        }
-        if (playAgainButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
-            jauntyGumption.stop();
-            host.setScreen(new GameScreen(host));
-        }
-        if (backButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
-            jauntyGumption.stop();
-            host.setScreen(new MainMenu(host));
-        }
-        if (settingsButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
-            jauntyGumption.stop();
-            host.setScreen(new Settings(host));
-        }
+            if (pauseButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+                paused = true;
+                moveHerePauseMenuButtons();
+            }
+            if (playButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+                paused = false;
+                moveAwayPauseMenuButtons();
+            }
+            if (playAgainButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+                jauntyGumption.stop();
+                host.setScreen(new GameScreen(host));
+            }
+            if (backButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+                jauntyGumption.stop();
+                host.setScreen(new MainMenu(host));
+            }
+            if (settingsButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+                changeSettings = true;
+                moveAwayPauseMenuButtons();
+                moveHereSettingsButtons();
+            }
+            if (calibration.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+                //kalibroi tässä
+                host.calibrateZeroPoint();
+                //player.pointer.resetSmoothing();
+            }
+            if (secondSetting.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+                //toinen asetusjuttu
+            }
+            if (soundButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+                jauntyGumption.stop();
+                if (host.isSoundOn()) {
+                    host.setSoundOn(false);
+                    soundButton.setTexture(soundOffTexture);
+                } else {
+                    host.setSoundOn(true);
+                    soundButton.setTexture(soundOnTexture);
+                }
+            }
+            if (backToPauseMenu.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+                changeSettings = false;
+                moveAwaySettingsButtons();
+                moveHerePauseMenuButtons();
+            }
+        //ottaa napin painalluksen vain kerran
+        if (!Gdx.input.isTouched()) {touchPos.set(0, 0, 0);}
+
     }
 
 

@@ -104,6 +104,9 @@ public class Difficulty implements Screen {
             song2Button.setTexture(buttonTexture);
             song3Button.setTexture(buttonPressedTexture);
         }
+        //ottaa napin painalluksen vain kerran
+        if (!Gdx.input.isTouched()) {touchPos.set(0, 0, 0);}
+
 
     }
 

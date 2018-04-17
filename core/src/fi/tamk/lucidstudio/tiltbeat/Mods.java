@@ -263,6 +263,9 @@ public class Mods implements Screen {
                 touchPos.setZero();
             }
         }
+        //ottaa napin painalluksen vain kerran
+        if (!Gdx.input.isTouched()) {touchPos.set(0, 0, 0);}
+
     }
 
 

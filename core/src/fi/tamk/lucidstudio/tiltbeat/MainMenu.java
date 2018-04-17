@@ -100,6 +100,9 @@ public class MainMenu implements Screen{
         if (modsButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setScreen(new Mods(host));
         }
+        //ottaa napin painalluksen vain kerran
+        if (!Gdx.input.isTouched()) {touchPos.set(0, 0, 0);}
+
     }
 
     @Override
