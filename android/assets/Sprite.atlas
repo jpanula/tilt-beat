@@ -1,0 +1,40 @@
+Sprite.png
+size: 3500, 700
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Frame 1
+  rotate: false
+  xy: 0, 0
+  size: 700, 700
+  orig: 700, 700
+  offset: 0, 0
+  index: -1
+Frame 2
+  rotate: false
+  xy: 700, 0
+  size: 700, 700
+  orig: 700, 700
+  offset: 0, 0
+  index: -1
+Frame 3
+  rotate: false
+  xy: 1400, 0
+  size: 700, 700
+  orig: 700, 700
+  offset: 0, 0
+  index: -1
+Frame 4
+  rotate: false
+  xy: 2100, 0
+  size: 700, 700
+  orig: 700, 700
+  offset: 0, 0
+  index: -1
+Frame 5
+  rotate: false
+  xy: 2800, 0
+  size: 700, 700
+  orig: 700, 700
+  offset: 0, 0
+  index: -1
