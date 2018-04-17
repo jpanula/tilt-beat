@@ -67,6 +67,10 @@ public class Mods implements Screen {
         backButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, GameMain.getBackButtonTexture());
         textBox = new Button(10.5f, 2.5f, 5.4f, 3f, GameMain.getTextBoxTexture());
 
+        button6.setText(40, 80, "6-side", basic);
+        button8.setText(40, 80, "8-side", basic);
+        button10.setText(40, 80, "10-side", basic);
+
         playerSides = host.getPlayerSides();
         playerDiameter = host.getPlayerDiameter();
         radius = playerDiameter / 2;
@@ -204,9 +208,9 @@ public class Mods implements Screen {
         batch.setProjectionMatrix(fontCamera.combined);
         //piirrellään fontit
         heading.draw(batch, "Modifications" , 250, 680);
-        basic.draw(batch, "6-side" , 120, 440);
-        basic.draw(batch, "8-side" , 120, 280);
-        basic.draw(batch, "10-side" , 120, 120);
+        button6.drawText(batch);
+        button8.drawText(batch);
+        button10.drawText(batch);
         small.draw(batch, "click sectors to" , 885, 400);
         small.draw(batch, "activate or" , 885, 350);
         small.draw(batch, "de-activate them" , 885, 300);

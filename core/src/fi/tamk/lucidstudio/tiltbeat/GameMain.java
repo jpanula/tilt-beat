@@ -3,6 +3,7 @@ package fi.tamk.lucidstudio.tiltbeat;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -23,9 +24,12 @@ public class GameMain extends Game {
 	private static final float SCREEN_HEIGHT = 10;
 	private static final float SCREEN_WIDTH_PIXELS = 1280;
 	private static final float SCREEN_HEIGHT_PIXELS = 800;
+	//public static boolean[] activeSectors;
+    private Music song1;
+    private Music song2;
+    private Music song3;
     private static Texture background;
     private static Texture button;
-    private static Texture buttonHigh;
     private static Texture buttonPressed;
 	private static Texture pauseButton;
 	private static Texture backButton;
@@ -140,6 +144,18 @@ public class GameMain extends Game {
 	    prefs.flush();
 	}
 
+	public Music getSong() {
+	    if (getSongChoice().equals("song 1")) {
+	        return song1;
+	    }
+	    else if (getSongChoice().equals("song 2")) {
+	        return song2;
+	    }
+	    else {
+	        return song3;
+	    }
+    }
+
 	public SpriteBatch getBatch() {
 	    return batch;
     }
@@ -188,8 +204,6 @@ public class GameMain extends Game {
     public static Texture getBackgroundTexture() { return background; }
 
     public static Texture getButtonTexture() { return button; }
-
-    public static Texture getButtonHighTexture() { return buttonHigh; }
 
     public static Texture getButtonPressedTexture() { return buttonPressed; }
 
@@ -271,14 +285,17 @@ public class GameMain extends Game {
 
 		background = new Texture(Gdx.files.internal("Galaxy blue.png"));
         button = new Texture(Gdx.files.internal("nappi1.png"));
-        buttonHigh = new Texture(Gdx.files.internal("nappi1korkee.png"));
         buttonPressed = new Texture(Gdx.files.internal("nappi2.png"));
-        pauseButton = new Texture(Gdx.files.internal("pausenappi.png"));
+        pauseButton = new Texture(Gdx.files.internal("pausenappi2.png"));
 		backButton = new Texture(Gdx.files.internal("backnappi.png"));
 		playButton = new Texture(Gdx.files.internal("playnappi.png"));
-		playAgainButton = new Texture(Gdx.files.internal("repeat.jpg"));
-        settingsButton = new Texture(Gdx.files.internal("settings.png"));
+		playAgainButton = new Texture(Gdx.files.internal("repeat.png"));
+        settingsButton = new Texture(Gdx.files.internal("settingsnappi.png"));
 		textBox = new Texture(Gdx.files.internal("folio.png"));
+
+		song1 = Gdx.audio.newMusic(Gdx.files.internal("JauntyGumption.ogg"));
+        song2 = Gdx.audio.newMusic(Gdx.files.internal("NyanCat.mp3"));
+        song3 = Gdx.audio.newMusic(Gdx.files.internal("WorldisMine.mp3"));
 
 		createFonts();
 

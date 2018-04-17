@@ -22,7 +22,6 @@ public class Settings implements Screen {
     private OrthographicCamera camera;
     private OrthographicCamera fontCamera;
     private Texture background;
-    private Texture buttonTexture;
     private Texture soundButtonTexture;
     private Texture soundOnTexture;
     private Texture soundOffTexture;
@@ -33,7 +32,7 @@ public class Settings implements Screen {
     private Button restore;
     private Button backButton;
     private Button soundButton;
-    private boolean changeSound=false;
+    private boolean changeSound = false;
     private Vector3 touchPos;
 
     public Settings(GameMain host) {
@@ -41,17 +40,19 @@ public class Settings implements Screen {
         batch = host.getBatch();
         camera = host.getCamera();
         background = GameMain.getBackgroundTexture();
-        buttonTexture = GameMain.getButtonTexture();
         fontCamera = host.getFontCamera();
         heading = GameMain.getSmallerHeadingFont();
         basic = GameMain.getBasicFont();
         soundOnTexture = new Texture("soundOn.png");
         soundOffTexture = new Texture("soundOff.png");
         soundButtonTexture = soundOnTexture;
-        sound = new Button(1.3f, 1.8f, 3.7f, 2f, buttonTexture);
-        calibration = new Button(11f, 1.8f, 3.7f, 2f, buttonTexture);
-        restore = new Button(6.2f, 1.8f, 3.7f, 2f, buttonTexture);
+        sound = new Button(1.3f, 1.8f, 3.7f, 2f, GameMain.getButtonTexture());
+        restore = new Button(11f, 1.8f, 3.7f, 2f, GameMain.getButtonTexture());
+        calibration = new Button(6.2f, 1.8f, 3.7f, 2f, GameMain.getButtonTexture());
         backButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, GameMain.getBackButtonTexture());
+
+        calibration.setText(24, 106, "calibration", basic);
+        restore.setText(50, 136, "default\nsettings", basic);
         destroySoundButton();
         touchPos = new Vector3();
     }
@@ -89,12 +90,11 @@ public class Settings implements Screen {
 
         batch.setProjectionMatrix(fontCamera.combined);
         //piirrellään fontit
+        calibration.drawText(batch);
+        restore.drawText(batch);
+
         heading.draw(batch, "Settings", 250, 700);
         basic.draw(batch, "sound", 180, 250);
-        basic.draw(batch, "calibration", 520, 250);
-        basic.draw(batch, "restore", 930, 290);
-        basic.draw(batch, "default", 930, 250);
-        basic.draw(batch, "settings", 930, 210);
 
         batch.end();
 

@@ -34,7 +34,6 @@ public class Difficulty implements Screen {
     private Button song3Button;
     private Texture background;
     private Texture buttonTexture;
-    private Texture buttonHighTexture;
     private Texture buttonPressedTexture;
     private Vector3 touchPos;
 
@@ -48,21 +47,28 @@ public class Difficulty implements Screen {
         small = GameMain.getSmallFont();
         background = GameMain.getBackgroundTexture();
         buttonTexture = GameMain.getButtonTexture();
-        buttonHighTexture = GameMain.getButtonHighTexture();
         buttonPressedTexture = GameMain.getButtonPressedTexture();
         touchPos = new Vector3();
 
 
+        backButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, GameMain.getBackButtonTexture());
+        playButton = new Button(14f, 0.5f, 1.5f, 1.5f, GameMain.getPlayButtonTexture());
+        textBox = new Button(1f, 3f, 7f, 4.6f, GameMain.getTextBoxTexture());
         easyButton = new Button(.5f, .5f, 2.6f, 2f, buttonTexture);
         normalButton = new Button(4f, .5f, 2.6f, 2f, buttonTexture);
         hardButton = new Button(7.5f, .5f, 2.6f, 2f, buttonTexture);
         backBreakerButton = new Button(11f, .5f, 2.6f, 2f, buttonTexture);
-        backButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, GameMain.getBackButtonTexture());
-        playButton = new Button(14f, 0.5f, 1.5f, 1.5f, GameMain.getPlayButtonTexture());
-        textBox = new Button(1f, 3f, 7f, 4.6f, GameMain.getTextBoxTexture());
         song1Button = new Button(10f, 7f, 5f, 1.5f, buttonTexture);
         song2Button = new Button(10f, 5f, 5f, 1.5f, buttonTexture);
         song3Button = new Button(10f, 3f, 5f, 1.5f, buttonTexture);
+
+        easyButton.setText(40, 110, "easy", basic);
+        normalButton.setText(30, 110, "normal", basic);
+        hardButton.setText(50, 110, "hard", basic);
+        backBreakerButton.setText(20, 110, "backbreaker", basic);
+        song1Button.setText(40, 80, "jaumpty gumpty", small);
+        song2Button.setText(40, 80, "nyan cat", small);
+        song3Button.setText(40, 80, "world is mine", small);
 
         changeButtonTextures();
     }
@@ -138,6 +144,14 @@ public class Difficulty implements Screen {
         batch.setProjectionMatrix(fontCamera.combined);
         //piirrellään fontit
         heading.draw(batch, "Difficulty" , 180, 720);
+        easyButton.drawText(batch);
+        normalButton.drawText(batch);
+        hardButton.drawText(batch);
+        backBreakerButton.drawText(batch);
+        song1Button.drawText(batch);
+        song2Button.drawText(batch);
+        song3Button.drawText(batch);
+        /*
         basic.draw(batch, "easy" , 80, 160);
         basic.draw(batch, "normal" , 350, 160);
         basic.draw(batch, "hard" , 650, 160);
@@ -146,6 +160,7 @@ public class Difficulty implements Screen {
         small.draw(batch, "song 3" , 900, 320);
         small.draw(batch, "song 2" , 900, 490);
         small.draw(batch, "song 1" , 900, 650);
+        */
         heading.draw(batch, host.getDifficulty() + "" , 150, 580);
         if (host.getDifficulty().equals("easy")) {
             basic.draw(batch, "fun! fun! fun!" , 150, 420);
