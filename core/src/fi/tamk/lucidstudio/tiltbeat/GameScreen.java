@@ -87,7 +87,7 @@ GameScreen implements Screen {
         playerDiameter = host.getPlayerDiameter();
         player = new Player(playerSides, playerDiameter);
 
-        jauntyGumption = Gdx.audio.newMusic(Gdx.files.internal("JauntyGumption.ogg"));
+        jauntyGumption = host.getSong();
         bpm = 146;
         // Muutetaan nuottien tiheyttä vaikeusasteen mukaan
         if (host.getDifficulty().equals("easy")) {
@@ -182,6 +182,14 @@ GameScreen implements Screen {
             soundButton.setTexture(soundOffTexture);
         }
         resultBox = new Button(2f, 1f, 12f, 8f, GameMain.getTextBoxTexture());
+
+        backButton.setText(0, 260, "main\nmenu", basic);
+        playButton.setText(-30, 190, "continue", basic);
+        playAgainButton.setText(0, 190, "retry", basic);
+        settingsButton.setText(-30, 190, "settings", basic);
+        calibration.setText(25, 110, "calibration", basic);
+        secondSetting.setText(20, 110, "do something", basic);
+        backToPauseMenu.setText(10, 180, "back", basic);
 
         paused = false;
         useShapeRenderer = true;
@@ -326,25 +334,26 @@ GameScreen implements Screen {
         //pauseruudun tekstit
         if (paused && !song.isEmpty() && !changeSettings) {
             heading.draw(batch, "PAUSE", 400, 600);
-            basic.draw(batch, "main", 280, 400);
-            basic.draw(batch, "menu", 280, 350);
-            basic.draw(batch, "continue", 440, 380);
-            basic.draw(batch, "retry", 680, 380);
-            basic.draw(batch, "settings", 830, 380);
+            backButton.drawText(batch);
+            playButton.drawText(batch);
+            playAgainButton.drawText(batch);
+            settingsButton.drawText(batch);
         }
         //tulosruudun tekstit
         if (song.isEmpty()) {
-            heading.draw(batch, "you did it!!!", 220, 650);
-            basic.draw(batch, "you got " + points + " points!!", 300, 400);
-            basic.draw(batch, "main menu", 410, 230);
-            basic.draw(batch, "start again?", 820, 230);
+            heading.draw(batch, "you did it!!!", 230, 620);
+            basic.draw(batch, "you got " + points + " points!!", 430, 400);
+            backButton.setText(140, 90, "main menu", basic);
+            playAgainButton.setText(140, 90, "start again?", basic);
+            backButton.drawText(batch);
+            playAgainButton.drawText(batch);
         }
         //asetusruudun tekstit
         if (changeSettings) {
             heading.draw(batch, "Settings", 320, 630);
-            basic.draw(batch, "calibrate" , 510, 420);
-            basic.draw(batch, "do something" , 470, 270);
-            basic.draw(batch, "back", 295, 330);
+            calibration.drawText(batch);
+            secondSetting.drawText(batch);
+            backToPauseMenu.drawText(batch);
         }
 
         batch.end();
@@ -513,6 +522,9 @@ GameScreen implements Screen {
         //ottaa napin painalluksen vain kerran
         if (!Gdx.input.isTouched()) {touchPos.set(0, 0, 0);}
 
+        if(song.isEmpty()) {
+            jauntyGumption.stop();
+        }
     }
 
 
