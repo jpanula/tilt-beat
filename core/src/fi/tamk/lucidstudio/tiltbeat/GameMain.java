@@ -54,7 +54,12 @@ public class GameMain extends Game {
         prefs.putFloat("zeroPointZ", 0);
         prefs.putInteger("smoothingSamples", 23);
         prefs.putString("activeSectors", "1111111111");
+        prefs.putBoolean("useAccelerometerX", false);
         prefs.flush();
+    }
+
+    public Preferences getPrefs() {
+        return prefs;
     }
 
     public boolean[] getActiveSectors() {
@@ -239,6 +244,11 @@ public class GameMain extends Game {
 		prefs.putFloat("accelerometerX", Gdx.input.getAccelerometerX());
         prefs.putFloat("accelerometerY", Gdx.input.getAccelerometerY());
         prefs.putFloat("accelerometerZ", Gdx.input.getAccelerometerZ());
+        if (prefs.getFloat("accelerometerZ") > 7f) {
+            prefs.putBoolean("useAccelerometerX",true);
+        } else {
+            prefs.putBoolean("useAccelerometerX",false);
+        }
         prefs.flush();
 	}
 

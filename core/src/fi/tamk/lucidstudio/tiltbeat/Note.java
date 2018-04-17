@@ -78,7 +78,6 @@ class Point extends Note {
     public Point(int sector, float distance, Texture texture) {
         super(sector, distance);
         this.texture = texture;
-        scoreAnimationSheet = new Texture("Sprite.png");
         TextureAtlas atlas = new TextureAtlas("Sprite2.atlas");
         scoreAnimation = new Animation<TextureRegion>(0.07f, atlas.getRegions());
         width = 1;

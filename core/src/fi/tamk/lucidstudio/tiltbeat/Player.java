@@ -47,7 +47,11 @@ public class Player {
             public void run() {
                 while(true) {
                     xSmoother[smoothIndex % smoothingSamples] = Gdx.input.getAccelerometerY() - prefs.getFloat("zeroPointY");
-                    ySmoother[smoothIndex % smoothingSamples] = Gdx.input.getAccelerometerZ() - prefs.getFloat("zeroPointZ");
+                    if (isUseAccelerometerX()) {
+                        ySmoother[smoothIndex % smoothingSamples] = -Gdx.input.getAccelerometerX() - prefs.getFloat("zeroPointX");
+                    } else {
+                        ySmoother[smoothIndex % smoothingSamples] = Gdx.input.getAccelerometerZ() - prefs.getFloat("zeroPointZ");
+                    }
                     smoothIndex++;
                     try {
                         Thread.sleep(5);
@@ -69,6 +73,10 @@ public class Player {
             (new Thread(new inputSmoother())).start();
         }
 
+        public boolean isUseAccelerometerX() {
+            return prefs.getBoolean("useAccelerometerX");
+        }
+
         // Piirtometodi SpriteBatchille, käyttää kuvia
         public void draw(SpriteBatch batch) {
             batch.draw(pointerTexture, hitbox.x - hitbox.radius, hitbox.y - hitbox.radius, hitbox.radius * 2, hitbox.radius * 2);
@@ -84,7 +92,11 @@ public class Player {
                 xSmoother[i] = prefs.getFloat("zeroPointY");
             }
             for (int i = 0; i < ySmoother.length; i++) {
-                ySmoother[i] = prefs.getFloat("zeroPointZ");
+                if (isUseAccelerometerX()) {
+                    ySmoother[i] = prefs.getFloat("zeroPointX");
+                } else {
+                    ySmoother[i] = prefs.getFloat("zeroPointZ");
+                }
             }
         }
 
@@ -109,11 +121,7 @@ public class Player {
                 }
             }
             // Osoittimen ohjaus accelerometrillä
-            /*if (Math.abs(Gdx.input.getAccelerometerY()) > GameMain.getAccelerometerDeadzone() || Math.abs(Gdx.input.getAccelerometerX()) > GameMain.getAccelerometerDeadzone()) {
-                hitbox.y = GameMain.getScreenHeight() / 2 - Math.min((Gdx.input.getAccelerometerX() / GameMain.getAccelerometerMax() * (GameMain.getPlayerInradius(prefs.getFloat("playerDiameter"), prefs.getInteger("playerSides")) - hitbox.radius * 2)), (GameMain.getPlayerInradius(prefs.getFloat("playerDiameter"), prefs.getInteger("playerSides")) - hitbox.radius * 2));
-                hitbox.x = GameMain.getScreenWidth() / 2 + Math.min((Gdx.input.getAccelerometerY() / GameMain.getAccelerometerMax() * (GameMain.getPlayerInradius(prefs.getFloat("playerDiameter"), prefs.getInteger("playerSides")) - hitbox.radius * 2)), (GameMain.getPlayerInradius(prefs.getFloat("playerDiameter"), prefs.getInteger("playerSides")) - hitbox.radius * 2));
-            }*/
-            if (Math.abs(prefs.getFloat("zeroPointZ") - Gdx.input.getAccelerometerZ()) > prefs.getFloat("accelerometerDeadzone") || Math.abs(prefs.getFloat("zeroPointY") - Gdx.input.getAccelerometerY()) > prefs.getFloat("accelerometerDeadzone")) {
+            if ((Math.abs(prefs.getFloat("zeroPointZ") - Gdx.input.getAccelerometerZ()) > prefs.getFloat("accelerometerDeadzone") && !prefs.getBoolean("useAccelerometerX")) || (Math.abs(prefs.getFloat("zeroPointX") - Gdx.input.getAccelerometerZ()) > prefs.getFloat("accelerometerDeadzone") && prefs.getBoolean("useAccelerometerX")) || Math.abs(prefs.getFloat("zeroPointY") - Gdx.input.getAccelerometerY()) > prefs.getFloat("accelerometerDeadzone")) {
                 float avgX = 0;
                 float avgY = 0;
 

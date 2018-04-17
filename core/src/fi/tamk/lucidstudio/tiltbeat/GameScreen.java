@@ -321,7 +321,8 @@ GameScreen implements Screen {
         // Piirrellään Accelerometerin arvoja ruudulle
         /*basic.draw(batch, "X: " + Gdx.input.getAccelerometerX(), 50, 300);
         basic.draw(batch, " Y: " + Gdx.input.getAccelerometerY(), 50, 250);
-        basic.draw(batch, " Z: " + Gdx.input.getAccelerometerZ(), 50, 200);*/
+        basic.draw(batch, " Z: " + Gdx.input.getAccelerometerZ(), 50, 200);
+        basic.draw(batch, "use accelerometer X: " + host.getPrefs().getBoolean("useAccelerometerX"), 50, 350);*/
 
         //pauseruudun tekstit
         if (paused && !song.isEmpty() && !changeSettings) {
