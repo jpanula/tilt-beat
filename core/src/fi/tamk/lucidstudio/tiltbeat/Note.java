@@ -6,6 +6,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -71,20 +72,18 @@ class Point extends Note {
     private float height;
     private boolean flipped;
     private float stateTime;
+    private float animationSize;
 
 
     public Point(int sector, float distance, Texture texture) {
         super(sector, distance);
         this.texture = texture;
         scoreAnimationSheet = new Texture("Sprite.png");
-        TextureRegion[][] tmp = TextureRegion.split(scoreAnimationSheet, scoreAnimationSheet.getWidth()/5, scoreAnimationSheet.getHeight());
-        scoreAnimationFrames = new TextureRegion[5];
-        for (int i = 0; i < 5; i++) {
-            scoreAnimationFrames[i] = tmp[0][i];
-        }
-        scoreAnimation = new Animation<TextureRegion>(0.1f, scoreAnimationFrames);
+        TextureAtlas atlas = new TextureAtlas("Sprite2.atlas");
+        scoreAnimation = new Animation<TextureRegion>(0.07f, atlas.getRegions());
         width = 1;
         height = (float) 0.7 * width;
+        animationSize = 1.1f;
         vector = new Vector2(distance, 0);
         flipped = false;
         stateTime = 0;
@@ -119,7 +118,7 @@ class Point extends Note {
             batch.draw(texture, GameMain.getScreenWidth() / 2 + vector.x - width / 2, GameMain.getScreenHeight() / 2 + vector.y - height / 2, width / 2, height / 2, width, height, 1, 1, vector.angle() - 90, 0, 0, texture.getWidth(), texture.getHeight(), flipped, false);
         } else {
             TextureRegion keyframe = new TextureRegion(scoreAnimation.getKeyFrame(stateTime));
-            batch.draw(keyframe, GameMain.getScreenWidth() / 2 + vector.x - width / 2, GameMain.getScreenHeight() / 2 + vector.y - height / 2, width / 2, height / 2, width, height, width, height, vector.angle(), false);
+            batch.draw(keyframe, GameMain.getScreenWidth() / 2 + vector.x - animationSize / 2, GameMain.getScreenHeight() / 2 + vector.y - animationSize / 2, animationSize / 2, animationSize / 2, animationSize, animationSize, animationSize, animationSize, vector.angle(), false);
             stateTime += Gdx.graphics.getDeltaTime();
         }
     }

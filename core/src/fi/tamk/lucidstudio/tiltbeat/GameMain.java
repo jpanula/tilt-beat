@@ -23,7 +23,6 @@ public class GameMain extends Game {
 	private static final float SCREEN_HEIGHT = 10;
 	private static final float SCREEN_WIDTH_PIXELS = 1280;
 	private static final float SCREEN_HEIGHT_PIXELS = 800;
-	//public static boolean[] activeSectors;
     private static Texture background;
     private static Texture button;
     private static Texture buttonHigh;
