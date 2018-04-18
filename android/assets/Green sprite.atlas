@@ -1,0 +1,47 @@
+Green sprite.png
+size: 2400, 1400
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+F1
+  rotate: false
+  xy: 0, 0
+  size: 800, 700
+  orig: 800, 700
+  offset: 0, 0
+  index: -1
+F2
+  rotate: false
+  xy: 800, 0
+  size: 800, 700
+  orig: 800, 700
+  offset: 0, 0
+  index: -1
+F3
+  rotate: false
+  xy: 1600, 0
+  size: 800, 700
+  orig: 800, 700
+  offset: 0, 0
+  index: -1
+F4
+  rotate: false
+  xy: 0, 700
+  size: 800, 700
+  orig: 800, 700
+  offset: 0, 0
+  index: -1
+F5
+  rotate: false
+  xy: 800, 700
+  size: 800, 700
+  orig: 800, 700
+  offset: 0, 0
+  index: -1
+F6
+  rotate: false
+  xy: 1600, 700
+  size: 800, 700
+  orig: 800, 700
+  offset: 0, 0
+  index: -1
