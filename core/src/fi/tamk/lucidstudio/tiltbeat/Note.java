@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -64,8 +65,9 @@ public abstract class Note {
 
 class Point extends Note {
     private Texture texture;
-    private Texture scoreAnimationSheet;
-    private TextureRegion[] scoreAnimationFrames;
+    private TextureAtlas atlas;
+    private TextureAtlas particleAtlas;
+    private ParticleEffect effect;
     private Animation<TextureRegion> scoreAnimation;
     private Vector2 vector;
     private float width;
@@ -78,8 +80,12 @@ class Point extends Note {
     public Point(int sector, float distance, Texture texture) {
         super(sector, distance);
         this.texture = texture;
-        TextureAtlas atlas = new TextureAtlas("Sprite2.atlas");
-        scoreAnimation = new Animation<TextureRegion>(0.07f, atlas.getRegions());
+        atlas = new TextureAtlas("Blue Sprite.atlas");
+        scoreAnimation = new Animation<TextureRegion>(0.05f, atlas.getRegions());
+        particleAtlas = new TextureAtlas("Nuotteja.atlas");
+        effect = new ParticleEffect();
+        effect.load(Gdx.files.internal("Testi"), particleAtlas);
+        effect.scaleEffect(1/80f);
         width = 1;
         height = (float) 0.7 * width;
         animationSize = 1.1f;
@@ -88,8 +94,20 @@ class Point extends Note {
         stateTime = 0;
     }
 
+    @Override
+    public void setHit(boolean hit) {
+        super.setHit(hit);
+        if (hit) {
+            effect.start();
+        }
+    }
+
     public boolean isAnimationFinished() {
-        return scoreAnimation.isAnimationFinished(stateTime);
+        if (scoreAnimation.isAnimationFinished(stateTime) && effect.isComplete()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public Vector2 getVector() {
@@ -116,10 +134,15 @@ class Point extends Note {
         if (!isHit()) {
             batch.draw(texture, GameMain.getScreenWidth() / 2 + vector.x - width / 2, GameMain.getScreenHeight() / 2 + vector.y - height / 2, width / 2, height / 2, width, height, 1, 1, vector.angle() - 90, 0, 0, texture.getWidth(), texture.getHeight(), flipped, false);
         } else {
-            TextureRegion keyframe = new TextureRegion(scoreAnimation.getKeyFrame(stateTime));
-            batch.draw(keyframe, GameMain.getScreenWidth() / 2 + vector.x - animationSize / 2, GameMain.getScreenHeight() / 2 + vector.y - animationSize / 2, animationSize / 2, animationSize / 2, animationSize, animationSize, animationSize, animationSize, vector.angle(), false);
+            if (!scoreAnimation.isAnimationFinished(stateTime)) {
+                TextureRegion keyframe = new TextureRegion(scoreAnimation.getKeyFrame(stateTime));
+                batch.draw(keyframe, GameMain.getScreenWidth() / 2 + vector.x - animationSize / 2, GameMain.getScreenHeight() / 2 + vector.y - animationSize / 2, animationSize / 2, animationSize / 2, animationSize, animationSize, animationSize, animationSize, vector.angle(), false);
+            }
+            effect.setPosition(GameMain.getScreenWidth() / 2 + vector.x, GameMain.getScreenHeight() / 2 + vector.y);
+            effect.draw(batch, Gdx.graphics.getDeltaTime());
             stateTime += Gdx.graphics.getDeltaTime();
         }
+
     }
     public void drawInBackground(SpriteBatch batch) {
         vector.setLength(getDistance() + GameMain.getPlayerInradius(prefs.getFloat("playerDiameter"), prefs.getInteger("playerSides")));

@@ -107,9 +107,9 @@ GameScreen implements Screen {
 
         noteSpeed = host.getNoteSpeed();
         song = new ArrayList<Note>();
-        pointTexture = new Texture("Smol Green.png");
-        holdTexture = new Texture("Smol Green Hold.png");
-        slideTexture = new Texture("Smol Green Slide.png");
+        pointTexture = new Texture("Smol Blue.png");
+        holdTexture = new Texture("Smol Blue Hold.png");
+        slideTexture = new Texture("Smol Blue Slide.png");
 
 
         for (int i = 0; i < totalBeats - startOffset ; i++) {
