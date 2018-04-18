@@ -59,6 +59,7 @@ public class GameMain extends Game {
         prefs.putInteger("smoothingSamples", 23);
         prefs.putString("activeSectors", "1111111111");
         prefs.putBoolean("useAccelerometerX", false);
+        prefs.putBoolean("tiltedSquare", false);
         prefs.flush();
     }
 

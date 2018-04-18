@@ -204,7 +204,26 @@ public class Player {
                     0.067f, 0.25f,
                     0.067f, 0.75f
             };
-        } else {
+        } else if (playerSides == 4) {
+            if (prefs.getBoolean("tiltedSquare")) {
+                texture = new Texture("tiltedSquare.png");
+                vertices = new float[]{
+                        0.5f, 1f,
+                        1f, 0.5f,
+                        0.5f, 0f,
+                        0f, 0.5f
+                };
+            } else {
+                texture = new Texture("square.png");
+                vertices = new float[]{
+                        1f, 1f,
+                        1f, 0f,
+                        0f, 0f,
+                        0f, 1f
+                };
+            }
+        }
+        else {
             throw new IllegalArgumentException("Invalid number of playerSides");
         }
         // Sektorien muodostus
