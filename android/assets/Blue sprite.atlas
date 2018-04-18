@@ -1,0 +1,47 @@
+Blue sprite.png
+size: 1600, 1903
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+1
+  rotate: false
+  xy: 0, 0
+  size: 622, 427
+  orig: 622, 427
+  offset: 0, 0
+  index: -1
+2
+  rotate: false
+  xy: 622, 0
+  size: 698, 503
+  orig: 698, 503
+  offset: 0, 0
+  index: -1
+3
+  rotate: false
+  xy: 0, 503
+  size: 800, 700
+  orig: 800, 700
+  offset: 0, 0
+  index: -1
+4
+  rotate: false
+  xy: 800, 503
+  size: 800, 700
+  orig: 800, 700
+  offset: 0, 0
+  index: -1
+5
+  rotate: false
+  xy: 0, 1203
+  size: 800, 700
+  orig: 800, 700
+  offset: 0, 0
+  index: -1
+6
+  rotate: false
+  xy: 800, 1203
+  size: 800, 700
+  orig: 800, 700
+  offset: 0, 0
+  index: -1
