@@ -36,6 +36,7 @@ GameScreen implements Screen {
     private Texture holdTexture;
     private Texture slideTexture;
     private Vector3 touchPos;
+    private boolean loaded;
 
     // Musiikki ja bpm
     private Music jauntyGumption;
@@ -82,6 +83,7 @@ GameScreen implements Screen {
         fontCamera = host.getFontCamera();
         shapeRenderer = host.getShapeRenderer();
         touchPos = new Vector3();
+        loaded = false;
 
         playerSides = host.getPlayerSides();
         playerDiameter = host.getPlayerDiameter();
@@ -271,6 +273,10 @@ GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        if (!loaded) {
+            host.setScreen(new LoadingScreen(host, this));
+            loaded = true;
+        }
         // Perus clearataan ruutu mustalla ja laitetaan renderereille kameran koordinaatit käyttöön
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -603,7 +609,6 @@ GameScreen implements Screen {
 
     @Override
     public void hide() {
-        paused = true;
     }
 
     @Override

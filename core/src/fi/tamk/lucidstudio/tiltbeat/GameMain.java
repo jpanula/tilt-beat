@@ -350,6 +350,7 @@ public class GameMain extends Game {
 	@Override
 	public void dispose () {
 		batch.dispose();
+		manager.dispose();
 		//gameScreen.dispose();
 
 	}
