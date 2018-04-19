@@ -3,6 +3,7 @@ package fi.tamk.lucidstudio.tiltbeat;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class GameMain extends Game {
+    private AssetManager manager = new AssetManager();
 	private Preferences prefs;
 	private SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
@@ -61,6 +63,10 @@ public class GameMain extends Game {
         prefs.putBoolean("useAccelerometerX", false);
         prefs.putBoolean("tiltedSquare", false);
         prefs.flush();
+    }
+
+    public AssetManager getManager() {
+        return manager;
     }
 
     public Preferences getPrefs() {
