@@ -24,10 +24,10 @@ public class GameMain extends Game {
     private ShapeRenderer shapeRenderer;
 	private OrthographicCamera camera;
 	private OrthographicCamera fontCamera;
-	private static final float SCREEN_WIDTH = 16;
-	private static final float SCREEN_HEIGHT = 10;
-	private static final float SCREEN_WIDTH_PIXELS = 1280;
-	private static final float SCREEN_HEIGHT_PIXELS = 800;
+	private final float SCREEN_WIDTH = 16;
+	private final float SCREEN_HEIGHT = 10;
+	private final float SCREEN_WIDTH_PIXELS = 1280;
+	private final float SCREEN_HEIGHT_PIXELS = 800;
     private Music song1;
     private Music song2;
     private Music song3;
@@ -71,6 +71,14 @@ public class GameMain extends Game {
 
     public Preferences getPrefs() {
         return prefs;
+    }
+
+    public float getSCREEN_WIDTH_PIXELS() {
+        return SCREEN_WIDTH_PIXELS;
+    }
+
+    public float getSCREEN_HEIGHT_PIXELS() {
+        return SCREEN_HEIGHT_PIXELS;
     }
 
     public boolean[] getActiveSectors() {
@@ -179,11 +187,11 @@ public class GameMain extends Game {
 		return fontCamera;
 	}
 
-    public static float getScreenWidth() {
+    public float getScreenWidth() {
         return SCREEN_WIDTH;
     }
 
-    public static float getScreenHeight() {
+    public float getScreenHeight() {
         return SCREEN_HEIGHT;
     }
 
@@ -284,9 +292,9 @@ public class GameMain extends Game {
 	    batch = new SpriteBatch();
 	    shapeRenderer = new ShapeRenderer();
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, SCREEN_WIDTH, SCREEN_HEIGHT);
+		camera.setToOrtho(false, getScreenWidth(), getScreenHeight());
 		fontCamera = new OrthographicCamera();
-		fontCamera.setToOrtho(false, SCREEN_WIDTH_PIXELS, SCREEN_HEIGHT_PIXELS);
+		fontCamera.setToOrtho(false, getSCREEN_WIDTH_PIXELS(), getSCREEN_HEIGHT_PIXELS());
 
 		setActiveSectors(new boolean[prefs.getInteger("playerSides")]);
 		for (int i=0 ; i<prefs.getInteger("playerSides") ; i++) {setActiveSector(i, true); }
