@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -31,6 +32,7 @@ import java.util.Iterator;
 public class
 GameScreen implements Screen {
     private GameMain host;
+    private AssetManager manager;
     private SpriteBatch batch;
     private OrthographicCamera camera;
     private OrthographicCamera fontCamera;
@@ -44,7 +46,7 @@ GameScreen implements Screen {
     private Texture holdTexture;
     private Texture slideTexture;
     private Vector3 touchPos;
-    private boolean loaded;
+    //private boolean loaded;
 
     // Musiikki ja bpm
     private Music jauntyGumption;
@@ -76,6 +78,13 @@ GameScreen implements Screen {
     private Button soundButton;
     private Texture soundOnTexture;
     private Texture soundOffTexture;
+    private Texture square;
+    private Texture tiltedSquare;
+    private Texture sixside;
+    private Texture eightside;
+    private Texture tenside;
+    private Texture pointerTexture;
+    private Texture tickTexture;
 
     /**
      * Pelaajan kulmiosysteemin luokka
@@ -91,7 +100,7 @@ GameScreen implements Screen {
 
         // Pelaajan osoittimen luokka
         class Pointer {
-            Texture pointerTexture;
+            Texture texture;
             Circle hitbox;
             float radius;
             float speed;
@@ -123,7 +132,7 @@ GameScreen implements Screen {
             public Pointer() {
                 radius = 0.4f;
                 speed = 8;
-                pointerTexture = new Texture("pointer.png");
+                texture = pointerTexture;
                 hitbox = new Circle(host.getScreenWidth() / 2, host.getScreenHeight() / 2, radius);
                 smoothingSamples = prefs.getInteger("smoothingSamples");
                 xSmoother = new float[smoothingSamples];
@@ -138,7 +147,7 @@ GameScreen implements Screen {
 
             // Piirtometodi SpriteBatchille, käyttää kuvia
             public void draw(SpriteBatch batch) {
-                batch.draw(pointerTexture, hitbox.x - hitbox.radius, hitbox.y - hitbox.radius, hitbox.radius * 2, hitbox.radius * 2);
+                batch.draw(texture, hitbox.x - hitbox.radius, hitbox.y - hitbox.radius, hitbox.radius * 2, hitbox.radius * 2);
             }
 
             // Piirtometodi ShapeRendererille, käyttää pisteitä / muotoja
@@ -225,7 +234,7 @@ GameScreen implements Screen {
 
             // Pelaaja on 10-sivuinen
             if (playerSides == 10) {
-                texture = new Texture("tenside.png");
+                texture = tenside;
                 // Tässä on 10-kulmion pisteet, joista hitbox Polygon muodostetaan
                 vertices = new float[]{
                         0.5f, 1.0f,
@@ -241,7 +250,7 @@ GameScreen implements Screen {
                 };
                 // Kahdeksankulmion pisteet
             } else if (playerSides == 8) {
-                texture = new Texture("eightside.png");
+                texture = eightside;
                 vertices = new float[]{
                         0.5f, 1.0f,
                         0.8555f, 0.8555f,
@@ -254,7 +263,7 @@ GameScreen implements Screen {
                 };
                 // Kuusikulmion pisteet
             } else if (playerSides == 6) {
-                texture = new Texture("sixside.png");
+                texture = sixside;
                 vertices = new float[]{
                         0.5f, 1f,
                         0.933f, 0.75f,
@@ -265,7 +274,7 @@ GameScreen implements Screen {
                 };
             } else if (playerSides == 4) {
                 if (prefs.getBoolean("tiltedSquare")) {
-                    texture = new Texture("tiltedSquare.png");
+                    texture = tiltedSquare;
                     vertices = new float[]{
                             0.5f, 1f,
                             1f, 0.5f,
@@ -273,7 +282,7 @@ GameScreen implements Screen {
                             0f, 0.5f
                     };
                 } else {
-                    texture = new Texture("square.png");
+                    texture = square;
                     vertices = new float[]{
                             1f, 1f,
                             1f, 0f,
@@ -423,7 +432,7 @@ GameScreen implements Screen {
 
         public Point(int sector, float distance, Texture texture) {
             super(sector, distance);
-            this.texture = texture;
+            this.texture = pointTexture;
             atlas = new TextureAtlas("Blue Sprite.atlas");
             scoreAnimation = new Animation<TextureRegion>(0.05f, atlas.getRegions());
             particleAtlas = new TextureAtlas("Nuotteja.atlas");
@@ -496,7 +505,6 @@ GameScreen implements Screen {
 
     class Hold extends Note {
         private Texture texture;
-        private Texture tickTexture;
         private Vector2 startPoint;
         private Vector2 endPoint;
         private float length;
@@ -515,7 +523,7 @@ GameScreen implements Screen {
             // Pikkupallerot Hold-nuottien välissä
             public Tick(int sector, float distance, Texture texture) {
                 super(sector, distance);
-                this.texture = texture;
+                this.texture = tickTexture;
                 vector = new Vector2(distance, 0);
                 scored = false;
             }
@@ -539,8 +547,7 @@ GameScreen implements Screen {
 
         public Hold(int sector, float distance, Texture texture, float length) {
             super(sector, distance);
-            tickTexture = new Texture("Smol Green Ball.png");
-            this.texture = texture;
+            this.texture = holdTexture;
             this.length = length;
             width = 1;
             tickDiameter = 0.2f;
@@ -656,12 +663,44 @@ GameScreen implements Screen {
         paused = true;
         changeSettings = false;
         this.host = host;
+        manager = host.getManager();
         batch = host.getBatch();
         camera = host.getCamera();
         fontCamera = host.getFontCamera();
         shapeRenderer = host.getShapeRenderer();
         touchPos = new Vector3();
-        loaded = false;
+        //loaded = false;
+
+        manager.load("Galaxy dark purple.png", Texture.class);
+        manager.load("soundOn.png", Texture.class);
+        manager.load("soundOff.png", Texture.class);
+        manager.load("Smol Blue.png", Texture.class);
+        manager.load("Smol Blue Hold.png", Texture.class);
+        manager.load("Smol Blue Slide.png", Texture.class);
+        manager.load("Smol Blue Ball.png", Texture.class);
+        manager.load("square.png", Texture.class);
+        manager.load("tiltedSquare.png", Texture.class);
+        manager.load("sixside.png", Texture.class);
+        manager.load("eightside.png", Texture.class);
+        manager.load("tenside.png", Texture.class);
+        manager.load("pointer.png", Texture.class);
+
+        manager.finishLoading();
+        //host.setScreen(new LoadingScreen(host, this));
+
+        background = manager.get("Galaxy dark purple.png");
+        soundOnTexture = manager.get("soundOn.png");
+        soundOffTexture = manager.get("soundOff.png");
+        pointTexture = manager.get("Smol Blue.png");
+        holdTexture = manager.get("Smol Blue Hold.png");
+        slideTexture = manager.get("Smol Blue Slide.png");
+        pointerTexture = manager.get("pointer.png");
+        square = manager.get("square.png");
+        tiltedSquare = manager.get("tiltedSquare.png");
+        sixside = manager.get("sixside.png");
+        eightside = manager.get("eightside.png");
+        tenside = manager.get("tenside.png");
+        tickTexture = manager.get("Smol Blue Ball.png");
 
         playerSides = host.getPlayerSides();
         playerDiameter = host.getPlayerDiameter();
@@ -687,9 +726,6 @@ GameScreen implements Screen {
 
         noteSpeed = host.getNoteSpeed();
         song = new ArrayList<Note>();
-        pointTexture = new Texture("Smol Blue.png");
-        holdTexture = new Texture("Smol Blue Hold.png");
-        slideTexture = new Texture("Smol Blue Slide.png");
 
 
         for (int i = 0; i < totalBeats - startOffset ; i++) {
@@ -745,9 +781,6 @@ GameScreen implements Screen {
         verySmall = host.getVerySmallFont();
         basic = host.getBasicFont();
         heading = host.getHeadingFont();
-        background = new Texture(Gdx.files.internal("Galaxy dark purple.png"));
-        soundOnTexture = new Texture("soundOn.png");
-        soundOffTexture = new Texture("soundOff.png");
 
         pauseButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, host.getPauseButtonTexture());
         playButton = new Button(18f, 18f, 1.5f, 1.5f, host.getPlayButtonTexture());
@@ -773,9 +806,6 @@ GameScreen implements Screen {
 
         paused = false;
         useShapeRenderer = true;
-        if (host.isSoundOn()) {
-            jauntyGumption.play();
-        }
     }
 
     public void moveHerePauseMenuButtons() {
@@ -851,10 +881,10 @@ GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        if (!loaded) {
+        /*if (!loaded) {
             host.setScreen(new LoadingScreen(host, this));
             loaded = true;
-        }
+        }*/
         // Perus clearataan ruutu mustalla ja laitetaan renderereille kameran koordinaatit käyttöön
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
