@@ -199,8 +199,8 @@ public class GameMain extends Game {
 		return prefs.getFloat("playerDiameter");
 	}
 
-	public static float getPlayerInradius(float playerDiameter, int playerSides) {
-		float playerInradius = (float) (playerDiameter / 2 * Math.cos(Math.PI/playerSides));
+	public float getPlayerInradius() {
+		float playerInradius = (float) (getPlayerDiameter() / 2 * Math.cos(Math.PI/getPlayerSides()));
 		return playerInradius;
 	}
 
