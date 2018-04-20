@@ -124,7 +124,7 @@ GameScreen implements Screen {
                 radius = 0.4f;
                 speed = 8;
                 pointerTexture = new Texture("pointer.png");
-                hitbox = new Circle(GameMain.getScreenWidth() / 2, GameMain.getScreenHeight() / 2, radius);
+                hitbox = new Circle(host.getScreenWidth() / 2, host.getScreenHeight() / 2, radius);
                 smoothingSamples = prefs.getInteger("smoothingSamples");
                 xSmoother = new float[smoothingSamples];
                 ySmoother = new float[smoothingSamples];
@@ -161,13 +161,13 @@ GameScreen implements Screen {
 
             public void move(OrthographicCamera camera) {
                 // Osoittimen ohjaus nuolinäppäimillä
-                if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT) && hitbox.x < GameMain.getScreenWidth() / 2 + host.getPlayerInradius() - radius * 2.5f) {
+                if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT) && hitbox.x < host.getScreenWidth() / 2 + host.getPlayerInradius() - radius * 2.5f) {
                     hitbox.x += speed * Gdx.graphics.getDeltaTime();
-                } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT) && hitbox.x > GameMain.getScreenWidth() / 2 - host.getPlayerInradius() + radius * 2.5f) {
+                } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT) && hitbox.x > host.getScreenWidth() / 2 - host.getPlayerInradius() + radius * 2.5f) {
                     hitbox.x -= speed * Gdx.graphics.getDeltaTime();
-                } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_UP) && hitbox.y < GameMain.getScreenHeight() / 2 + host.getPlayerInradius() - radius * 2.5f) {
+                } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_UP) && hitbox.y < host.getScreenHeight() / 2 + host.getPlayerInradius() - radius * 2.5f) {
                     hitbox.y += speed * Gdx.graphics.getDeltaTime();
-                } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN) && hitbox.y > GameMain.getScreenHeight() / 2 - host.getPlayerInradius() + radius * 2.5f) {
+                } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN) && hitbox.y > host.getScreenHeight() / 2 - host.getPlayerInradius() + radius * 2.5f) {
                     hitbox.y -= speed * Gdx.graphics.getDeltaTime();
                 }
                 // Osoittimen ohjaus kosketuksella / hiirellä
@@ -191,13 +191,13 @@ GameScreen implements Screen {
                     avgX /= smoothingSamples;
                     avgY /= smoothingSamples;
 
-                    hitbox.x = GameMain.getScreenWidth() / 2 + avgX;
-                    hitbox.y =  GameMain.getScreenHeight() / 2 + avgY;
-                    Vector2 vector = new Vector2(hitbox.x - GameMain.getScreenWidth() / 2, hitbox.y - GameMain.getScreenHeight() / 2);
+                    hitbox.x = host.getScreenWidth() / 2 + avgX;
+                    hitbox.y =  host.getScreenHeight() / 2 + avgY;
+                    Vector2 vector = new Vector2(hitbox.x - host.getScreenWidth() / 2, hitbox.y - host.getScreenHeight() / 2);
                     if (vector.len() > host.getPlayerInradius() * 0.8f) {
                         vector.setLength(host.getPlayerInradius() * 0.8f);
-                        hitbox.x = GameMain.getScreenWidth() / 2 + vector.x;
-                        hitbox.y = GameMain.getScreenHeight() / 2 + vector.y;
+                        hitbox.x = host.getScreenWidth() / 2 + vector.x;
+                        hitbox.y = host.getScreenHeight() / 2 + vector.y;
                     }
                 }
             }
@@ -295,13 +295,13 @@ GameScreen implements Screen {
                 sectors.add(new Polygon(triangleVerts));
                 // Asetetaan sektorien koko ja sijainti oikeiksi
                 sectors.get(i).setScale(playerDiameter, playerDiameter);
-                sectors.get(i).setPosition(GameMain.getScreenWidth() / 2 - radius, GameMain.getScreenHeight() / 2 - radius);
+                sectors.get(i).setPosition(host.getScreenWidth() / 2 - radius, host.getScreenHeight() / 2 - radius);
                 // asetetaan sektori aktiiviseksi
             }
             // Muodostetaan pelaajan kulmio, tehdään siitä oikean kokoinen ja siirretään se keskelle ruutua
             hitbox = new Polygon(vertices);
             hitbox.setScale(playerDiameter, playerDiameter);
-            hitbox.setPosition(GameMain.getScreenWidth() / 2 - radius, GameMain.getScreenHeight() / 2 - radius);
+            hitbox.setPosition(host.getScreenWidth() / 2 - radius, host.getScreenHeight() / 2 - radius);
 
         }
 
@@ -476,13 +476,13 @@ GameScreen implements Screen {
             vector.setLength(getDistance() + host.getPlayerInradius());
             vector.setAngle(90 - (360 / prefs.getInteger("playerSides")) * getSector() - (360 / prefs.getInteger("playerSides")) / 2);
             if (!isHit()) {
-                batch.draw(texture, GameMain.getScreenWidth() / 2 + vector.x - width / 2, GameMain.getScreenHeight() / 2 + vector.y - height / 2, width / 2, height / 2, width, height, 1, 1, vector.angle() - 90, 0, 0, texture.getWidth(), texture.getHeight(), flipped, false);
+                batch.draw(texture, host.getScreenWidth() / 2 + vector.x - width / 2, host.getScreenHeight() / 2 + vector.y - height / 2, width / 2, height / 2, width, height, 1, 1, vector.angle() - 90, 0, 0, texture.getWidth(), texture.getHeight(), flipped, false);
             } else {
                 if (!scoreAnimation.isAnimationFinished(stateTime)) {
                     TextureRegion keyframe = new TextureRegion(scoreAnimation.getKeyFrame(stateTime));
-                    batch.draw(keyframe, GameMain.getScreenWidth() / 2 + vector.x - animationSize / 2, GameMain.getScreenHeight() / 2 + vector.y - animationSize / 2, animationSize / 2, animationSize / 2, animationSize, animationSize, animationSize, animationSize, vector.angle(), false);
+                    batch.draw(keyframe, host.getScreenWidth() / 2 + vector.x - animationSize / 2, host.getScreenHeight() / 2 + vector.y - animationSize / 2, animationSize / 2, animationSize / 2, animationSize, animationSize, animationSize, animationSize, vector.angle(), false);
                 }
-                effect.setPosition(GameMain.getScreenWidth() / 2 + vector.x, GameMain.getScreenHeight() / 2 + vector.y);
+                effect.setPosition(host.getScreenWidth() / 2 + vector.x, host.getScreenHeight() / 2 + vector.y);
                 effect.draw(batch, Gdx.graphics.getDeltaTime());
                 stateTime += Gdx.graphics.getDeltaTime();
             }
@@ -533,7 +533,7 @@ GameScreen implements Screen {
                 vector.setLength(getDistance() + host.getPlayerInradius());
                 vector.setAngle(90 - (360 / prefs.getInteger("playerSides")) * getSector() - (360 / prefs.getInteger("playerSides")) / 2);
                 if (getDistance() > 0)
-                    batch.draw(texture, GameMain.getScreenWidth() / 2 + vector.x - tickDiameter / 2, GameMain.getScreenHeight() / 2 + vector.y - tickDiameter / 2, tickDiameter, tickDiameter);
+                    batch.draw(texture, host.getScreenWidth() / 2 + vector.x - tickDiameter / 2, host.getScreenHeight() / 2 + vector.y - tickDiameter / 2, tickDiameter, tickDiameter);
             }
         }
 
@@ -589,11 +589,11 @@ GameScreen implements Screen {
             startPoint.setLength(getDistance() + host.getPlayerInradius());
             startPoint.setAngle(90 - (360 / prefs.getInteger("playerSides")) * getSector() - (360 / prefs.getInteger("playerSides")) / 2);
             if (getDistance() > 0) {
-                batch.draw(texture, GameMain.getScreenWidth() / 2 + startPoint.x - width / 2, GameMain.getScreenHeight() / 2 + startPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, startPoint.angle() - 90, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
+                batch.draw(texture, host.getScreenWidth() / 2 + startPoint.x - width / 2, host.getScreenHeight() / 2 + startPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, startPoint.angle() - 90, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
             }
             endPoint.setLength(getDistance() + length + host.getPlayerInradius());
             endPoint.setAngle(90 - (360 / prefs.getInteger("playerSides")) * getSector() - (360 / prefs.getInteger("playerSides")) / 2);
-            batch.draw(texture, GameMain.getScreenWidth() / 2 + endPoint.x - width / 2, GameMain.getScreenHeight() / 2 + endPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, endPoint.angle() - 90, 0, 0, texture.getWidth(), texture.getHeight(), false, true);
+            batch.draw(texture, host.getScreenWidth() / 2 + endPoint.x - width / 2, host.getScreenHeight() / 2 + endPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, endPoint.angle() - 90, 0, 0, texture.getWidth(), texture.getHeight(), false, true);
         }
 
         @Override
@@ -626,8 +626,8 @@ GameScreen implements Screen {
         public void draw(ShapeRenderer shapeRenderer) {
             for (int i = 0; i < notes.size() - 1; i++) {
                 // Piirretään ShapeRendererillä viiva Sliden sisällä olevien nuottien väliin
-                Vector2 startPoint = (notes.get(i).getVector().add(new Vector2(GameMain.getScreenWidth() / 2, GameMain.getScreenHeight() / 2)));
-                Vector2 endPoint = (notes.get(i + 1).getVector().add(new Vector2(GameMain.getScreenWidth() / 2, GameMain.getScreenHeight() / 2)));
+                Vector2 startPoint = (notes.get(i).getVector().add(new Vector2(host.getScreenWidth() / 2, host.getScreenHeight() / 2)));
+                Vector2 endPoint = (notes.get(i + 1).getVector().add(new Vector2(host.getScreenWidth() / 2, host.getScreenHeight() / 2)));
                 shapeRenderer.line(startPoint, endPoint);
             }
         }
@@ -958,7 +958,7 @@ GameScreen implements Screen {
                         ((Slide) note).draw(shapeRenderer);
                     }
                 }
-                //shapeRenderer.line(GameMain.getScreenWidth() / 2, GameMain.getScreenHeight() / 2, 0, Gdx.input.getAccelerometerY() + GameMain.getScreenWidth() / 2, -Gdx.input.getAccelerometerX() + GameMain.getScreenHeight() / 2, -Math.abs(Gdx.input.getAccelerometerZ()));
+                //shapeRenderer.line(host.getScreenWidth() / 2, host.getScreenHeight() / 2, 0, Gdx.input.getAccelerometerY() + host.getScreenWidth() / 2, -Gdx.input.getAccelerometerX() + host.getScreenHeight() / 2, -Math.abs(Gdx.input.getAccelerometerZ()));
                 shapeRenderer.end();
             }
         }

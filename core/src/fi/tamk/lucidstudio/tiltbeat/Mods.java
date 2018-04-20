@@ -173,13 +173,13 @@ public class Mods implements Screen {
             sectors.add(new Polygon(triangleVerts));
             // Asetetaan sektorien koko ja sijainti oikeiksi
             sectors.get(i).setScale(playerDiameter+2f, playerDiameter+2f);
-            sectors.get(i).setPosition(GameMain.getScreenWidth() / 2 - radius - 1.5f, GameMain.getScreenHeight() / 2 - radius - 2.5f);
+            sectors.get(i).setPosition(host.getScreenWidth() / 2 - radius - 1.5f, host.getScreenHeight() / 2 - radius - 2.5f);
             // asetetaan sektori aktiiviseksi
         }
         // Muodostetaan pelaajan kulmio, tehdään siitä oikean kokoinen ja siirretään se keskelle ruutua
         hitbox = new Polygon(vertices);
         hitbox.setScale(playerDiameter+2f, playerDiameter+2f);
-        hitbox.setPosition(GameMain.getScreenWidth() / 2 - radius - 1.5f, GameMain.getScreenHeight() / 2 - radius - 2.5f);
+        hitbox.setPosition(host.getScreenWidth() / 2 - radius - 1.5f, host.getScreenHeight() / 2 - radius - 2.5f);
 
     }
 

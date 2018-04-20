@@ -299,6 +299,8 @@ public class GameMain extends Game {
 		setActiveSectors(new boolean[prefs.getInteger("playerSides")]);
 		for (int i=0 ; i<prefs.getInteger("playerSides") ; i++) {setActiveSector(i, true); }
 
+
+
 		background = new Texture(Gdx.files.internal("Galaxy blue.png"));
         button = new Texture(Gdx.files.internal("nappi1.png"));
         buttonPressed = new Texture(Gdx.files.internal("nappi2.png"));
