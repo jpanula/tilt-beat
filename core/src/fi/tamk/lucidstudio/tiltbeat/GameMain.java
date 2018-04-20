@@ -321,11 +321,15 @@ public class GameMain extends Game {
         settingsButton = manager.get("settingsnappi.png");
 		textBox = manager.get("folio.png");
 
+        manager.load("JauntyGumption.ogg", Music.class);
+        manager.load("NyanCat.mp3", Music.class);
+        manager.load("WorldisMine.mp3", Music.class);
 
+        manager.finishLoading();
 
-		song1 = Gdx.audio.newMusic(Gdx.files.internal("JauntyGumption.ogg"));
-        song2 = Gdx.audio.newMusic(Gdx.files.internal("NyanCat.mp3"));
-        song3 = Gdx.audio.newMusic(Gdx.files.internal("WorldisMine.mp3"));
+		song1 = manager.get("JauntyGumption.ogg");
+        song2 = manager.get("NyanCat.mp3");
+        song3 = manager.get("WorldisMine.mp3");
 
 		createFonts();
 
