@@ -57,15 +57,15 @@ public class Mods implements Screen {
         heading = host.getSmallerHeadingFont();
         basic = host.getBasicFont();
         small = host.getSmallFont();
-        background = GameMain.getBackgroundTexture();
-        buttonTexture = GameMain.getButtonTexture();
-        buttonPressedTexture = GameMain.getButtonPressedTexture();
+        background = host.getBackgroundTexture();
+        buttonTexture = host.getButtonTexture();
+        buttonPressedTexture = host.getButtonPressedTexture();
 
         button6 = new Button(1f, 4.5f, 3f, 1.5f, buttonTexture);
         button8 = new Button(1f, 2.5f, 3f, 1.5f, buttonTexture);
         button10 = new Button(1f, 0.5f, 3f, 1.5f, buttonTexture);
-        backButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, GameMain.getBackButtonTexture());
-        textBox = new Button(10.5f, 2.5f, 5.4f, 3f, GameMain.getTextBoxTexture());
+        backButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, host.getBackButtonTexture());
+        textBox = new Button(10.5f, 2.5f, 5.4f, 3f, host.getTextBoxTexture());
 
         button6.setText(40, 80, "6-side", basic);
         button8.setText(40, 80, "8-side", basic);

@@ -749,19 +749,19 @@ GameScreen implements Screen {
         soundOnTexture = new Texture("soundOn.png");
         soundOffTexture = new Texture("soundOff.png");
 
-        pauseButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, GameMain.getPauseButtonTexture());
-        playButton = new Button(18f, 18f, 1.5f, 1.5f, GameMain.getPlayButtonTexture());
-        playAgainButton = new Button(18f, 18f, 1.5f, 1.5f, GameMain.getPlayAgainButtonTexture());
-        backButton = new Button(18f, 18f, 1.5f, 1.5f, GameMain.getBackButtonTexture());
-        settingsButton = new Button(18f, 18f, 1.5f, 1.5f, GameMain.getSettingsButtonTexture());
-        calibration = new Button(18f, 18f, 4f, 2f, GameMain.getButtonTexture());
-        secondSetting = new Button(18f, 18f, 4f, 2f, GameMain.getButtonTexture());
-        backToPauseMenu = new Button(18f, 18f, 1.5f, 1.5f, GameMain.getBackButtonTexture());
+        pauseButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, host.getPauseButtonTexture());
+        playButton = new Button(18f, 18f, 1.5f, 1.5f, host.getPlayButtonTexture());
+        playAgainButton = new Button(18f, 18f, 1.5f, 1.5f, host.getPlayAgainButtonTexture());
+        backButton = new Button(18f, 18f, 1.5f, 1.5f, host.getBackButtonTexture());
+        settingsButton = new Button(18f, 18f, 1.5f, 1.5f, host.getSettingsButtonTexture());
+        calibration = new Button(18f, 18f, 4f, 2f, host.getButtonTexture());
+        secondSetting = new Button(18f, 18f, 4f, 2f, host.getButtonTexture());
+        backToPauseMenu = new Button(18f, 18f, 1.5f, 1.5f, host.getBackButtonTexture());
         soundButton = new Button(18f, 18f, 2f, 2f, soundOnTexture);
         if (!host.isSoundOn()) {
             soundButton.setTexture(soundOffTexture);
         }
-        resultBox = new Button(2f, 1f, 12f, 8f, GameMain.getTextBoxTexture());
+        resultBox = new Button(2f, 1f, 12f, 8f, host.getTextBoxTexture());
 
         backButton.setText(0, 260, "main\nmenu", basic);
         playButton.setText(-30, 190, "continue", basic);
@@ -812,8 +812,8 @@ GameScreen implements Screen {
     }
 
     public void destroyResultMenuButtons() {
-        playButton = new Button(11f, 18f, .1f, .1f, GameMain.getPlayButtonTexture());
-        playAgainButton = new Button(11f, 18f, .1f, .1f, GameMain.getPlayAgainButtonTexture());
+        playButton = new Button(11f, 18f, .1f, .1f, host.getPlayButtonTexture());
+        playAgainButton = new Button(11f, 18f, .1f, .1f, host.getPlayAgainButtonTexture());
     }
 
     public boolean isSectorActive(int a) {

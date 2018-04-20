@@ -39,17 +39,17 @@ public class Settings implements Screen {
         this.host = host;
         batch = host.getBatch();
         camera = host.getCamera();
-        background = GameMain.getBackgroundTexture();
+        background = host.getBackgroundTexture();
         fontCamera = host.getFontCamera();
         heading = host.getSmallerHeadingFont();
         basic = host.getBasicFont();
         soundOnTexture = new Texture("soundOn.png");
         soundOffTexture = new Texture("soundOff.png");
         soundButtonTexture = soundOnTexture;
-        sound = new Button(1.3f, 1.8f, 3.7f, 2f, GameMain.getButtonTexture());
-        restore = new Button(11f, 1.8f, 3.7f, 2f, GameMain.getButtonTexture());
-        calibration = new Button(6.2f, 1.8f, 3.7f, 2f, GameMain.getButtonTexture());
-        backButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, GameMain.getBackButtonTexture());
+        sound = new Button(1.3f, 1.8f, 3.7f, 2f, host.getButtonTexture());
+        restore = new Button(11f, 1.8f, 3.7f, 2f, host.getButtonTexture());
+        calibration = new Button(6.2f, 1.8f, 3.7f, 2f, host.getButtonTexture());
+        backButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, host.getBackButtonTexture());
 
         calibration.setText(24, 106, "calibration", basic);
         restore.setText(50, 136, "default\nsettings", basic);

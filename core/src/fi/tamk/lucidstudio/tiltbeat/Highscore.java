@@ -41,18 +41,18 @@ public class Highscore implements Screen {
         fontCamera = host.getFontCamera();
         heading = host.getSmallerHeadingFont();
         basic = host.getBasicFont();
-        background = GameMain.getBackgroundTexture();
-        //buttonTexture = GameMain.getButtonTexture();
-        backButtonTexture = GameMain.getBackButtonTexture();
-        textBoxTexture = GameMain.getTextBoxTexture();
+        background = host.getBackgroundTexture();
+        //buttonTexture = host.getButtonTexture();
+        backButtonTexture = host.getBackButtonTexture();
+        textBoxTexture = host.getTextBoxTexture();
         touchPos = new Vector3();
 
         /*
-        button1 = new Button(1.3f, 1.8f, 3.7f, 2f, GameMain.getButtonTexture());
-        button2 = new Button(6.15f, 1.8f, 3.7f, 2f, GameMain.getButtonTexture());
-        button3 = new Button(11f, 1.8f, 3.7f, 2f, GameMain.getButtonTexture());
+        button1 = new Button(1.3f, 1.8f, 3.7f, 2f, host.getButtonTexture());
+        button2 = new Button(6.15f, 1.8f, 3.7f, 2f, host.getButtonTexture());
+        button3 = new Button(11f, 1.8f, 3.7f, 2f, host.getButtonTexture());
         */
-        backButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, GameMain.getBackButtonTexture());
+        backButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, host.getBackButtonTexture());
 
     }
 

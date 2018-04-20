@@ -40,12 +40,12 @@ public class MainMenu implements Screen{
         batch = host.getBatch();
         camera = host.getCamera();
         fontCamera = host.getFontCamera();
-        background = GameMain.getBackgroundTexture();
+        background = host.getBackgroundTexture();
 
-        playButton = new Button(2.8f, 4f, 4f, 1.7f, GameMain.getButtonTexture());
-        modsButton = new Button(8.5f, 4f, 4f, 1.7f, GameMain.getButtonTexture());
-        settingsButton = new Button(2.8f, 1f, 4f, 1.7f, GameMain.getButtonTexture());
-        highscoreButton = new Button(8.5f, 1f, 4f, 1.7f, GameMain.getButtonTexture());
+        playButton = new Button(2.8f, 4f, 4f, 1.7f, host.getButtonTexture());
+        modsButton = new Button(8.5f, 4f, 4f, 1.7f, host.getButtonTexture());
+        settingsButton = new Button(2.8f, 1f, 4f, 1.7f, host.getButtonTexture());
+        highscoreButton = new Button(8.5f, 1f, 4f, 1.7f, host.getButtonTexture());
 
         heading = host.getHeadingFont();
         basic = host.getBasicFont();

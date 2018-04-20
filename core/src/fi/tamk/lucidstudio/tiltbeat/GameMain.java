@@ -31,15 +31,15 @@ public class GameMain extends Game {
     private Music song1;
     private Music song2;
     private Music song3;
-    private static Texture background;
-    private static Texture button;
-    private static Texture buttonPressed;
-	private static Texture pauseButton;
-	private static Texture backButton;
-    private static Texture playButton;
-	private static Texture playAgainButton;
-    private static Texture settingsButton;
-    private static Texture textBox;
+    private Texture background;
+    private Texture button;
+    private Texture buttonPressed;
+	private Texture pauseButton;
+	private Texture backButton;
+    private Texture playButton;
+	private Texture playAgainButton;
+    private Texture settingsButton;
+    private Texture textBox;
     private BitmapFont verySmallFont;
     private BitmapFont smallFont;
     private BitmapFont basicFont;
@@ -216,23 +216,23 @@ public class GameMain extends Game {
 
     public String getDifficulty() { return prefs.getString("difficulty"); }
 
-    public static Texture getBackgroundTexture() { return background; }
+    public Texture getBackgroundTexture() { return background; }
 
-    public static Texture getButtonTexture() { return button; }
+    public Texture getButtonTexture() { return button; }
 
-    public static Texture getButtonPressedTexture() { return buttonPressed; }
+    public Texture getButtonPressedTexture() { return buttonPressed; }
 
-	public static Texture getBackButtonTexture() { return backButton; }
+	public Texture getBackButtonTexture() { return backButton; }
 
-	public static Texture getPauseButtonTexture() { return pauseButton; }
+	public Texture getPauseButtonTexture() { return pauseButton; }
 
-    public static Texture getPlayButtonTexture() { return playButton; }
+    public Texture getPlayButtonTexture() { return playButton; }
 
-	public static Texture getPlayAgainButtonTexture() { return playAgainButton; }
+	public Texture getPlayAgainButtonTexture() { return playAgainButton; }
 
-    public static Texture getSettingsButtonTexture() { return settingsButton; }
+    public Texture getSettingsButtonTexture() { return settingsButton; }
 
-    public static Texture getTextBoxTexture() { return textBox; }
+    public Texture getTextBoxTexture() { return textBox; }
 
     public BitmapFont getHeadingFont() { return headingFont; }
 
@@ -299,17 +299,29 @@ public class GameMain extends Game {
 		setActiveSectors(new boolean[prefs.getInteger("playerSides")]);
 		for (int i=0 ; i<prefs.getInteger("playerSides") ; i++) {setActiveSector(i, true); }
 
+        manager.load("Galaxy blue.png", Texture.class);
+		manager.load("nappi1.png", Texture.class);
+		manager.load("nappi2.png", Texture.class);
+		manager.load("pausenappi2.png", Texture.class);
+		manager.load("backnappi.png", Texture.class);
+		manager.load("playnappi.png", Texture.class);
+		manager.load("repeat.png", Texture.class);
+		manager.load("settingsnappi.png", Texture.class);
+		manager.load("folio.png", Texture.class);
+
+		manager.finishLoading();
+
+		background = manager.get("Galaxy blue.png");
+        button = manager.get("nappi1.png");
+        buttonPressed = manager.get("nappi2.png");
+        pauseButton = manager.get("pausenappi2.png");
+		backButton = manager.get("backnappi.png");
+		playButton = manager.get("playnappi.png");
+		playAgainButton = manager.get("repeat.png");
+        settingsButton = manager.get("settingsnappi.png");
+		textBox = manager.get("folio.png");
 
 
-		background = new Texture(Gdx.files.internal("Galaxy blue.png"));
-        button = new Texture(Gdx.files.internal("nappi1.png"));
-        buttonPressed = new Texture(Gdx.files.internal("nappi2.png"));
-        pauseButton = new Texture(Gdx.files.internal("pausenappi2.png"));
-		backButton = new Texture(Gdx.files.internal("backnappi.png"));
-		playButton = new Texture(Gdx.files.internal("playnappi.png"));
-		playAgainButton = new Texture(Gdx.files.internal("repeat.png"));
-        settingsButton = new Texture(Gdx.files.internal("settingsnappi.png"));
-		textBox = new Texture(Gdx.files.internal("folio.png"));
 
 		song1 = Gdx.audio.newMusic(Gdx.files.internal("JauntyGumption.ogg"));
         song2 = Gdx.audio.newMusic(Gdx.files.internal("NyanCat.mp3"));

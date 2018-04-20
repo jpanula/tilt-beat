@@ -45,15 +45,15 @@ public class Difficulty implements Screen {
         heading = host.getSmallerHeadingFont();
         basic = host.getBasicFont();
         small = host.getSmallFont();
-        background = GameMain.getBackgroundTexture();
-        buttonTexture = GameMain.getButtonTexture();
-        buttonPressedTexture = GameMain.getButtonPressedTexture();
+        background = host.getBackgroundTexture();
+        buttonTexture = host.getButtonTexture();
+        buttonPressedTexture = host.getButtonPressedTexture();
         touchPos = new Vector3();
 
 
-        backButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, GameMain.getBackButtonTexture());
-        playButton = new Button(14f, 0.5f, 1.5f, 1.5f, GameMain.getPlayButtonTexture());
-        textBox = new Button(1f, 3f, 7f, 4.6f, GameMain.getTextBoxTexture());
+        backButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, host.getBackButtonTexture());
+        playButton = new Button(14f, 0.5f, 1.5f, 1.5f, host.getPlayButtonTexture());
+        textBox = new Button(1f, 3f, 7f, 4.6f, host.getTextBoxTexture());
         easyButton = new Button(.5f, .5f, 2.6f, 2f, buttonTexture);
         normalButton = new Button(4f, .5f, 2.6f, 2f, buttonTexture);
         hardButton = new Button(7.5f, .5f, 2.6f, 2f, buttonTexture);
