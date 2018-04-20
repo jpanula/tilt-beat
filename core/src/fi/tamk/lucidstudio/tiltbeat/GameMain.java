@@ -40,11 +40,11 @@ public class GameMain extends Game {
 	private static Texture playAgainButton;
     private static Texture settingsButton;
     private static Texture textBox;
-    private static BitmapFont verySmallFont;
-    private static BitmapFont smallFont;
-    private static BitmapFont basicFont;
-    private static BitmapFont headingFont;
-    private static BitmapFont smallerHeadingFont;
+    private BitmapFont verySmallFont;
+    private BitmapFont smallFont;
+    private BitmapFont basicFont;
+    private BitmapFont headingFont;
+    private BitmapFont smallerHeadingFont;
 
 	public void setDefaultPreferences(Preferences prefs) {
         prefs.putInteger("playerSides", 8);
@@ -226,15 +226,15 @@ public class GameMain extends Game {
 
     public static Texture getTextBoxTexture() { return textBox; }
 
-    public static BitmapFont getHeadingFont() { return headingFont; }
+    public BitmapFont getHeadingFont() { return headingFont; }
 
-    public static BitmapFont getSmallFont() { return smallFont; }
+    public BitmapFont getSmallFont() { return smallFont; }
 
-    public static BitmapFont getVerySmallFont() { return verySmallFont; }
+    public BitmapFont getVerySmallFont() { return verySmallFont; }
 
-    public static BitmapFont getBasicFont() { return basicFont; }
+    public BitmapFont getBasicFont() { return basicFont; }
 
-    public static BitmapFont getSmallerHeadingFont() { return smallerHeadingFont; }
+    public BitmapFont getSmallerHeadingFont() { return smallerHeadingFont; }
 
     public float getAccelerometerDeadzone() {
         return prefs.getFloat("accelerometerDeadzone");
