@@ -4,6 +4,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -11,22 +13,21 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class GameMain extends Game {
-    private AssetManager manager = new AssetManager();
+    private AssetManager manager;
 	private Preferences prefs;
 	private SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
 	private OrthographicCamera camera;
 	private OrthographicCamera fontCamera;
-	//private GameScreen gameScreen;
-	//private MainMenu menu;
 	private static final float SCREEN_WIDTH = 16;
 	private static final float SCREEN_HEIGHT = 10;
 	private static final float SCREEN_WIDTH_PIXELS = 1280;
 	private static final float SCREEN_HEIGHT_PIXELS = 800;
-	//public static boolean[] activeSectors;
     private Music song1;
     private Music song2;
     private Music song3;
@@ -40,11 +41,10 @@ public class GameMain extends Game {
     private static Texture settingsButton;
     private static Texture textBox;
     private static BitmapFont verySmallFont;
-	private static BitmapFont smallFont;
-	private static BitmapFont basicFont;
-	private static BitmapFont headingFont;
+    private static BitmapFont smallFont;
+    private static BitmapFont basicFont;
+    private static BitmapFont headingFont;
     private static BitmapFont smallerHeadingFont;
-	private FreeTypeFontGenerator generator;
 
 	public void setDefaultPreferences(Preferences prefs) {
         prefs.putInteger("playerSides", 8);
@@ -226,13 +226,13 @@ public class GameMain extends Game {
 
     public static Texture getTextBoxTexture() { return textBox; }
 
-	public static BitmapFont getHeadingFont() { return headingFont; }
+    public static BitmapFont getHeadingFont() { return headingFont; }
 
     public static BitmapFont getSmallFont() { return smallFont; }
 
-	public static BitmapFont getVerySmallFont() { return verySmallFont; }
+    public static BitmapFont getVerySmallFont() { return verySmallFont; }
 
-	public static BitmapFont getBasicFont() { return basicFont; }
+    public static BitmapFont getBasicFont() { return basicFont; }
 
     public static BitmapFont getSmallerHeadingFont() { return smallerHeadingFont; }
 
@@ -275,6 +275,7 @@ public class GameMain extends Game {
 
     @Override
 	public void create () {
+        manager = new AssetManager(new InternalFileHandleResolver());
 	    prefs = Gdx.app.getPreferences("default");
 	    if (!prefs.contains("firstTime")) {
 	        prefs.putBoolean("firstTime", true);
@@ -310,36 +311,56 @@ public class GameMain extends Game {
 	}
 
 	public void createFonts() {
-		generator = new FreeTypeFontGenerator(Gdx.files.internal("grove.ttf"));
-		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        FileHandleResolver resolver = new InternalFileHandleResolver();
+        manager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
+        manager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
 
         //luodaan vitun pieni fontti
-        parameter.size = 25;
-        parameter.color = Color.WHITE;
-        verySmallFont = generator.generateFont(parameter);
+        FreetypeFontLoader.FreeTypeFontLoaderParameter verySmallFontParameter = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
+        verySmallFontParameter.fontFileName = "grove.ttf";
+        verySmallFontParameter.fontParameters.size = 25;
+        verySmallFontParameter.fontParameters.color = Color.WHITE;
+        manager.load("verySmallFont.ttf", BitmapFont.class, verySmallFontParameter);
+
 
 		//luodaan pieni fontti
-		parameter.size = 40;
-		parameter.color = Color.WHITE;
-		smallFont = generator.generateFont(parameter);
+        FreetypeFontLoader.FreeTypeFontLoaderParameter smallFontParameter = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
+        smallFontParameter.fontFileName = "grove.ttf";
+        smallFontParameter.fontParameters.size = 40;
+        smallFontParameter.fontParameters.color = Color.WHITE;
+        manager.load("smallFont.ttf", BitmapFont.class, smallFontParameter);
 
 		//luodaan perusfontti
-		parameter.size = 50;
-		parameter.color = Color.WHITE;
-		basicFont = generator.generateFont(parameter);
+        FreetypeFontLoader.FreeTypeFontLoaderParameter basicFontParameter = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
+        basicFontParameter.fontFileName = "grove.ttf";
+        basicFontParameter.fontParameters.size = 50;
+        basicFontParameter.fontParameters.color = Color.WHITE;
+        manager.load("basicFont.ttf", BitmapFont.class, basicFontParameter);
 
 		//luodaan otsikkofontti
-		parameter.size = 150;
-		parameter.color = Color.CYAN;
-		parameter.borderColor = Color.BLACK;
-		parameter.borderWidth = 3;
-		headingFont = generator.generateFont(parameter);
+        FreetypeFontLoader.FreeTypeFontLoaderParameter headingFontParameter = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
+        headingFontParameter.fontFileName = "grove.ttf";
+        headingFontParameter.fontParameters.size = 150;
+        headingFontParameter.fontParameters.color = Color.CYAN;
+        headingFontParameter.fontParameters.borderColor = Color.BLACK;
+        headingFontParameter.fontParameters.borderWidth = 3;
+        manager.load("headingFont.ttf", BitmapFont.class, headingFontParameter);
 
-        parameter.size = 100;
-        parameter.color = Color.CYAN;
-        parameter.borderColor = Color.BLACK;
-        parameter.borderWidth = 3;
-        smallerHeadingFont = generator.generateFont(parameter);
+        FreetypeFontLoader.FreeTypeFontLoaderParameter smallerHeadingFontParameter = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
+        smallerHeadingFontParameter.fontFileName = "grove.ttf";
+        smallerHeadingFontParameter.fontParameters.size = 100;
+        smallerHeadingFontParameter.fontParameters.color = Color.CYAN;
+        smallerHeadingFontParameter.fontParameters.borderColor = Color.BLACK;
+        smallerHeadingFontParameter.fontParameters.borderWidth = 3;
+        manager.load("smallerHeadingFont.ttf", BitmapFont.class, smallerHeadingFontParameter);
+
+        manager.finishLoading();
+
+        verySmallFont = manager.get("verySmallFont.ttf", BitmapFont.class);
+        smallFont = manager.get("smallFont.ttf", BitmapFont.class);
+        basicFont = manager.get("basicFont.ttf", BitmapFont.class);
+        headingFont = manager.get("headingFont.ttf", BitmapFont.class);
+        smallerHeadingFont = manager.get("smallerHeadingFont.ttf", BitmapFont.class);
 	}
 
 	@Override

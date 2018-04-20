@@ -164,9 +164,9 @@ GameScreen implements Screen {
             }*/
 
         points = 0;
-        verySmall = GameMain.getVerySmallFont();
-        basic = GameMain.getBasicFont();
-        heading = GameMain.getHeadingFont();
+        verySmall = host.getVerySmallFont();
+        basic = host.getBasicFont();
+        heading = host.getHeadingFont();
         background = new Texture(Gdx.files.internal("Galaxy dark purple.png"));
         soundOnTexture = new Texture("soundOn.png");
         soundOffTexture = new Texture("soundOff.png");

@@ -42,9 +42,9 @@ public class Difficulty implements Screen {
         batch = host.getBatch();
         camera = host.getCamera();
         fontCamera = host.getFontCamera();
-        heading = GameMain.getSmallerHeadingFont();
-        basic = GameMain.getBasicFont();
-        small = GameMain.getSmallFont();
+        heading = host.getSmallerHeadingFont();
+        basic = host.getBasicFont();
+        small = host.getSmallFont();
         background = GameMain.getBackgroundTexture();
         buttonTexture = GameMain.getButtonTexture();
         buttonPressedTexture = GameMain.getButtonPressedTexture();

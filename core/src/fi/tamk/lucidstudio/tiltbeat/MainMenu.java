@@ -36,6 +36,7 @@ public class MainMenu implements Screen{
 
     public MainMenu(GameMain host) {
         this.host = host;
+        host.setScreen(new LoadingScreen(host, this));
         batch = host.getBatch();
         camera = host.getCamera();
         fontCamera = host.getFontCamera();
@@ -46,8 +47,8 @@ public class MainMenu implements Screen{
         settingsButton = new Button(2.8f, 1f, 4f, 1.7f, GameMain.getButtonTexture());
         highscoreButton = new Button(8.5f, 1f, 4f, 1.7f, GameMain.getButtonTexture());
 
-        heading = GameMain.getHeadingFont();
-        basic = GameMain.getBasicFont();
+        heading = host.getHeadingFont();
+        basic = host.getBasicFont();
         touchPos = new Vector3();
 
     }

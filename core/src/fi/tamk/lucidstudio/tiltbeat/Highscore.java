@@ -39,8 +39,8 @@ public class Highscore implements Screen {
         batch = host.getBatch();
         camera = host.getCamera();
         fontCamera = host.getFontCamera();
-        heading = GameMain.getSmallerHeadingFont();
-        basic = GameMain.getBasicFont();
+        heading = host.getSmallerHeadingFont();
+        basic = host.getBasicFont();
         background = GameMain.getBackgroundTexture();
         //buttonTexture = GameMain.getButtonTexture();
         backButtonTexture = GameMain.getBackButtonTexture();

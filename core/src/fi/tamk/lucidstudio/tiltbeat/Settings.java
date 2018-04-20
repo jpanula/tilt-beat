@@ -41,8 +41,8 @@ public class Settings implements Screen {
         camera = host.getCamera();
         background = GameMain.getBackgroundTexture();
         fontCamera = host.getFontCamera();
-        heading = GameMain.getSmallerHeadingFont();
-        basic = GameMain.getBasicFont();
+        heading = host.getSmallerHeadingFont();
+        basic = host.getBasicFont();
         soundOnTexture = new Texture("soundOn.png");
         soundOffTexture = new Texture("soundOff.png");
         soundButtonTexture = soundOnTexture;
