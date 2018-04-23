@@ -44,7 +44,6 @@ public class GameMain extends Game {
     private BitmapFont verySmallFont;
     private BitmapFont smallFont;
     private BitmapFont basicFont;
-    private BitmapFont basicOutlinedFont;
     private BitmapFont bigFont;
     private BitmapFont headingFont;
     private BitmapFont smallerHeadingFont;
@@ -315,7 +314,10 @@ public class GameMain extends Game {
 		manager.load("repeat.png", Texture.class);
 		manager.load("settingsnappi.png", Texture.class);
         manager.load("folio.png", Texture.class);
-        manager.load("easynappi.png", Texture.class);
+        //manager.load("easynappi.png", Texture.class);
+        //manager.load("normalnappi.png", Texture.class);
+        //manager.load("hardnappi.png", Texture.class);
+        //manager.load("bbnappi.png", Texture.class);
 
 		manager.finishLoading();
 
@@ -328,7 +330,10 @@ public class GameMain extends Game {
 		playAgainButton = manager.get("repeat.png");
         settingsButton = manager.get("settingsnappi.png");
 		textBox = manager.get("folio.png");
-		easyTexture = manager.get("easynappi.png");
+		//easyTexture = manager.get("easynappi.png");
+        //normalTexture = manager.get("normalnappi.png");
+        //hardTexture = manager.get("hardnappi.png");
+        //bbTexture = manager.get("bbnappi.png");
 
         manager.load("JauntyGumption.ogg", Music.class);
         manager.load("NyanCat.mp3", Music.class);

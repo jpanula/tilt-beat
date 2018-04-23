@@ -52,13 +52,17 @@ public class Difficulty implements Screen {
         buttonPressedTexture = host.getButtonPressedTexture();
         touchPos = new Vector3();
 
+        Texture easyT = new Texture("easynappi.png");
+        Texture normalT = new Texture("normalnappi.png");
+        Texture hardT = new Texture("hardnappi.png");
+        //Texture bbT = new Texture("bbnappi.png");
 
         backButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, host.getBackButtonTexture());
         playButton = new Button(14f, 0.5f, 1.5f, 1.5f, host.getPlayButtonTexture());
         textBox = new Button(1f, 3f, 7f, 4.6f, host.getTextBoxTexture());
-        easyButton = new Button(1.5f, .5f, 2f, 2f, host.getEasyTexture());
-        normalButton = new Button(4.5f, .5f, 2f, 2f, buttonTexture);
-        hardButton = new Button(7.5f, .5f, 2f, 2f, buttonTexture);
+        easyButton = new Button(1.5f, .5f, 2f, 2f, easyT);
+        normalButton = new Button(4.5f, .5f, 2f, 2f, normalT);
+        hardButton = new Button(7.2f, .4f, 2.5f, 2.5f, hardT);
         backBreakerButton = new Button(10.5f, .5f, 2f, 2f, buttonTexture);
         song1Button = new Button(10f, 7f, 5f, 1.5f, buttonTexture);
         song2Button = new Button(10f, 5f, 5f, 1.5f, buttonTexture);
@@ -66,7 +70,7 @@ public class Difficulty implements Screen {
 
         easyButton.setText(28, 110, "easy", basic);
         normalButton.setText(5, 110, "normal", basic);
-        hardButton.setText(26, 110, "hard", basic);
+        hardButton.setText(55, 120, "hard", basic);
         backBreakerButton.setText(-40, 110, "backbreaker", basic);
         song1Button.setText(40, 80, "jaumpty gumpty", small);
         song2Button.setText(40, 80, "nyan cat", small);
@@ -79,28 +83,12 @@ public class Difficulty implements Screen {
     public void changeButtonTextures() {
 
         if (host.getDifficulty().equals("easy")) {
-            easyButton.setTexture(host.getEasyTexture());
-            normalButton.setTexture(buttonTexture);
-            hardButton.setTexture(buttonTexture);
-            backBreakerButton.setTexture(buttonTexture);
             textBox.setText("fun! fun! fun!\nfor beginners");
         } else if (host.getDifficulty().equals("normal")) {
-            easyButton.setTexture(host.getEasyTexture());
-            normalButton.setTexture(buttonPressedTexture);
-            hardButton.setTexture(buttonTexture);
-            backBreakerButton.setTexture(buttonTexture);
             textBox.setText("fun!\nbasic mode");
         } else if (host.getDifficulty().equals("hard")) {
-            easyButton.setTexture(host.getEasyTexture());
-            normalButton.setTexture(buttonTexture);
-            hardButton.setTexture(buttonPressedTexture);
-            backBreakerButton.setTexture(buttonTexture);
             textBox.setText("fun?\nfor hc players");
         } else {
-            easyButton.setTexture(host.getEasyTexture());
-            normalButton.setTexture(buttonTexture);
-            hardButton.setTexture(buttonTexture);
-            backBreakerButton.setTexture(buttonPressedTexture);
             textBox.setText("not fun\nyou will die");
         }
 
@@ -160,25 +148,6 @@ public class Difficulty implements Screen {
         song3Button.drawText(batch);
         textBox.drawText(batch);
         big.draw(batch, host.getDifficulty() + "" , 130, 550);
-        /*
-        if (host.getDifficulty().equals("easy")) {
-            basic.draw(batch, "fun! fun! fun!" , 150, 420);
-            basic.draw(batch, "for beginners" , 150, 350);
-        }
-        else if (host.getDifficulty().equals("normal")) {
-            basic.draw(batch, "fun!" , 150, 420);
-            basic.draw(batch, "basic mode" , 150, 350);
-        }
-        else if (host.getDifficulty().equals("hard")) {
-            basic.draw(batch, "fun?" , 150, 490);
-            basic.draw(batch, "for experienced" , 150, 420);
-            basic.draw(batch, "players only" , 150, 350);
-        }
-        else if (host.getDifficulty().equals("BACKBREAKER")) {
-            basic.draw(batch, "not fun" , 150, 420);
-            basic.draw(batch, "you will die" , 150, 350);
-        }
-*/
         batch.end();
 
         //nappien toiminnallisuus
