@@ -434,7 +434,7 @@ public class GameScreen implements Screen {
             this.texture = pointTexture;
             atlas = new TextureAtlas("Blue Sprite.atlas");
             scoreAnimation = new Animation<TextureRegion>(0.05f, atlas.getRegions());
-            particleAtlas = new TextureAtlas("Nuotteja.atlas");
+            particleAtlas = getColorForEffect();
             effect = new ParticleEffect();
             effect.load(Gdx.files.internal("Testi"), particleAtlas);
             effect.scaleEffect(1/80f);
@@ -444,6 +444,23 @@ public class GameScreen implements Screen {
             vector = new Vector2(distance, 0);
             flipped = false;
             stateTime = 0;
+        }
+
+        public TextureAtlas getColorForEffect() {
+            TextureAtlas tmep = new TextureAtlas("Nuotteja.atlas");
+            if (pointTexture.equals("Smol Blue.png")) {
+                tmep = new TextureAtlas("Nuotteja.atlas");
+            }
+            else if (pointTexture.equals("Smol Green.png")) {
+                tmep = new TextureAtlas("Nuotteja.atlas");
+            }
+            else if (pointTexture.equals("Smol Pink.png")) {
+                tmep = new TextureAtlas("Nuotteja.atlas");
+            }
+            else if (pointTexture.equals("Smol Yellow.png")) {
+                tmep = new TextureAtlas("Nuotteja.atlas");
+            }
+            return tmep;
         }
 
         @Override
@@ -741,7 +758,7 @@ public class GameScreen implements Screen {
 
         for (int i = 0; i < totalBeats - startOffset ; i++) {
             int noteColor = MathUtils.random(0, 3);
-            createPointTexture(noteColor);
+            changePointTexture(noteColor);
             int randomSector = MathUtils.random(0, (playerSides-1));
             randomSector = moveNotes(randomSector);
             //jos ei järjestelmällinen siirtäminen toimi (koska uusi sektori myös passiivinen) niin arvotaan uusi paikka
@@ -821,7 +838,7 @@ public class GameScreen implements Screen {
         useShapeRenderer = true;
     }
 
-    public void createPointTexture(int a) {
+    public void changePointTexture(int a) {
         if (a==0) {
             pointTexture = manager.get("Smol Blue.png");
             holdTexture = manager.get("Smol Blue Hold.png");
@@ -1036,7 +1053,7 @@ public class GameScreen implements Screen {
         // Musiikin toiminta pausen kanssa
         if (paused) {
             jauntyGumption.pause();
-        } else if (!paused && !jauntyGumption.isPlaying() && !song.isEmpty() && host.isSoundOn()) {
+        } else if (!paused && !jauntyGumption.isPlaying() && !song.isEmpty()) {
             jauntyGumption.play();
         }
 
@@ -1139,11 +1156,9 @@ public class GameScreen implements Screen {
                 moveAwayPauseMenuButtons();
             }
             if (playAgainButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
-                jauntyGumption.stop();
                 host.setScreen(new GameScreen(host));
             }
             if (backButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
-                jauntyGumption.stop();
                 host.setScreen(new MainMenu(host));
             }
             if (settingsButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
@@ -1160,7 +1175,6 @@ public class GameScreen implements Screen {
                 //toinen asetusjuttu
             }
             if (soundButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
-                jauntyGumption.stop();
                 if (host.isSoundOn()) {
                     host.setSoundOn(false);
                     soundButton.setTexture(soundOffTexture);
@@ -1177,9 +1191,6 @@ public class GameScreen implements Screen {
         //ottaa napin painalluksen vain kerran
         if (!Gdx.input.isTouched()) {touchPos.set(0, 0, 0);}
 
-        if(song.isEmpty()) {
-            jauntyGumption.stop();
-        }
     }
 
 
