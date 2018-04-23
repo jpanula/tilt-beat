@@ -42,6 +42,10 @@ public class Button extends Rectangle {
         this.font = font;
     }
 
+    public void setText(String a) {
+        text = a;
+    }
+
     public void moveText() {
         fontX = calculateXPos() + plusX;
         fontY = calculateYPos() + plusY;

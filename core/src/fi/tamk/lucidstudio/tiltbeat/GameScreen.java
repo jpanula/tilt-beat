@@ -29,8 +29,7 @@ import java.util.Iterator;
  * Created by Jaakko on 11.3.2018.
  */
 
-public class
-GameScreen implements Screen {
+public class GameScreen implements Screen {
     private GameMain host;
     private AssetManager manager;
     private SpriteBatch batch;
@@ -557,7 +556,7 @@ GameScreen implements Screen {
                 tickAmount *= 2;
             } else if (prefs.getString("difficulty").equals("hard")) {
                 tickAmount *= 3;
-            } else if (prefs.getString("difficulty").equals("BACKBREAKER")) {
+            } else if (prefs.getString("difficulty").equals("backbreaker")) {
                 tickAmount *= 5;
             }
             tickAmount -= 2;
@@ -678,6 +677,18 @@ GameScreen implements Screen {
         manager.load("Smol Blue Hold.png", Texture.class);
         manager.load("Smol Blue Slide.png", Texture.class);
         manager.load("Smol Blue Ball.png", Texture.class);
+        manager.load("Smol Green.png", Texture.class);
+        manager.load("Smol Green Hold.png", Texture.class);
+        manager.load("Smol Green Slide.png", Texture.class);
+        manager.load("Smol Green Ball.png", Texture.class);
+        manager.load("Smol Pink.png", Texture.class);
+        manager.load("Smol Pink Hold.png", Texture.class);
+        manager.load("Smol Pink Slide.png", Texture.class);
+        manager.load("Smol Pink Ball.png", Texture.class);
+        manager.load("Smol Yellow.png", Texture.class);
+        manager.load("Smol Yellow Hold.png", Texture.class);
+        manager.load("Smol Yellow Slide.png", Texture.class);
+        manager.load("Smol Yellow Ball.png", Texture.class);
         manager.load("square.png", Texture.class);
         manager.load("tiltedSquare.png", Texture.class);
         manager.load("sixside.png", Texture.class);
@@ -729,13 +740,15 @@ GameScreen implements Screen {
 
 
         for (int i = 0; i < totalBeats - startOffset ; i++) {
+            int noteColor = MathUtils.random(0, 3);
+            createPointTexture(noteColor);
             int randomSector = MathUtils.random(0, (playerSides-1));
             randomSector = moveNotes(randomSector);
             //jos ei järjestelmällinen siirtäminen toimi (koska uusi sektori myös passiivinen) niin arvotaan uusi paikka
             while (!isSectorActive(randomSector)) {
                 randomSector = MathUtils.random(0, (playerSides-1));
             }
-            int randomNoteType = MathUtils.random(0, 4);
+            int randomNoteType = MathUtils.random(0, 7);
             if (randomNoteType < 5) {
                 song.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), pointTexture));
             } else if (randomNoteType < 7) {
@@ -800,12 +813,39 @@ GameScreen implements Screen {
         playButton.setText(-30, 190, "continue", basic);
         playAgainButton.setText(0, 190, "retry", basic);
         settingsButton.setText(-30, 190, "settings", basic);
-        calibration.setText(25, 110, "calibration", basic);
+        calibration.setText(30, 110, "calibration", basic);
         secondSetting.setText(20, 110, "do something", basic);
         backToPauseMenu.setText(10, 180, "back", basic);
 
         paused = false;
         useShapeRenderer = true;
+    }
+
+    public void createPointTexture(int a) {
+        if (a==0) {
+            pointTexture = manager.get("Smol Blue.png");
+            holdTexture = manager.get("Smol Blue Hold.png");
+            slideTexture = manager.get("Smol Blue Slide.png");
+            tickTexture = manager.get("Smol Blue Ball.png");
+        }
+        if (a==1) {
+            pointTexture = manager.get("Smol Green.png");
+            holdTexture = manager.get("Smol Green Hold.png");
+            slideTexture = manager.get("Smol Green Slide.png");
+            tickTexture = manager.get("Smol Green Ball.png");
+        }
+        if (a==2) {
+            pointTexture = manager.get("Smol Pink.png");
+            holdTexture = manager.get("Smol Pink Hold.png");
+            slideTexture = manager.get("Smol Pink Slide.png");
+            tickTexture = manager.get("Smol Pink Ball.png");
+        }
+        if (a==3) {
+            pointTexture = manager.get("Smol Yellow.png");
+            holdTexture = manager.get("Smol Yellow Hold.png");
+            slideTexture = manager.get("Smol Yellow Slide.png");
+            tickTexture = manager.get("Smol Yellow Ball.png");
+        }
     }
 
     public void moveHerePauseMenuButtons() {
@@ -837,8 +877,8 @@ GameScreen implements Screen {
     }
 
     public void moveHereResultMenuButtons() {
-        playAgainButton.setPosition(8.5f, 2f);
-        backButton.setPosition(3.5f, 2f);
+        playAgainButton.setPosition(8f, 2f);
+        backButton.setPosition(3f, 2f);
     }
 
     public void destroyResultMenuButtons() {
@@ -912,8 +952,8 @@ GameScreen implements Screen {
         if (song.isEmpty()) {
             moveHereResultMenuButtons();
             resultBox.draw(batch);
-            playAgainButton.draw(batch);
             backButton.draw(batch);
+            playAgainButton.draw(batch);
         }
         //asetusruutu
         if(changeSettings) {
@@ -957,7 +997,7 @@ GameScreen implements Screen {
         //tulosruudun tekstit
         if (song.isEmpty()) {
             heading.draw(batch, "you did it!!!", 230, 620);
-            basic.draw(batch, "you got " + points + " points!!", 430, 400);
+            basic.draw(batch, "you got " + points + " points!!", 410, 400);
             backButton.setText(140, 90, "main menu", basic);
             playAgainButton.setText(140, 90, "start again?", basic);
             backButton.drawText(batch);

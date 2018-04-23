@@ -40,9 +40,12 @@ public class GameMain extends Game {
 	private Texture playAgainButton;
     private Texture settingsButton;
     private Texture textBox;
+    private Texture easyTexture;
     private BitmapFont verySmallFont;
     private BitmapFont smallFont;
     private BitmapFont basicFont;
+    private BitmapFont basicOutlinedFont;
+    private BitmapFont bigFont;
     private BitmapFont headingFont;
     private BitmapFont smallerHeadingFont;
 
@@ -234,6 +237,8 @@ public class GameMain extends Game {
 
     public Texture getTextBoxTexture() { return textBox; }
 
+    public Texture getEasyTexture() { return easyTexture; }
+
     public BitmapFont getHeadingFont() { return headingFont; }
 
     public BitmapFont getSmallFont() { return smallFont; }
@@ -241,6 +246,8 @@ public class GameMain extends Game {
     public BitmapFont getVerySmallFont() { return verySmallFont; }
 
     public BitmapFont getBasicFont() { return basicFont; }
+
+    public BitmapFont getBigFont() { return bigFont; }
 
     public BitmapFont getSmallerHeadingFont() { return smallerHeadingFont; }
 
@@ -307,7 +314,8 @@ public class GameMain extends Game {
 		manager.load("playnappi.png", Texture.class);
 		manager.load("repeat.png", Texture.class);
 		manager.load("settingsnappi.png", Texture.class);
-		manager.load("folio.png", Texture.class);
+        manager.load("folio.png", Texture.class);
+        manager.load("easynappi.png", Texture.class);
 
 		manager.finishLoading();
 
@@ -320,16 +328,17 @@ public class GameMain extends Game {
 		playAgainButton = manager.get("repeat.png");
         settingsButton = manager.get("settingsnappi.png");
 		textBox = manager.get("folio.png");
+		easyTexture = manager.get("easynappi.png");
 
         manager.load("JauntyGumption.ogg", Music.class);
         manager.load("NyanCat.mp3", Music.class);
-        manager.load("WorldisMine.mp3", Music.class);
+        manager.load("takeOnMe.mp3", Music.class);
 
         manager.finishLoading();
 
 		song1 = manager.get("JauntyGumption.ogg");
         song2 = manager.get("NyanCat.mp3");
-        song3 = manager.get("WorldisMine.mp3");
+        song3 = manager.get("takeOnMe.mp3");
 
 		createFonts();
 
@@ -363,6 +372,15 @@ public class GameMain extends Game {
         basicFontParameter.fontParameters.color = Color.WHITE;
         manager.load("basicFont.ttf", BitmapFont.class, basicFontParameter);
 
+        //luodaan iso fontti
+        FreetypeFontLoader.FreeTypeFontLoaderParameter bigFontParameter = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
+        bigFontParameter.fontFileName = "grove.ttf";
+        bigFontParameter.fontParameters.size = 80;
+        bigFontParameter.fontParameters.color = Color.WHITE;
+        bigFontParameter.fontParameters.borderColor = Color.BLACK;
+        bigFontParameter.fontParameters.borderWidth = 3;
+        manager.load("bigFont.ttf", BitmapFont.class, bigFontParameter);
+
 		//luodaan otsikkofontti
         FreetypeFontLoader.FreeTypeFontLoaderParameter headingFontParameter = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
         headingFontParameter.fontFileName = "grove.ttf";
@@ -385,6 +403,7 @@ public class GameMain extends Game {
         verySmallFont = manager.get("verySmallFont.ttf", BitmapFont.class);
         smallFont = manager.get("smallFont.ttf", BitmapFont.class);
         basicFont = manager.get("basicFont.ttf", BitmapFont.class);
+        bigFont = manager.get("bigFont.ttf", BitmapFont.class);
         headingFont = manager.get("headingFont.ttf", BitmapFont.class);
         smallerHeadingFont = manager.get("smallerHeadingFont.ttf", BitmapFont.class);
 	}

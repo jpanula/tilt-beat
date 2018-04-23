@@ -41,7 +41,7 @@ public class Settings implements Screen {
         camera = host.getCamera();
         background = host.getBackgroundTexture();
         fontCamera = host.getFontCamera();
-        heading = host.getSmallerHeadingFont();
+        heading = host.getHeadingFont();
         basic = host.getBasicFont();
         soundOnTexture = new Texture("soundOn.png");
         soundOffTexture = new Texture("soundOff.png");
@@ -51,6 +51,7 @@ public class Settings implements Screen {
         calibration = new Button(6.2f, 1.8f, 3.7f, 2f, host.getButtonTexture());
         backButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, host.getBackButtonTexture());
 
+        sound.setText(80, 106, "sound", basic);
         calibration.setText(24, 106, "calibration", basic);
         restore.setText(50, 136, "default\nsettings", basic);
         destroySoundButton();
@@ -62,7 +63,7 @@ public class Settings implements Screen {
     }
 
     public void createSoundButton() {
-        soundButton = new Button(2f, 4.5f, 2f, 2f, soundOnTexture);
+        soundButton = new Button(2f, 4f, 2f, 2f, soundOnTexture);
     }
 
     public void destroySoundButton() {
@@ -92,9 +93,9 @@ public class Settings implements Screen {
         //piirrellään fontit
         calibration.drawText(batch);
         restore.drawText(batch);
+        sound.drawText(batch);
 
-        heading.draw(batch, "Settings", 250, 700);
-        basic.draw(batch, "sound", 180, 250);
+        heading.draw(batch, "Settings", 330, 650);
 
         batch.end();
 
@@ -106,13 +107,27 @@ public class Settings implements Screen {
         if (backButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setScreen(new MainMenu(host));
         }
-        if (restore.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
-            restoreSettings();
+        if (restore.contains(touchPos.x, touchPos.y)) {
+            restore.setTexture(host.getButtonPressedTexture());
+            if (!Gdx.input.isTouched()) {
+                restoreSettings();
+                restore.setTexture(host.getButtonTexture());
+            }
         }
-        if (sound.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
-            createSoundButton();
-            changeSound ^= true;
-            touchPos.setZero();
+        if (!restore.contains(touchPos.x, touchPos.y)) {
+            restore.setTexture(host.getButtonTexture());
+        }
+        if (sound.contains(touchPos.x, touchPos.y)) {
+            sound.setTexture(host.getButtonPressedTexture());
+            if (!Gdx.input.isTouched()) {
+                createSoundButton();
+                changeSound ^= true;
+                touchPos.setZero();
+                sound.setTexture(host.getButtonTexture());
+            }
+        }
+        if (!sound.contains(touchPos.x, touchPos.y)) {
+            sound.setTexture(host.getButtonTexture());
         }
         if (soundButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setSoundOn(true);
@@ -122,9 +137,16 @@ public class Settings implements Screen {
             touchPos.setZero();
         }
         // Nollapisteen kalibrointi
-        if (calibration.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
-            host.calibrateZeroPoint();
-            touchPos.setZero();
+        if (calibration.contains(touchPos.x, touchPos.y)) {
+            calibration.setTexture(host.getButtonPressedTexture());
+            if (!Gdx.input.isTouched()) {
+                host.calibrateZeroPoint();
+                touchPos.setZero();
+                calibration.setTexture(host.getButtonTexture());
+            }
+        }
+        if (!calibration.contains(touchPos.x, touchPos.y)) {
+            calibration.setTexture(host.getButtonTexture());
         }
 
         //ottaa napin painalluksen vain kerran
