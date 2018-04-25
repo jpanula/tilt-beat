@@ -95,7 +95,6 @@ public class GameScreen implements Screen {
         float radius;
         float[] vertices;
         Pointer pointer;
-        Preferences prefs = Gdx.app.getPreferences("default");
 
         // Pelaajan osoittimen luokka
         class Pointer {
@@ -113,11 +112,11 @@ public class GameScreen implements Screen {
                 @Override
                 public void run() {
                     while(true) {
-                        xSmoother[smoothIndex % smoothingSamples] = Gdx.input.getAccelerometerY() - prefs.getFloat("zeroPointY");
-                        if (isUseAccelerometerX()) {
-                            ySmoother[smoothIndex % smoothingSamples] = -Gdx.input.getAccelerometerX() - prefs.getFloat("zeroPointX");
+                        xSmoother[smoothIndex % smoothingSamples] = Gdx.input.getAccelerometerY() - host.getZeroPointY();
+                        if (host.isUseAccelerometerX()) {
+                            ySmoother[smoothIndex % smoothingSamples] = -Gdx.input.getAccelerometerX() - host.getZeroPointX();
                         } else {
-                            ySmoother[smoothIndex % smoothingSamples] = Gdx.input.getAccelerometerZ() - prefs.getFloat("zeroPointZ");
+                            ySmoother[smoothIndex % smoothingSamples] = Gdx.input.getAccelerometerZ() - host.getZeroPointZ();
                         }
                         smoothIndex++;
                         try {
@@ -133,15 +132,11 @@ public class GameScreen implements Screen {
                 speed = 8;
                 texture = pointerTexture;
                 hitbox = new Circle(host.getScreenWidth() / 2, host.getScreenHeight() / 2, radius);
-                smoothingSamples = prefs.getInteger("smoothingSamples");
+                smoothingSamples = host.getSmoothingSamples();
                 xSmoother = new float[smoothingSamples];
                 ySmoother = new float[smoothingSamples];
                 smoothIndex = 0;
                 (new Thread(new inputSmoother())).start();
-            }
-
-            public boolean isUseAccelerometerX() {
-                return prefs.getBoolean("useAccelerometerX");
             }
 
             // Piirtometodi SpriteBatchille, käyttää kuvia
@@ -156,13 +151,13 @@ public class GameScreen implements Screen {
 
             public void resetSmoothing() {
                 for (int i = 0; i < xSmoother.length; i++) {
-                    xSmoother[i] = prefs.getFloat("zeroPointY");
+                    xSmoother[i] = host.getZeroPointY();
                 }
                 for (int i = 0; i < ySmoother.length; i++) {
-                    if (isUseAccelerometerX()) {
-                        ySmoother[i] = prefs.getFloat("zeroPointX");
+                    if (host.isUseAccelerometerX()) {
+                        ySmoother[i] = host.getZeroPointX();
                     } else {
-                        ySmoother[i] = prefs.getFloat("zeroPointZ");
+                        ySmoother[i] = host.getZeroPointZ();
                     }
                 }
             }
@@ -188,7 +183,7 @@ public class GameScreen implements Screen {
                     }
                 }
                 // Osoittimen ohjaus accelerometrillä
-                if ((Math.abs(prefs.getFloat("zeroPointZ") - Gdx.input.getAccelerometerZ()) > prefs.getFloat("accelerometerDeadzone") && !prefs.getBoolean("useAccelerometerX")) || (Math.abs(prefs.getFloat("zeroPointX") - Gdx.input.getAccelerometerZ()) > prefs.getFloat("accelerometerDeadzone") && prefs.getBoolean("useAccelerometerX")) || Math.abs(prefs.getFloat("zeroPointY") - Gdx.input.getAccelerometerY()) > prefs.getFloat("accelerometerDeadzone")) {
+                if ((Math.abs(host.getZeroPointZ() - Gdx.input.getAccelerometerZ()) > host.getAccelerometerDeadzone() && !host.isUseAccelerometerX()) || (Math.abs(host.getZeroPointX() - Gdx.input.getAccelerometerZ()) > host.getAccelerometerDeadzone() && host.isUseAccelerometerX()) || Math.abs(host.getZeroPointY() - Gdx.input.getAccelerometerY()) > host.getAccelerometerDeadzone()) {
                     float avgX = 0;
                     float avgY = 0;
 
@@ -272,7 +267,7 @@ public class GameScreen implements Screen {
                         0.067f, 0.75f
                 };
             } else if (playerSides == 4) {
-                if (prefs.getBoolean("tiltedSquare")) {
+                if (host.isTiltedSquare()) {
                     texture = tiltedSquare;
                     vertices = new float[]{
                             0.5f, 1f,
@@ -374,7 +369,6 @@ public class GameScreen implements Screen {
         private int sector;
         private float distance;
         private boolean hit;
-        Preferences prefs = Gdx.app.getPreferences("default");
 
         public Note(int sector, float distance) {
             this.sector = sector;
@@ -429,7 +423,7 @@ public class GameScreen implements Screen {
         private float animationSize;
 
 
-        public Point(int sector, float distance, Texture texture) {
+        public Point(int sector, float distance) {
             super(sector, distance);
             this.texture = pointTexture;
             atlas = new TextureAtlas("Blue Sprite.atlas");
@@ -452,13 +446,13 @@ public class GameScreen implements Screen {
                 tmep = new TextureAtlas("Nuotteja.atlas");
             }
             else if (pointTexture.equals("Smol Green.png")) {
-                tmep = new TextureAtlas("Nuotteja.atlas");
+                tmep = new TextureAtlas("Vihree.atlas");
             }
             else if (pointTexture.equals("Smol Pink.png")) {
-                tmep = new TextureAtlas("Nuotteja.atlas");
+                tmep = new TextureAtlas("Pinkki.atlas");
             }
             else if (pointTexture.equals("Smol Yellow.png")) {
-                tmep = new TextureAtlas("Nuotteja.atlas");
+                tmep = new TextureAtlas("Keltane.atlas");
             }
             return tmep;
         }
@@ -481,7 +475,7 @@ public class GameScreen implements Screen {
 
         public Vector2 getVector() {
             vector.setLength(getDistance() + host.getPlayerInradius());
-            vector.setAngle(90 - (360 / prefs.getInteger("playerSides")) * getSector() - (360 / prefs.getInteger("playerSides")) / 2);
+            vector.setAngle(90 - (360 / host.getPlayerSides()) * getSector() - (360 / host.getPlayerSides()) / 2);
             return vector;
         }
 
@@ -499,7 +493,11 @@ public class GameScreen implements Screen {
             // Vektorilla lasketaan pelaajan kulmion kulmien perusteella nuottien liikerata kohti niiden
             // sektoreita
             vector.setLength(getDistance() + host.getPlayerInradius());
-            vector.setAngle(90 - (360 / prefs.getInteger("playerSides")) * getSector() - (360 / prefs.getInteger("playerSides")) / 2);
+            vector.setAngle(90 - (360 / host.getPlayerSides()) * getSector() - (360 / host.getPlayerSides()) / 2);
+            if (!host.isTiltedSquare() && host.getPlayerSides() == 4) {
+                vector.setAngle(vector.angle() - 45);
+                vector.setLength(getDistance() + host.getPlayerDiameter() / 2);
+            }
             if (!isHit()) {
                 batch.draw(texture, host.getScreenWidth() / 2 + vector.x - width / 2, host.getScreenHeight() / 2 + vector.y - height / 2, width / 2, height / 2, width, height, 1, 1, vector.angle() - 90, 0, 0, texture.getWidth(), texture.getHeight(), flipped, false);
             } else {
@@ -515,7 +513,7 @@ public class GameScreen implements Screen {
         }
         public void drawInBackground(SpriteBatch batch) {
             vector.setLength(getDistance() + host.getPlayerInradius());
-            vector.setAngle(90 - (360 / prefs.getInteger("playerSides")) * getSector() - (360 / prefs.getInteger("playerSides")) / 2);
+            vector.setAngle(90 - (360 / host.getPlayerSides()) * getSector() - (360 / host.getPlayerSides()) / 2);
         }
     }
 
@@ -555,7 +553,11 @@ public class GameScreen implements Screen {
             @Override
             public void draw(SpriteBatch batch) {
                 vector.setLength(getDistance() + host.getPlayerInradius());
-                vector.setAngle(90 - (360 / prefs.getInteger("playerSides")) * getSector() - (360 / prefs.getInteger("playerSides")) / 2);
+                vector.setAngle(90 - (360 / host.getPlayerSides()) * getSector() - (360 / host.getPlayerSides()) / 2);
+                if (!host.isTiltedSquare() && host.getPlayerSides() == 4) {
+                    vector.setAngle(vector.angle() - 45);
+                    vector.setLength(getDistance() + host.getPlayerDiameter() / 2);
+                }
                 if (getDistance() > 0)
                     batch.draw(texture, host.getScreenWidth() / 2 + vector.x - tickDiameter / 2, host.getScreenHeight() / 2 + vector.y - tickDiameter / 2, tickDiameter, tickDiameter);
             }
@@ -568,12 +570,12 @@ public class GameScreen implements Screen {
             width = 1;
             tickDiameter = 0.2f;
             height = 0.7f * width;
-            tickAmount = (int) (length / (tickDiameter * prefs.getFloat("noteSpeed")));
-            if (prefs.getString("difficulty").equals("normal")) {
+            tickAmount = (int) (length / (tickDiameter * host.getNoteSpeed()));
+            if (host.getDifficulty().equals("normal")) {
                 tickAmount *= 2;
-            } else if (prefs.getString("difficulty").equals("hard")) {
+            } else if (host.getDifficulty().equals("hard")) {
                 tickAmount *= 3;
-            } else if (prefs.getString("difficulty").equals("backbreaker")) {
+            } else if (host.getDifficulty().equals("backbreaker")) {
                 tickAmount *= 5;
             }
             tickAmount -= 2;
@@ -610,12 +612,20 @@ public class GameScreen implements Screen {
                 tick.draw(batch);
             }
             startPoint.setLength(getDistance() + host.getPlayerInradius());
-            startPoint.setAngle(90 - (360 / prefs.getInteger("playerSides")) * getSector() - (360 / prefs.getInteger("playerSides")) / 2);
+            startPoint.setAngle(90 - (360 / host.getPlayerSides()) * getSector() - (360 / host.getPlayerSides()) / 2);
+            if (!host.isTiltedSquare() && host.getPlayerSides() == 4) {
+                startPoint.setAngle(startPoint.angle() - 45);
+                startPoint.setLength(getDistance() + host.getPlayerDiameter() / 2);
+            }
             if (getDistance() > 0) {
                 batch.draw(texture, host.getScreenWidth() / 2 + startPoint.x - width / 2, host.getScreenHeight() / 2 + startPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, startPoint.angle() - 90, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
             }
             endPoint.setLength(getDistance() + length + host.getPlayerInradius());
-            endPoint.setAngle(90 - (360 / prefs.getInteger("playerSides")) * getSector() - (360 / prefs.getInteger("playerSides")) / 2);
+            endPoint.setAngle(90 - (360 / host.getPlayerSides()) * getSector() - (360 / host.getPlayerSides()) / 2);
+            if (!host.isTiltedSquare() && host.getPlayerSides() == 4) {
+                endPoint.setAngle(endPoint.angle() - 45);
+                endPoint.setLength(getDistance() + host.getPlayerDiameter() / 2 + length);
+            }
             batch.draw(texture, host.getScreenWidth() / 2 + endPoint.x - width / 2, host.getScreenHeight() / 2 + endPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, endPoint.angle() - 90, 0, 0, texture.getWidth(), texture.getHeight(), false, true);
         }
 
@@ -636,7 +646,7 @@ public class GameScreen implements Screen {
             // Muutetaan annetun nuottikasan sektorit ja etäisyys koko Sliden mukaan
             for (int i = 0; i < notes.size(); i++) {
                 Point note = notes.get(i);
-                note.setSector((note.getSector() + sector) % prefs.getInteger("playerSides"));
+                note.setSector((note.getSector() + sector) % host.getPlayerSides());
                 note.setDistance(note.getDistance() + distance);
             }
             this.notes = notes;
@@ -647,10 +657,17 @@ public class GameScreen implements Screen {
         }
 
         public void draw(ShapeRenderer shapeRenderer) {
+            if (!host.isTiltedSquare() && host.getPlayerSides() == 4) {
+                for (int j = 0; j < notes.size() - 1; j++) {
+                    notes.get(j).getVector().setAngle(notes.get(j).getVector().angle() - 45);
+                    notes.get(j).getVector().setLength(getDistance() + host.getPlayerDiameter() / 2);
+                }
+            }
             for (int i = 0; i < notes.size() - 1; i++) {
                 // Piirretään ShapeRendererillä viiva Sliden sisällä olevien nuottien väliin
                 Vector2 startPoint = (notes.get(i).getVector().add(new Vector2(host.getScreenWidth() / 2, host.getScreenHeight() / 2)));
                 Vector2 endPoint = (notes.get(i + 1).getVector().add(new Vector2(host.getScreenWidth() / 2, host.getScreenHeight() / 2)));
+
                 shapeRenderer.line(startPoint, endPoint);
             }
         }
@@ -767,19 +784,19 @@ public class GameScreen implements Screen {
             }
             int randomNoteType = MathUtils.random(0, 7);
             if (randomNoteType < 5) {
-                song.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), pointTexture));
+                song.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60)));
             } else if (randomNoteType < 7) {
                 song.add(new Hold((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), holdTexture, noteSpeed / (bpm / 60)));
                 i++;
             } else {
                 ArrayList<Point> slideGen = new ArrayList<Point>();
-                slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), slideTexture));
+                slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60)));
                 randomSector++;
                 randomSector = moveNotes(randomSector % playerSides);
                 while (!isSectorActive(randomSector % playerSides)) {
                     randomSector = MathUtils.random(0, (playerSides - 1));
                 }
-                slideGen.add(new Point((randomSector) % playerSides, (i + 0.5f) * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), slideTexture));
+                slideGen.add(new Point((randomSector) % playerSides, (i + 0.5f) * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60)));
                 i++;
                 if (randomSector == 0) {
                     randomSector = host.getPlayerSides() - 1;
@@ -790,7 +807,7 @@ public class GameScreen implements Screen {
                 while (!isSectorActive(randomSector % playerSides)) {
                     randomSector = MathUtils.random(0, (playerSides - 1));
                 }
-                slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), slideTexture));
+                slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60)));
                 slideGen.get(1).flip();
                 song.add(new Slide(0, 0, slideGen));
             }

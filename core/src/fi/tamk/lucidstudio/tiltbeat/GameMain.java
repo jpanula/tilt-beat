@@ -67,6 +67,22 @@ public class GameMain extends Game {
         prefs.flush();
     }
 
+    public boolean isUseAccelerometerX() {
+	    return prefs.getBoolean("useAccelerometerX");
+    }
+
+    public void setUseAccelerometerX(boolean useAccelerometerX) {
+	    prefs.putBoolean("useAccelerometerX", useAccelerometerX);
+    }
+
+    public boolean isTiltedSquare() {
+	    return prefs.getBoolean("tiltedSquare");
+    }
+
+    public void setTiltedSquare(boolean tilted) {
+	    prefs.putBoolean("tiltedSquare", tilted);
+    }
+
     public AssetManager getManager() {
         return manager;
     }
