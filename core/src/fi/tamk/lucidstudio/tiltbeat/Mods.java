@@ -34,12 +34,15 @@ public class Mods implements Screen {
     private Texture background;
     private Texture buttonTexture;
     private Texture buttonPressedTexture;
+    private Button button4;
+    private Button button4twist;
     private Button button6;
     private Button button8;
     private Button button10;
     private Button backButton;
     private Button textBox;
     private Vector3 touchPos;
+    private boolean isFourFlipped;
 
     ArrayList<Polygon> sectors;
     float[] vertices;
@@ -61,15 +64,19 @@ public class Mods implements Screen {
         buttonTexture = host.getButtonTexture();
         buttonPressedTexture = host.getButtonPressedTexture();
 
-        button6 = new Button(1f, 4.5f, 3f, 1.5f, buttonTexture);
-        button8 = new Button(1f, 2.5f, 3f, 1.5f, buttonTexture);
-        button10 = new Button(1f, 0.5f, 3f, 1.5f, buttonTexture);
+        button4 = new Button(1f, 5.3f, 3f, 1.2f, buttonTexture);
+        button4twist = new Button(10.5f, 0.7f, 2f, 1.2f, buttonTexture);
+        button6 = new Button(1f, 3.7f, 3f, 1.2f, buttonTexture);
+        button8 = new Button(1f, 2.1f, 3f, 1.2f, buttonTexture);
+        button10 = new Button(1f, 0.5f, 3f, 1.2f, buttonTexture);
         backButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, host.getBackButtonTexture());
         textBox = new Button(10.5f, 2.5f, 5.4f, 3f, host.getTextBoxTexture());
 
-        button6.setText(40, 80, "6-side", basic);
-        button8.setText(40, 80, "8-side", basic);
-        button10.setText(40, 80, "10-side", basic);
+        button4.setText(40, 70, "4-side", basic);
+        button6.setText(40, 70, "6-side", basic);
+        button8.setText(40, 70, "8-side", basic);
+        button10.setText(40, 70, "10-side", basic);
+        button4twist.setText(30, 70, "flip", basic);
 
         playerSides = host.getPlayerSides();
         playerDiameter = host.getPlayerDiameter();
@@ -77,12 +84,16 @@ public class Mods implements Screen {
         sectors = new ArrayList<Polygon>();
         touchPos = new Vector3();
 
+        if (!(playerSides==4)) { button4twist.setPosition(18f, 11f); }
         makeButtonsAndPolygon();
 
     }
 
     public void makeButtonsAndPolygon() {
-        if(playerSides==6) {
+        if(playerSides==4) {
+            createFourside();
+            button4.setTexture(buttonPressedTexture);
+        } else if(playerSides==6) {
             createSixside();
             button6.setTexture(buttonPressedTexture);
         } else if (playerSides==8) {
@@ -93,6 +104,48 @@ public class Mods implements Screen {
             button10.setTexture(buttonPressedTexture);
         }
 
+    }
+
+    public void createFourside() {
+        if (isFourFlipped) {
+            createDiamond();
+        } else {createSquare(); }
+    }
+
+    public void createSquare() {
+        texture = new Texture("squaresectors.png");
+        vertices = new float[]{
+                1f, 1f,
+                1f, 0f,
+                0f, 0f,
+                0f, 1f
+        };
+        //jos kulmio&aktiiviset sektorit ovat jo olemassa, ei nollata niitä
+        if(host.getActiveSectors().length!=4) {
+            host.setActiveSectors(new boolean[4]);
+            for (int i=0 ; i<4 ; i++) {
+                host.setActiveSector(i, true);
+            }
+        }
+        createSectors(vertices);
+    }
+
+    public void createDiamond() {
+        texture = new Texture("diamondsectors.png");
+        vertices = new float[]{
+                0.5f, 1f,
+                1f, 0.5f,
+                0.5f, 0f,
+                0f, 0.5f
+        };
+        //jos kulmio&aktiiviset sektorit ovat jo olemassa, ei nollata niitä
+        if(host.getActiveSectors().length!=4) {
+            host.setActiveSectors(new boolean[4]);
+            for (int i=0 ; i<4 ; i++) {
+                host.setActiveSector(i, true);
+            }
+        }
+        createSectors(vertices);
     }
 
     public void createSixside() {
@@ -199,18 +252,22 @@ public class Mods implements Screen {
         //piirrellään tausta ja napit
         batch.draw(background, 0, 0 , 16, 10);
         backButton.draw(batch);
+        button4.draw(batch);
         button6.draw(batch);
         button8.draw(batch);
         button10.draw(batch);
+        button4twist.draw(batch);
         textBox.draw(batch);
         batch.draw(texture, hitbox.getX(), hitbox.getY(), hitbox.getScaleX(), hitbox.getScaleY());
 
         batch.setProjectionMatrix(fontCamera.combined);
         //piirrellään fontit
         heading.draw(batch, "Modifications" , 250, 680);
+        button4.drawText(batch);
         button6.drawText(batch);
         button8.drawText(batch);
         button10.drawText(batch);
+        button4twist.drawText(batch);
         small.draw(batch, "click sectors to" , 885, 400);
         small.draw(batch, "activate or" , 885, 350);
         small.draw(batch, "de-activate them" , 885, 300);
@@ -223,7 +280,9 @@ public class Mods implements Screen {
             draw8sectors();
         } else if(playerSides==6) {
             draw6sectors();
-        }
+        } else if(playerSides==4 && !isFourFlipped) {
+            drawSquareSectors();
+        } else { drawDiamondSectors(); }
 
         batch.end();
 
@@ -235,26 +294,51 @@ public class Mods implements Screen {
         if (backButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setScreen(new MainMenu(host));
         }
+        if (button4.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            host.setPlayerSides(4);
+            createFourside();
+            button4.setTexture(buttonPressedTexture);
+            button6.setTexture(buttonTexture);
+            button8.setTexture(buttonTexture);
+            button10.setTexture(buttonTexture);
+            button4twist.setPosition(10.5f, 0.7f);
+        }
+        if (button4twist.contains(touchPos.x, touchPos.y)) {
+            button4twist.setTexture(buttonPressedTexture);
+            if (!Gdx.input.isTouched()) {
+                isFourFlipped ^= true;
+                createFourside();
+            }
+        }
+        if (!button4twist.contains(touchPos.x, touchPos.y)) {
+            button4twist.setTexture(buttonTexture);
+        }
         if (button6.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setPlayerSides(6);
             createSixside();
+            button4.setTexture(buttonTexture);
             button6.setTexture(buttonPressedTexture);
             button8.setTexture(buttonTexture);
             button10.setTexture(buttonTexture);
+            button4twist.setPosition(18f, 11f);
         }
         if (button8.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setPlayerSides(8);
             createEightside();
+            button4.setTexture(buttonTexture);
             button6.setTexture(buttonTexture);
             button8.setTexture(buttonPressedTexture);
             button10.setTexture(buttonTexture);
+            button4twist.setPosition(18f, 11f);
         }
         if (button10.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setPlayerSides(10);
             createTenside();
+            button4.setTexture(buttonTexture);
             button6.setTexture(buttonTexture);
             button8.setTexture(buttonTexture);
             button10.setTexture(buttonPressedTexture);
+            button4twist.setPosition(18f, 11f);
         }
         for (int i=0 ; i<playerSides ; i++) {
             Polygon polygon = sectors.get(i);
@@ -272,6 +356,38 @@ public class Mods implements Screen {
 
     }
 
+
+    public void drawSquareSectors() {
+        if(host.getActiveSectors()[0])  //
+            small.draw(batch, "on", 700, 300);
+        else { small.draw(batch, "off", 700, 300); }
+        if(host.getActiveSectors()[1]) {
+            small.draw(batch, "on", 570, 180);
+        } else { small.draw(batch, "off", 570, 180); }
+        if(host.getActiveSectors()[2]) {
+            small.draw(batch, "on", 440, 300);
+        } else { small.draw(batch, "off", 440, 300); }
+        if(host.getActiveSectors()[3]) {
+            small.draw(batch, "on", 570, 420);
+        } else { small.draw(batch, "off", 570, 420); }
+    }
+
+
+    public void drawDiamondSectors() {
+        if(host.getActiveSectors()[0]) {
+            small.draw(batch, "on", 630, 350);
+        } else { small.draw(batch, "off", 630, 350); }
+        if(host.getActiveSectors()[1]) {
+            small.draw(batch, "on", 630, 240);
+        } else { small.draw(batch, "off", 630, 240); }
+        if(host.getActiveSectors()[2]) {
+            small.draw(batch, "on", 500, 240);
+        } else { small.draw(batch, "off", 500, 240); }
+        if(host.getActiveSectors()[3]) {
+            small.draw(batch, "on", 500, 350);
+        } else { small.draw(batch, "off", 500, 350); }
+
+    }
 
     public void draw6sectors() {
         if(host.getActiveSectors()[0]) {
