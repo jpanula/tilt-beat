@@ -89,6 +89,9 @@ public class MainMenu implements Screen{
         }
         if (playButton.contains(touchPos.x, touchPos.y)  && !Gdx.input.isTouched()) {
             host.setScreen(new Difficulty(host));
+            if (host.howManySectorsActive()==0) {
+                host.setScreen(new SectorsOff(host));
+            }
         }
         if (settingsButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setScreen(new Settings(host));

@@ -1192,6 +1192,9 @@ public class GameScreen implements Screen {
                 draw8sectors();
             } else if (playerSides == 6) {
                 draw6sectors();
+            } else if (playerSides == 4) {
+                if (host.isTiltedSquare()) { drawDiamondSectors();
+                } else {drawSquareSectors(); }
             }
         }
 
@@ -1391,6 +1394,27 @@ public class GameScreen implements Screen {
 
     }
 
+    public void drawSquareSectors() {
+        if(!host.getActiveSectors()[0]) {
+            verySmall.draw(batch, "off", 690, 410); }
+        if(!host.getActiveSectors()[1]) {
+            verySmall.draw(batch, "off", 610, 340); }
+        if(!host.getActiveSectors()[2]) {
+            verySmall.draw(batch, "off", 550, 410); }
+        if(!host.getActiveSectors()[3]) {
+            verySmall.draw(batch, "off", 610, 470); }
+    }
+
+    public void drawDiamondSectors() {
+        if(!host.getActiveSectors()[0]) {
+            verySmall.draw(batch, "off", 650, 450); }
+        if(!host.getActiveSectors()[1]) {
+            verySmall.draw(batch, "off", 650, 370); }
+        if(!host.getActiveSectors()[2]) {
+            verySmall.draw(batch, "off", 580, 370); }
+        if(!host.getActiveSectors()[3]) {
+            verySmall.draw(batch, "off", 580, 450); }
+    }
 
     public void draw6sectors() {
         if(!host.getActiveSectors()[0]) {
@@ -1457,6 +1481,7 @@ public class GameScreen implements Screen {
     @Override
     public void pause() {
         paused = true;
+        moveHerePauseMenuButtons();
     }
 
     @Override

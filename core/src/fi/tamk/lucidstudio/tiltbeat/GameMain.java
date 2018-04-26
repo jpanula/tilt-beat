@@ -40,7 +40,6 @@ public class GameMain extends Game {
 	private Texture playAgainButton;
     private Texture settingsButton;
     private Texture textBox;
-    private Texture easyTexture;
     private BitmapFont verySmallFont;
     private BitmapFont smallFont;
     private BitmapFont basicFont;
@@ -81,6 +80,7 @@ public class GameMain extends Game {
 
     public void setTiltedSquare(boolean tilted) {
 	    prefs.putBoolean("tiltedSquare", tilted);
+        prefs.flush();
     }
 
     public AssetManager getManager() {
@@ -146,6 +146,17 @@ public class GameMain extends Game {
         }
         prefs.putString("activeSectors", newSetting);
         prefs.flush();
+    }
+
+    public int howManySectorsActive() {
+	    int a = 0;
+        String prefString = prefs.getString("activeSectors");
+        for (int i=0 ; i<getPlayerSides() ; i++) {
+            if (prefString.charAt(i) == '1') {
+                a++;
+            }
+        }
+	    return a;
     }
 
     public boolean isSoundOn() {
@@ -251,8 +262,6 @@ public class GameMain extends Game {
     public Texture getSettingsButtonTexture() { return settingsButton; }
 
     public Texture getTextBoxTexture() { return textBox; }
-
-    public Texture getEasyTexture() { return easyTexture; }
 
     public BitmapFont getHeadingFont() { return headingFont; }
 
