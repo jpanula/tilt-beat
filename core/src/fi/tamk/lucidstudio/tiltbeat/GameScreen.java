@@ -2,7 +2,6 @@ package fi.tamk.lucidstudio.tiltbeat;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
@@ -41,9 +40,6 @@ public class GameScreen implements Screen {
     private boolean paused;
     private boolean changeSettings;
     private boolean useShapeRenderer;
-    private Texture pointTexture;
-    private Texture holdTexture;
-    private Texture slideTexture;
     private Vector3 touchPos;
     //private boolean loaded;
 
@@ -83,7 +79,54 @@ public class GameScreen implements Screen {
     private Texture eightside;
     private Texture tenside;
     private Texture pointerTexture;
-    private Texture tickTexture;
+
+    private Texture bluePointTexture;
+    private Texture greenPointTexture;
+    private Texture yellowPointTexture;
+    private Texture pinkPointTexture;
+    private Texture redPointTexture;
+
+    private Texture blueHoldTexture;
+    private Texture greenHoldTexture;
+    private Texture yellowHoldTexture;
+    private Texture pinkHoldTexture;
+    private Texture redHoldTexture;
+
+    private Texture blueSlideTexture;
+    private Texture greenSlideTexture;
+    private Texture yellowSlideTexture;
+    private Texture pinkSlideTexture;
+    private Texture redSlideTexture;
+
+    private Texture blueTickTexture;
+    private Texture greenTickTexture;
+    private Texture yellowTickTexture;
+    private Texture pinkTickTexture;
+    private Texture redTickTexture;
+
+    private Animation<TextureRegion> blueHitAnimation;
+    private Animation<TextureRegion> greenHitAnimation;
+    private Animation<TextureRegion> yellowHitAnimation;
+    private Animation<TextureRegion> pinkHitAnimation;
+    private Animation<TextureRegion> redHitAnimation;
+
+    private ParticleEffect blueParticleEffect;
+    private ParticleEffect greenParticleEffect;
+    private ParticleEffect yellowParticleEffect;
+    private ParticleEffect pinkParticleEffect;
+    private ParticleEffect redParticleEffect;
+
+    private TextureAtlas blueHitAnimationAtlas;
+    private TextureAtlas greenHitAnimationAtlas;
+    private TextureAtlas yellowHitAnimationAtlas;
+    private TextureAtlas pinkHitAnimationAtlas;
+    private TextureAtlas redHitAnimationAtlas;
+
+    private TextureAtlas blueParticleEffectAtlas;
+    private TextureAtlas greenParticleEffectAtlas;
+    private TextureAtlas yellowParticleEffectAtlas;
+    private TextureAtlas pinkParticleEffectAtlas;
+    private TextureAtlas redParticleEffectAtlas;
 
     /**
      * Pelaajan kulmiosysteemin luokka
@@ -369,10 +412,14 @@ public class GameScreen implements Screen {
         private int sector;
         private float distance;
         private boolean hit;
+        private Texture texture;
+        private ParticleEffect effect;
+        private Animation<TextureRegion> scoreAnimation;
 
-        public Note(int sector, float distance) {
+        public Note(int sector, float distance, String color) {
             this.sector = sector;
             this.distance = distance;
+            setColor(color);
             hit = false;
         }
 
@@ -400,9 +447,87 @@ public class GameScreen implements Screen {
             this.hit = hit;
         }
 
+        public void setTexture(Texture texture) {
+            this.texture = texture;
+        }
+
+        public Texture getTexture() {
+            return texture;
+        }
+
+        public ParticleEffect getEffect() {
+            return effect;
+        }
+
+        public Animation<TextureRegion> getScoreAnimation() {
+            return scoreAnimation;
+        }
+
         public void move(float noteSpeed) {
             if (!isHit()) {
                 distance -= noteSpeed * Gdx.graphics.getDeltaTime();
+            }
+        }
+
+        public void setColor(String color) {
+            color = color.toLowerCase();
+            if (color.equals("blue")) {
+                if (this instanceof  Point) {
+                    this.texture = bluePointTexture;
+                } else if (this instanceof Hold) {
+                    this.texture = blueHoldTexture;
+                } else if (this instanceof Hold.Tick) {
+                    this.texture = blueTickTexture;
+                }
+                this.scoreAnimation = blueHitAnimation;
+                this.effect = blueParticleEffect;
+
+            } else if (color.equals("green")) {
+                if (this instanceof  Point) {
+                    this.texture = greenPointTexture;
+                } else if (this instanceof Hold) {
+                    this.texture = greenHoldTexture;
+                } else if (this instanceof Hold.Tick) {
+                    this.texture = greenTickTexture;
+                }
+                this.scoreAnimation = greenHitAnimation;
+                this.effect = greenParticleEffect;
+
+            } else if (color.equals("yellow")) {
+                if (this instanceof  Point) {
+                    this.texture = yellowPointTexture;
+                } else if (this instanceof Hold) {
+                    this.texture = yellowHoldTexture;
+                } else if (this instanceof Hold.Tick) {
+                    this.texture = yellowTickTexture;
+                }
+                this.scoreAnimation = yellowHitAnimation;
+                this.effect = yellowParticleEffect;
+
+            } else if (color.equals("red")){
+                if (this instanceof  Point) {
+                    this.texture = redPointTexture;
+                } else if (this instanceof Hold) {
+                    this.texture = redHoldTexture;
+                } else if (this instanceof Hold.Tick) {
+                    this.texture = redTickTexture;
+                }
+                this.scoreAnimation = redHitAnimation;
+                this.effect = redParticleEffect;
+
+            } else if (color.equals("pink")) {
+                if (this instanceof  Point) {
+                    this.texture = pinkPointTexture;
+                } else if (this instanceof Hold) {
+                    this.texture = pinkHoldTexture;
+                } else if (this instanceof Hold.Tick) {
+                    this.texture = pinkTickTexture;
+                }
+                this.scoreAnimation = pinkHitAnimation;
+                this.effect = pinkParticleEffect;
+
+            } else {
+                throw new IllegalArgumentException("Invalid color");
             }
         }
 
@@ -410,11 +535,6 @@ public class GameScreen implements Screen {
     }
 
     class Point extends Note {
-        private Texture texture;
-        private TextureAtlas atlas;
-        private TextureAtlas particleAtlas;
-        private ParticleEffect effect;
-        private Animation<TextureRegion> scoreAnimation;
         private Vector2 vector;
         private float width;
         private float height;
@@ -423,15 +543,8 @@ public class GameScreen implements Screen {
         private float animationSize;
 
 
-        public Point(int sector, float distance) {
-            super(sector, distance);
-            this.texture = pointTexture;
-            atlas = new TextureAtlas("Blue Sprite.atlas");
-            scoreAnimation = new Animation<TextureRegion>(0.05f, atlas.getRegions());
-            particleAtlas = getColorForEffect();
-            effect = new ParticleEffect();
-            effect.load(Gdx.files.internal("Testi"), particleAtlas);
-            effect.scaleEffect(1/80f);
+        public Point(int sector, float distance, String color) {
+            super(sector, distance, color);
             width = 1;
             height = (float) 0.7 * width;
             animationSize = 1.1f;
@@ -440,33 +553,16 @@ public class GameScreen implements Screen {
             stateTime = 0;
         }
 
-        public TextureAtlas getColorForEffect() {
-            TextureAtlas tmep = new TextureAtlas("Nuotteja.atlas");
-            if (pointTexture.equals("Smol Blue.png")) {
-                tmep = new TextureAtlas("Nuotteja.atlas");
-            }
-            else if (pointTexture.equals("Smol Green.png")) {
-                tmep = new TextureAtlas("Vihree.atlas");
-            }
-            else if (pointTexture.equals("Smol Pink.png")) {
-                tmep = new TextureAtlas("Pinkki.atlas");
-            }
-            else if (pointTexture.equals("Smol Yellow.png")) {
-                tmep = new TextureAtlas("Keltane.atlas");
-            }
-            return tmep;
-        }
-
         @Override
         public void setHit(boolean hit) {
             super.setHit(hit);
             if (hit) {
-                effect.start();
+                getEffect().start();
             }
         }
 
         public boolean isAnimationFinished() {
-            if (scoreAnimation.isAnimationFinished(stateTime) && effect.isComplete()) {
+            if (getScoreAnimation().isAnimationFinished(stateTime) && getEffect().isComplete()) {
                 return true;
             } else {
                 return false;
@@ -499,14 +595,14 @@ public class GameScreen implements Screen {
                 vector.setLength(getDistance() + host.getPlayerDiameter() / 2);
             }
             if (!isHit()) {
-                batch.draw(texture, host.getScreenWidth() / 2 + vector.x - width / 2, host.getScreenHeight() / 2 + vector.y - height / 2, width / 2, height / 2, width, height, 1, 1, vector.angle() - 90, 0, 0, texture.getWidth(), texture.getHeight(), flipped, false);
+                batch.draw(getTexture(), host.getScreenWidth() / 2 + vector.x - width / 2, host.getScreenHeight() / 2 + vector.y - height / 2, width / 2, height / 2, width, height, 1, 1, vector.angle() - 90, 0, 0, getTexture().getWidth(), getTexture().getHeight(), flipped, false);
             } else {
-                if (!scoreAnimation.isAnimationFinished(stateTime)) {
-                    TextureRegion keyframe = new TextureRegion(scoreAnimation.getKeyFrame(stateTime));
+                if (!getScoreAnimation().isAnimationFinished(stateTime)) {
+                    TextureRegion keyframe = new TextureRegion(getScoreAnimation().getKeyFrame(stateTime));
                     batch.draw(keyframe, host.getScreenWidth() / 2 + vector.x - animationSize / 2, host.getScreenHeight() / 2 + vector.y - animationSize / 2, animationSize / 2, animationSize / 2, animationSize, animationSize, animationSize, animationSize, vector.angle(), false);
                 }
-                effect.setPosition(host.getScreenWidth() / 2 + vector.x, host.getScreenHeight() / 2 + vector.y);
-                effect.draw(batch, Gdx.graphics.getDeltaTime());
+                getEffect().setPosition(host.getScreenWidth() / 2 + vector.x, host.getScreenHeight() / 2 + vector.y);
+                getEffect().draw(batch, Gdx.graphics.getDeltaTime());
                 stateTime += Gdx.graphics.getDeltaTime();
             }
 
@@ -518,7 +614,6 @@ public class GameScreen implements Screen {
     }
 
     class Hold extends Note {
-        private Texture texture;
         private Vector2 startPoint;
         private Vector2 endPoint;
         private float length;
@@ -530,14 +625,12 @@ public class GameScreen implements Screen {
         private boolean scored;
 
         class Tick extends Note {
-            private Texture texture;
             private Vector2 vector;
             private boolean scored;
 
             // Pikkupallerot Hold-nuottien välissä
-            public Tick(int sector, float distance, Texture texture) {
-                super(sector, distance);
-                this.texture = tickTexture;
+            public Tick(int sector, float distance, String color) {
+                super(sector, distance, color);
                 vector = new Vector2(distance, 0);
                 scored = false;
             }
@@ -559,13 +652,12 @@ public class GameScreen implements Screen {
                     vector.setLength(getDistance() + host.getPlayerDiameter() / 2);
                 }
                 if (getDistance() > 0)
-                    batch.draw(texture, host.getScreenWidth() / 2 + vector.x - tickDiameter / 2, host.getScreenHeight() / 2 + vector.y - tickDiameter / 2, tickDiameter, tickDiameter);
+                    batch.draw(getTexture(), host.getScreenWidth() / 2 + vector.x - tickDiameter / 2, host.getScreenHeight() / 2 + vector.y - tickDiameter / 2, tickDiameter, tickDiameter);
             }
         }
 
-        public Hold(int sector, float distance, Texture texture, float length) {
-            super(sector, distance);
-            this.texture = holdTexture;
+        public Hold(int sector, float distance, float length, String color) {
+            super(sector, distance, color);
             this.length = length;
             width = 1;
             tickDiameter = 0.2f;
@@ -583,7 +675,7 @@ public class GameScreen implements Screen {
             endPoint = new Vector2(distance + length, 0);
             ticks = new ArrayList<Tick>();
             for (int i = 2; i < tickAmount - 1; i++) {
-                ticks.add(new Tick(sector, (distance + (float) i / tickAmount * length), tickTexture));
+                ticks.add(new Tick(sector, (distance + (float) i / tickAmount * length), color));
             }
 
         }
@@ -618,7 +710,7 @@ public class GameScreen implements Screen {
                 startPoint.setLength(getDistance() + host.getPlayerDiameter() / 2);
             }
             if (getDistance() > 0) {
-                batch.draw(texture, host.getScreenWidth() / 2 + startPoint.x - width / 2, host.getScreenHeight() / 2 + startPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, startPoint.angle() - 90, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
+                batch.draw(getTexture(), host.getScreenWidth() / 2 + startPoint.x - width / 2, host.getScreenHeight() / 2 + startPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, startPoint.angle() - 90, 0, 0, getTexture().getWidth(), getTexture().getHeight(), false, false);
             }
             endPoint.setLength(getDistance() + length + host.getPlayerInradius());
             endPoint.setAngle(90 - (360 / host.getPlayerSides()) * getSector() - (360 / host.getPlayerSides()) / 2);
@@ -626,7 +718,7 @@ public class GameScreen implements Screen {
                 endPoint.setAngle(endPoint.angle() - 45);
                 endPoint.setLength(getDistance() + host.getPlayerDiameter() / 2 + length);
             }
-            batch.draw(texture, host.getScreenWidth() / 2 + endPoint.x - width / 2, host.getScreenHeight() / 2 + endPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, endPoint.angle() - 90, 0, 0, texture.getWidth(), texture.getHeight(), false, true);
+            batch.draw(getTexture(), host.getScreenWidth() / 2 + endPoint.x - width / 2, host.getScreenHeight() / 2 + endPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, endPoint.angle() - 90, 0, 0, getTexture().getWidth(), getTexture().getHeight(), false, true);
         }
 
         @Override
@@ -641,17 +733,35 @@ public class GameScreen implements Screen {
     class Slide extends Note {
         private ArrayList<Point> notes;
 
-        public Slide(int sector, float distance, ArrayList<Point> notes) {
-            super(sector, distance);
+        public Slide(int sector, float distance, ArrayList<Point> notes, String color) {
+            super(sector, distance, color);
             // Muutetaan annetun nuottikasan sektorit ja etäisyys koko Sliden mukaan
             for (int i = 0; i < notes.size(); i++) {
                 Point note = notes.get(i);
+                setPointColor(note, color);
                 note.setSector((note.getSector() + sector) % host.getPlayerSides());
                 note.setDistance(note.getDistance() + distance);
             }
             this.notes = notes;
         }
-
+        
+        public void setPointColor(Point note, String color) {
+            color = color.toLowerCase();
+            if (color.equals("blue")) {
+                note.setTexture(blueSlideTexture);
+            } else if (color.equals("green")) {
+                note.setTexture(greenSlideTexture);
+            } else if (color.equals("yellow")) {
+                note.setTexture(yellowSlideTexture);
+            } else if (color.equals("pink")) {
+                note.setTexture(pinkSlideTexture);
+            } else if (color.equals("red")) {
+                note.setTexture(redSlideTexture);
+            } else {
+                throw new IllegalArgumentException("Invalid color");
+            }
+        }
+        
         public ArrayList<Point> getNotes() {
             return notes;
         }
@@ -707,22 +817,42 @@ public class GameScreen implements Screen {
         manager.load("Galaxy dark purple.png", Texture.class);
         manager.load("soundOn.png", Texture.class);
         manager.load("soundOff.png", Texture.class);
+
         manager.load("Smol Blue.png", Texture.class);
         manager.load("Smol Blue Hold.png", Texture.class);
         manager.load("Smol Blue Slide.png", Texture.class);
         manager.load("Smol Blue Ball.png", Texture.class);
+        manager.load("Blue sprite.atlas", TextureAtlas.class);
+        manager.load("Nuotteja.atlas", TextureAtlas.class);
+
         manager.load("Smol Green.png", Texture.class);
         manager.load("Smol Green Hold.png", Texture.class);
         manager.load("Smol Green Slide.png", Texture.class);
         manager.load("Smol Green Ball.png", Texture.class);
+        manager.load("Green sprite.atlas", TextureAtlas.class);
+        manager.load("Vihree.atlas", TextureAtlas.class);
+
         manager.load("Smol Pink.png", Texture.class);
         manager.load("Smol Pink Hold.png", Texture.class);
         manager.load("Smol Pink Slide.png", Texture.class);
         manager.load("Smol Pink Ball.png", Texture.class);
+        manager.load("Pink sprite.atlas", TextureAtlas.class);
+        manager.load("Pinkki.atlas", TextureAtlas.class);
+
         manager.load("Smol Yellow.png", Texture.class);
         manager.load("Smol Yellow Hold.png", Texture.class);
         manager.load("Smol Yellow Slide.png", Texture.class);
         manager.load("Smol Yellow Ball.png", Texture.class);
+        manager.load("Yellow sprite.atlas", TextureAtlas.class);
+        manager.load("Keltane.atlas", TextureAtlas.class);
+
+        manager.load("Smol Red.png", Texture.class);
+        manager.load("Smol Red Hold.png", Texture.class);
+        manager.load("Smol Red Slide.png", Texture.class);
+        manager.load("Smol Red Ball.png", Texture.class);
+        manager.load("Red sprite.atlas", TextureAtlas.class);
+        manager.load("Punane.atlas", TextureAtlas.class);
+
         manager.load("square.png", Texture.class);
         manager.load("tiltedSquare.png", Texture.class);
         manager.load("sixside.png", Texture.class);
@@ -736,16 +866,67 @@ public class GameScreen implements Screen {
         background = manager.get("Galaxy dark purple.png");
         soundOnTexture = manager.get("soundOn.png");
         soundOffTexture = manager.get("soundOff.png");
-        pointTexture = manager.get("Smol Blue.png");
-        holdTexture = manager.get("Smol Blue Hold.png");
-        slideTexture = manager.get("Smol Blue Slide.png");
         pointerTexture = manager.get("pointer.png");
         square = manager.get("square.png");
         tiltedSquare = manager.get("tiltedSquare.png");
         sixside = manager.get("sixside.png");
         eightside = manager.get("eightside.png");
         tenside = manager.get("tenside.png");
-        tickTexture = manager.get("Smol Blue Ball.png");
+
+        bluePointTexture = manager.get("Smol Blue.png");
+        blueHoldTexture = manager.get("Smol Blue Hold.png");
+        blueSlideTexture = manager.get("Smol Blue Slide.png");
+        blueTickTexture = manager.get("Smol Blue Ball.png");
+        blueHitAnimationAtlas = manager.get("Blue sprite.atlas");
+        blueParticleEffectAtlas = manager.get("Nuotteja.atlas");
+        blueHitAnimation = new Animation<TextureRegion>(0.05f, blueHitAnimationAtlas.getRegions());
+        blueParticleEffect = new ParticleEffect();
+        blueParticleEffect.load(Gdx.files.internal("Testi"), blueParticleEffectAtlas);
+        blueParticleEffect.scaleEffect(1/80f);
+
+        greenPointTexture = manager.get("Smol Green.png");
+        greenHoldTexture = manager.get("Smol Green Hold.png");
+        greenSlideTexture = manager.get("Smol Green Slide.png");
+        greenTickTexture = manager.get("Smol Green Ball.png");
+        greenHitAnimationAtlas = manager.get("Green sprite.atlas");
+        greenParticleEffectAtlas = manager.get("Vihree.atlas");
+        greenHitAnimation = new Animation<TextureRegion>(0.05f, greenHitAnimationAtlas.getRegions());
+        greenParticleEffect = new ParticleEffect();
+        greenParticleEffect.load(Gdx.files.internal("Testi"), greenParticleEffectAtlas);
+        greenParticleEffect.scaleEffect(1/80f);
+
+        yellowPointTexture = manager.get("Smol Yellow.png");
+        yellowHoldTexture = manager.get("Smol Yellow Hold.png");
+        yellowSlideTexture = manager.get("Smol Yellow Slide.png");
+        yellowTickTexture = manager.get("Smol Yellow Ball.png");
+        yellowHitAnimationAtlas = manager.get("Yellow sprite.atlas");
+        yellowParticleEffectAtlas = manager.get("Keltane.atlas");
+        yellowHitAnimation = new Animation<TextureRegion>(0.05f, yellowHitAnimationAtlas.getRegions());
+        yellowParticleEffect = new ParticleEffect();
+        yellowParticleEffect.load(Gdx.files.internal("Testi"), yellowParticleEffectAtlas);
+        yellowParticleEffect.scaleEffect(1/80f);
+
+        pinkPointTexture = manager.get("Smol Pink.png");
+        pinkHoldTexture = manager.get("Smol Pink Hold.png");
+        pinkSlideTexture = manager.get("Smol Pink Slide.png");
+        pinkTickTexture = manager.get("Smol Pink Ball.png");
+        pinkHitAnimationAtlas = manager.get("Pink sprite.atlas");
+        pinkParticleEffectAtlas = manager.get("Pinkki.atlas");
+        pinkHitAnimation = new Animation<TextureRegion>(0.05f, pinkHitAnimationAtlas.getRegions());
+        pinkParticleEffect = new ParticleEffect();
+        pinkParticleEffect.load(Gdx.files.internal("Testi"), pinkParticleEffectAtlas);
+        pinkParticleEffect.scaleEffect(1/80f);
+
+        redPointTexture = manager.get("Smol Red.png");
+        redHoldTexture = manager.get("Smol Red Hold.png");
+        redSlideTexture = manager.get("Smol Red Slide.png");
+        redTickTexture = manager.get("Smol Red Ball.png");
+        redHitAnimationAtlas = manager.get("Red sprite.atlas");
+        redParticleEffectAtlas = manager.get("Punane.atlas");
+        redHitAnimation = new Animation<TextureRegion>(0.05f, redHitAnimationAtlas.getRegions());
+        redParticleEffect = new ParticleEffect();
+        redParticleEffect.load(Gdx.files.internal("Testi"), redParticleEffectAtlas);
+        redParticleEffect.scaleEffect(1/80f);
 
         playerSides = host.getPlayerSides();
         playerDiameter = host.getPlayerDiameter();
@@ -775,7 +956,7 @@ public class GameScreen implements Screen {
 
         for (int i = 0; i < totalBeats - startOffset ; i++) {
             int noteColor = MathUtils.random(0, 3);
-            changePointTexture(noteColor);
+            //changePointTexture(noteColor);
             int randomSector = MathUtils.random(0, (playerSides-1));
             randomSector = moveNotes(randomSector);
             //jos ei järjestelmällinen siirtäminen toimi (koska uusi sektori myös passiivinen) niin arvotaan uusi paikka
@@ -784,19 +965,19 @@ public class GameScreen implements Screen {
             }
             int randomNoteType = MathUtils.random(0, 7);
             if (randomNoteType < 5) {
-                song.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60)));
+                song.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), "blue"));
             } else if (randomNoteType < 7) {
-                song.add(new Hold((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), holdTexture, noteSpeed / (bpm / 60)));
+                song.add(new Hold((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), noteSpeed / (bpm / 60), "blue"));
                 i++;
             } else {
                 ArrayList<Point> slideGen = new ArrayList<Point>();
-                slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60)));
+                slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), "blue"));
                 randomSector++;
                 randomSector = moveNotes(randomSector % playerSides);
                 while (!isSectorActive(randomSector % playerSides)) {
                     randomSector = MathUtils.random(0, (playerSides - 1));
                 }
-                slideGen.add(new Point((randomSector) % playerSides, (i + 0.5f) * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60)));
+                slideGen.add(new Point((randomSector) % playerSides, (i + 0.5f) * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), "blue"));
                 i++;
                 if (randomSector == 0) {
                     randomSector = host.getPlayerSides() - 1;
@@ -807,20 +988,20 @@ public class GameScreen implements Screen {
                 while (!isSectorActive(randomSector % playerSides)) {
                     randomSector = MathUtils.random(0, (playerSides - 1));
                 }
-                slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60)));
+                slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), "blue"));
                 slideGen.get(1).flip();
-                song.add(new Slide(0, 0, slideGen));
+                song.add(new Slide(0, 0, slideGen, "blue"));
             }
         }
             /*
             int rand = MathUtils.random(0, 5);
             for (int j = 0; j < 3; j++) {
                 if (rand == 0) {
-                song.add(new Point(((rand + j) % playerSides), 2.5f * i * noteSpeed + j * 0.8f * noteSpeed, pointTexture));
+                song.add(new Point(((rand + j) % playerSides), 2.5f * i * noteSpeed + j * 0.8f * noteSpeed, bluePointTexture));
                 } else if (rand == 1) {
-                    song.add(new Point(((rand - j) % playerSides), 2.5f * i * noteSpeed + j * 0.8f * noteSpeed, pointTexture));
+                    song.add(new Point(((rand - j) % playerSides), 2.5f * i * noteSpeed + j * 0.8f * noteSpeed, bluePointTexture));
                 } else {
-                    song.add(new Point(((rand) % playerSides), 2.5f * i * noteSpeed + j * 0.5f *  noteSpeed, pointTexture));
+                    song.add(new Point(((rand) % playerSides), 2.5f * i * noteSpeed + j * 0.5f *  noteSpeed, bluePointTexture));
                 }
             }*/
 
@@ -857,28 +1038,28 @@ public class GameScreen implements Screen {
 
     public void changePointTexture(int a) {
         if (a==0) {
-            pointTexture = manager.get("Smol Blue.png");
-            holdTexture = manager.get("Smol Blue Hold.png");
-            slideTexture = manager.get("Smol Blue Slide.png");
-            tickTexture = manager.get("Smol Blue Ball.png");
+            bluePointTexture = manager.get("Smol Blue.png");
+            blueHoldTexture = manager.get("Smol Blue Hold.png");
+            blueSlideTexture = manager.get("Smol Blue Slide.png");
+            blueTickTexture = manager.get("Smol Blue Ball.png");
         }
         if (a==1) {
-            pointTexture = manager.get("Smol Green.png");
-            holdTexture = manager.get("Smol Green Hold.png");
-            slideTexture = manager.get("Smol Green Slide.png");
-            tickTexture = manager.get("Smol Green Ball.png");
+            bluePointTexture = manager.get("Smol Green.png");
+            blueHoldTexture = manager.get("Smol Green Hold.png");
+            blueSlideTexture = manager.get("Smol Green Slide.png");
+            blueTickTexture = manager.get("Smol Green Ball.png");
         }
         if (a==2) {
-            pointTexture = manager.get("Smol Pink.png");
-            holdTexture = manager.get("Smol Pink Hold.png");
-            slideTexture = manager.get("Smol Pink Slide.png");
-            tickTexture = manager.get("Smol Pink Ball.png");
+            bluePointTexture = manager.get("Smol Pink.png");
+            blueHoldTexture = manager.get("Smol Pink Hold.png");
+            blueSlideTexture = manager.get("Smol Pink Slide.png");
+            blueTickTexture = manager.get("Smol Pink Ball.png");
         }
         if (a==3) {
-            pointTexture = manager.get("Smol Yellow.png");
-            holdTexture = manager.get("Smol Yellow Hold.png");
-            slideTexture = manager.get("Smol Yellow Slide.png");
-            tickTexture = manager.get("Smol Yellow Ball.png");
+            bluePointTexture = manager.get("Smol Yellow.png");
+            blueHoldTexture = manager.get("Smol Yellow Hold.png");
+            blueSlideTexture = manager.get("Smol Yellow Slide.png");
+            blueTickTexture = manager.get("Smol Yellow Ball.png");
         }
     }
 
