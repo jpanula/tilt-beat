@@ -1338,7 +1338,9 @@ public class GameScreen implements Screen {
                 if (note.getSector() == player.getPointerSector() && !note.isHit()) {
                     note.setHit(true);
                     points += pointMulti;
-                    soundEffect.play();
+                    if (host.isSoundOn()) {
+                        soundEffect.play();
+                    }
                 // Muuten FAIL
                 } else if (note.getDistance() < -0.35f || !note.isHit()){
                     System.out.println("FAIL!");
@@ -1355,7 +1357,9 @@ public class GameScreen implements Screen {
                     if (note.getSector() == player.getPointerSector()) {
                         iter.remove();
                         points += pointMulti*2;
-                        soundEffect.play();
+                        if (host.isSoundOn()) {
+                            soundEffect.play();
+                        }
                     } else if (note.getDistance() < -0.35f){
                         System.out.println("FAIL!");
                         iter.remove();
@@ -1364,7 +1368,9 @@ public class GameScreen implements Screen {
                 if (note.getDistance() <= 0 && !((Hold) note).isScored()) {
                     if (note.getSector() == player.getPointerSector()) {
                         points += pointMulti*2;
-                        soundEffect.play();
+                        if (host.isSoundOn()) {
+                            soundEffect.play();
+                        }
                         ((Hold) note).setScored(true);
                     } else if (note.getDistance() < -0.35f){
                         System.out.println("FAIL!");
@@ -1376,7 +1382,9 @@ public class GameScreen implements Screen {
                     if (tick.getDistance() <= 0 && !tick.isScored()) {
                         if (tick.getSector() == player.getPointerSector()) {
                             points += pointMulti/3;
-                            soundEffect.play();
+                            if (host.isSoundOn()) {
+                                soundEffect.play();
+                            }
                             tick.setScored(true);
                         } else if (note.getDistance() < -0.35f){
                             System.out.println("FAIL!");
@@ -1393,7 +1401,9 @@ public class GameScreen implements Screen {
                         if (point.getSector() == player.getPointerSector()) {
                             points += pointMulti*2;
                             slideIter.remove();
-                            soundEffect.play();
+                            if (host.isSoundOn()) {
+                                soundEffect.play();
+                            }
                         } else if (point.getDistance() < -0.35f){
                             System.out.println("FAIL!");
                             slideIter.remove();
