@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -20,6 +21,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.CharArray;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -44,6 +46,7 @@ public class GameScreen implements Screen {
     //private boolean loaded;
 
     // Musiikki ja bpm
+    private Sound soundEffect;
     private Music jauntyGumption;
     private float bpm;
     // Pituus minuuteissa
@@ -55,6 +58,7 @@ public class GameScreen implements Screen {
     private float playerDiameter;
     private float noteSpeed;
 
+    private char[] list;
     private int points;
     private BitmapFont verySmall;
     private BitmapFont basic;
@@ -932,6 +936,7 @@ public class GameScreen implements Screen {
         playerDiameter = host.getPlayerDiameter();
         player = new Player(playerSides, playerDiameter);
 
+        soundEffect = host.getEffect();
         jauntyGumption = host.getSong();
         bpm = 146;
         // Muutetaan nuottien tiheyttä vaikeusasteen mukaan
@@ -953,7 +958,7 @@ public class GameScreen implements Screen {
         noteSpeed = host.getNoteSpeed();
         song = new ArrayList<Note>();
 
-
+        selectNoteType();
         for (int i = 0; i < totalBeats - startOffset ; i++) {
             int noteColor = MathUtils.random(0, 3);
             //changePointTexture(noteColor);
@@ -964,12 +969,7 @@ public class GameScreen implements Screen {
                 randomSector = MathUtils.random(0, (playerSides-1));
             }
             int randomNoteType = MathUtils.random(0, 7);
-            if (randomNoteType < 5) {
-                song.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), randomColor()));
-            } else if (randomNoteType < 7) {
-                song.add(new Hold((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), noteSpeed / (bpm / 60), "blue"));
-                i++;
-            } else {
+            if ((list[i]=='s') && !(host.getPlayerSides()==4)) {
                 ArrayList<Point> slideGen = new ArrayList<Point>();
                 slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), "blue"));
                 randomSector++;
@@ -991,6 +991,11 @@ public class GameScreen implements Screen {
                 slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), "blue"));
                 slideGen.get(1).flip();
                 song.add(new Slide(0, 0, slideGen, "blue"));
+            } else if (list[i]=='h'){
+                song.add(new Hold((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), noteSpeed / (bpm / 60), "blue"));
+                i++;
+            } else  {
+                song.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), randomColor()));
             }
         }
             /*
@@ -1029,11 +1034,39 @@ public class GameScreen implements Screen {
         playAgainButton.setText(0, 190, "retry", basic);
         settingsButton.setText(-30, 190, "settings", basic);
         calibration.setText(30, 110, "calibration", basic);
-        secondSetting.setText(20, 110, "do something", basic);
         backToPauseMenu.setText(10, 180, "back", basic);
+        secondSetting.setText(17, 110, "effects: on", basic);
+        if (!host.isEffectOn()) {
+            secondSetting.setText("effects: off");
+        }
 
         paused = false;
         useShapeRenderer = true;
+    }
+
+    public void selectNoteType() {
+        int rand = 3;
+        int helper = totalBeats - startOffset;
+        list = new char[helper+1];
+
+        for (int i = 0; i < totalBeats - startOffset ; i++) {
+            list[i] = 'b'; //basic
+        }
+
+        for (int i = 0; i < helper/6 ; i++) {
+            while (list[rand]!=('b')) {
+                rand = MathUtils.random(0, (helper));
+            }
+            list[rand] = 'h'; //hold
+        }
+        for (int i = 0; i < helper/6 ; i++) {
+            while (list[rand]!=('b')) {
+                rand = MathUtils.random(0, (helper));
+            }
+            if (playerSides!=4) {
+                list[rand] = 's'; //slide
+            } else { list[rand] = 'h'; } //hold
+        }
     }
 
     public String randomColor() {
@@ -1189,7 +1222,7 @@ public class GameScreen implements Screen {
             playAgainButton.draw(batch);
         }
         //asetusruutu
-        if(changeSettings) {
+        if (changeSettings) {
             resultBox.draw(batch);
             backToPauseMenu.draw(batch);
             calibration.draw(batch);
@@ -1203,7 +1236,7 @@ public class GameScreen implements Screen {
 
         //väliaikainen millä näkee onko sektorit päällä vai pois
         //piirtää sektoreihin "on/off"
-        if(!song.isEmpty() && !paused) {
+        if (!song.isEmpty() && !paused) {
             if (playerSides == 10) {
                 draw10sectors();
             } else if (playerSides == 8) {
@@ -1211,8 +1244,11 @@ public class GameScreen implements Screen {
             } else if (playerSides == 6) {
                 draw6sectors();
             } else if (playerSides == 4) {
-                if (host.isTiltedSquare()) { drawDiamondSectors();
-                } else {drawSquareSectors(); }
+                if (host.isTiltedSquare()) {
+                    drawDiamondSectors();
+                } else {
+                    drawSquareSectors();
+                }
             }
         }
 
@@ -1250,7 +1286,7 @@ public class GameScreen implements Screen {
         batch.end();
 
         //piirretään sektorit&osoitin vain kun peli päällä
-        if(!song.isEmpty() && !paused) {
+        if (!song.isEmpty() && !paused) {
             // ShapeRenderer render, piirtää annetuilla pisteillä muotoja
             if (useShapeRenderer) {
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
@@ -1272,6 +1308,8 @@ public class GameScreen implements Screen {
         // Musiikin toiminta pausen kanssa
         if (paused) {
             jauntyGumption.pause();
+        } else if (song.isEmpty()) {
+            jauntyGumption.stop();
         } else if (!paused && !jauntyGumption.isPlaying() && !song.isEmpty()) {
             jauntyGumption.play();
         }
@@ -1298,6 +1336,7 @@ public class GameScreen implements Screen {
                 if (note.getSector() == player.getPointerSector() && !note.isHit()) {
                     note.setHit(true);
                     points += 5;
+                    soundEffect.play();
                 // Muuten FAIL
                 } else if (note.getDistance() < -0.35f || !note.isHit()){
                     System.out.println("FAIL!");
@@ -1314,6 +1353,7 @@ public class GameScreen implements Screen {
                     if (note.getSector() == player.getPointerSector()) {
                         iter.remove();
                         points += 10;
+                        soundEffect.play();
                     } else if (note.getDistance() < -0.35f){
                         System.out.println("FAIL!");
                         iter.remove();
@@ -1322,6 +1362,7 @@ public class GameScreen implements Screen {
                 if (note.getDistance() <= 0 && !((Hold) note).isScored()) {
                     if (note.getSector() == player.getPointerSector()) {
                         points += 10;
+                        soundEffect.play();
                         ((Hold) note).setScored(true);
                     } else if (note.getDistance() < -0.35f){
                         System.out.println("FAIL!");
@@ -1333,6 +1374,7 @@ public class GameScreen implements Screen {
                     if (tick.getDistance() <= 0 && !tick.isScored()) {
                         if (tick.getSector() == player.getPointerSector()) {
                             points++;
+                            soundEffect.play();
                             tick.setScored(true);
                         } else if (note.getDistance() < -0.35f){
                             System.out.println("FAIL!");
@@ -1349,6 +1391,7 @@ public class GameScreen implements Screen {
                         if (point.getSector() == player.getPointerSector()) {
                             points += 10;
                             slideIter.remove();
+                            soundEffect.play();
                         } else if (point.getDistance() < -0.35f){
                             System.out.println("FAIL!");
                             slideIter.remove();
@@ -1375,9 +1418,11 @@ public class GameScreen implements Screen {
                 moveAwayPauseMenuButtons();
             }
             if (playAgainButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+                jauntyGumption.stop();
                 host.setScreen(new GameScreen(host));
             }
             if (backButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+                jauntyGumption.stop();
                 host.setScreen(new MainMenu(host));
             }
             if (settingsButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
@@ -1391,7 +1436,13 @@ public class GameScreen implements Screen {
                 //player.pointer.resetSmoothing();
             }
             if (secondSetting.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
-                //toinen asetusjuttu
+                if (host.isEffectOn()) {
+                    host.setEffectsOn(false);
+                    secondSetting.setText("effects: off");
+                } else {
+                    host.setEffectsOn(true);
+                    secondSetting.setText("effects: on");
+                }
             }
             if (soundButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
                 if (host.isSoundOn()) {

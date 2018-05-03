@@ -7,6 +7,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -28,6 +29,7 @@ public class GameMain extends Game {
 	private final float SCREEN_HEIGHT = 10;
 	private final float SCREEN_WIDTH_PIXELS = 1280;
 	private final float SCREEN_HEIGHT_PIXELS = 800;
+	private Sound soundEffect;
     private Music song1;
     private Music song2;
     private Music song3;
@@ -56,6 +58,7 @@ public class GameMain extends Game {
         prefs.putString("songChoice", "song 1");
         prefs.putString("difficulty", "normal");
         prefs.putBoolean("soundOn", true);
+        prefs.putBoolean("effectsOn", true);
         prefs.putFloat("zeroPointX", 0);
         prefs.putFloat("zeroPointY", 0);
         prefs.putFloat("zeroPointZ", 0);
@@ -177,8 +180,17 @@ public class GameMain extends Game {
         return prefs.getBoolean("soundOn");
     }
 
-    public void setSoundOn(boolean soundOn) {
-        prefs.putBoolean("soundOn", soundOn);
+    public void setSoundOn(boolean a) {
+        prefs.putBoolean("soundOn", a);
+        prefs.flush();
+    }
+
+    public boolean isEffectOn() {
+        return prefs.getBoolean("effectsOn");
+    }
+
+    public void setEffectsOn(boolean a) {
+        prefs.putBoolean("effectsOn", a);
         prefs.flush();
     }
 
@@ -212,6 +224,10 @@ public class GameMain extends Game {
 	    else {
 	        return song3;
 	    }
+    }
+
+    public Sound getEffect() {
+	    return soundEffect;
     }
 
 	public SpriteBatch getBatch() {
@@ -353,10 +369,6 @@ public class GameMain extends Game {
 		manager.load("repeat.png", Texture.class);
 		manager.load("settingsnappi.png", Texture.class);
         manager.load("folio.png", Texture.class);
-        //manager.load("easynappi.png", Texture.class);
-        //manager.load("normalnappi.png", Texture.class);
-        //manager.load("hardnappi.png", Texture.class);
-        //manager.load("bbnappi.png", Texture.class);
 
 		manager.finishLoading();
 
@@ -369,20 +381,18 @@ public class GameMain extends Game {
 		playAgainButton = manager.get("repeat.png");
         settingsButton = manager.get("settingsnappi.png");
 		textBox = manager.get("folio.png");
-		//easyTexture = manager.get("easynappi.png");
-        //normalTexture = manager.get("normalnappi.png");
-        //hardTexture = manager.get("hardnappi.png");
-        //bbTexture = manager.get("bbnappi.png");
 
         manager.load("JauntyGumption.ogg", Music.class);
         manager.load("NyanCat.mp3", Music.class);
         manager.load("takeOnMe.mp3", Music.class);
+        manager.load("soundeffect2.wav", Sound.class);
 
         manager.finishLoading();
 
 		song1 = manager.get("JauntyGumption.ogg");
         song2 = manager.get("NyanCat.mp3");
         song3 = manager.get("takeOnMe.mp3");
+        soundEffect = manager.get("soundeffect2.wav");
 
 		createFonts();
 
