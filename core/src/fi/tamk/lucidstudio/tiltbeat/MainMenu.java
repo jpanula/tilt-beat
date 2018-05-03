@@ -28,6 +28,10 @@ public class MainMenu implements Screen{
     private Button modsButton;
     private Button settingsButton;
     private Button highscoreButton;
+    private Button creditsButton;
+    private Button enButton;
+    private Button finButton;
+    private Button circle;
     private Texture background;
     private Vector3 touchPos;
 
@@ -39,11 +43,24 @@ public class MainMenu implements Screen{
         camera = host.getCamera();
         fontCamera = host.getFontCamera();
         background = host.getBackgroundTexture();
+        Texture t = new Texture("copyright.png");
+        Texture en = new Texture("uk.png");
+        Texture fin = new Texture("fin.png");
+        Texture c = new Texture("circle.png");
 
         playButton = new Button(2.8f, 4f, 4f, 1.7f, host.getButtonTexture());
         modsButton = new Button(8.5f, 4f, 4f, 1.7f, host.getButtonTexture());
         settingsButton = new Button(2.8f, 1f, 4f, 1.7f, host.getButtonTexture());
         highscoreButton = new Button(8.5f, 1f, 4f, 1.7f, host.getButtonTexture());
+        creditsButton = new Button(14.5f, .5f, 1f, 1f, t);
+        enButton = new Button(14.5f, 8.5f, 1f, 1f, en);
+        finButton = new Button(13.2f, 8.5f, 1f, 1f, fin);
+
+        if (host.getLanguage().equals("fi")) {
+            circle = new Button(13.1f, 8.4f, 1.2f, 1.2f, c);
+        } else {
+            circle = new Button(14.4f, 8.4f, 1.2f, 1.2f, c);
+        }
 
         heading = host.getHeadingFont();
         basic = host.getBasicFont();
@@ -70,6 +87,10 @@ public class MainMenu implements Screen{
         settingsButton.draw(batch);
         highscoreButton.draw(batch);
         modsButton.draw(batch);
+        creditsButton.draw(batch);
+        enButton.draw(batch);
+        finButton.draw(batch);
+        circle.draw(batch);
 
         batch.setProjectionMatrix(fontCamera.combined);
         //piirrellään fontit
@@ -101,6 +122,17 @@ public class MainMenu implements Screen{
         }
         if (modsButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setScreen(new Mods(host));
+        }
+        if (creditsButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            host.setScreen(new Credits(host));
+        }
+        if (enButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            host.setLanguage("en");
+            circle.setPosition(14.4f, 8.4f);
+        }
+        if (finButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            host.setLanguage("fi");
+            circle.setPosition(13.1f, 8.4f);
         }
         //ottaa napin painalluksen vain kerran
         if (!Gdx.input.isTouched()) {touchPos.set(0, 0, 0);}

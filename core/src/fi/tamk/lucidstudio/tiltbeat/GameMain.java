@@ -59,6 +59,7 @@ public class GameMain extends Game {
         prefs.putString("difficulty", "normal");
         prefs.putBoolean("soundOn", true);
         prefs.putBoolean("effectsOn", true);
+        prefs.putBoolean("highscoreOn", true);
         prefs.putFloat("zeroPointX", 0);
         prefs.putFloat("zeroPointY", 0);
         prefs.putFloat("zeroPointZ", 0);
@@ -68,44 +69,48 @@ public class GameMain extends Game {
         prefs.putBoolean("tiltedSquare", false);
         prefs.putString("language", "en");
 
-        prefs.putString("1stS", "a");
-        prefs.putString("2ndS", "b");
-        prefs.putString("3rdS", "c");
-        prefs.putString("4thS", "d");
-        prefs.putString("5thS", "e");
+        prefs.flush();
+    }
+
+    public void resetHighscore(Preferences prefs) {
+        prefs.putString("1stS", "");
+        prefs.putString("2ndS", "");
+        prefs.putString("3rdS", "");
+        prefs.putString("4thS", "");
+        prefs.putString("5thS", "");
         prefs.putInteger("1st", 0);
         prefs.putInteger("2nd", 0);
         prefs.putInteger("3rd", 0);
         prefs.putInteger("4th", 0);
         prefs.putInteger("5th", 0);
 
-        prefs.putString("1stSN", "a");
-        prefs.putString("2ndSN", "b");
-        prefs.putString("3rdSN", "c");
-        prefs.putString("4thSN", "d");
-        prefs.putString("5thSN", "e");
+        prefs.putString("1stSN", "");
+        prefs.putString("2ndSN", "");
+        prefs.putString("3rdSN", "");
+        prefs.putString("4thSN", "");
+        prefs.putString("5thSN", "");
         prefs.putInteger("1stN", 0);
         prefs.putInteger("2ndN", 0);
         prefs.putInteger("3rdN", 0);
         prefs.putInteger("4thN", 0);
         prefs.putInteger("5thN", 0);
 
-        prefs.putString("1stSH", "a");
-        prefs.putString("2ndSH", "b");
-        prefs.putString("3rdSH", "c");
-        prefs.putString("4thSH", "d");
-        prefs.putString("5thSH", "e");
+        prefs.putString("1stSH", "");
+        prefs.putString("2ndSH", "");
+        prefs.putString("3rdSH", "");
+        prefs.putString("4thSH", "");
+        prefs.putString("5thSH", "");
         prefs.putInteger("1stH", 0);
         prefs.putInteger("2ndH", 0);
         prefs.putInteger("3rdH", 0);
         prefs.putInteger("4thH", 0);
         prefs.putInteger("5thH", 0);
 
-        prefs.putString("1stSB", "a");
-        prefs.putString("2ndSB", "b");
-        prefs.putString("3rdSB", "c");
-        prefs.putString("4thSB", "d");
-        prefs.putString("5thSB", "e");
+        prefs.putString("1stSB", "");
+        prefs.putString("2ndSB", "");
+        prefs.putString("3rdSB", "");
+        prefs.putString("4thSB", "");
+        prefs.putString("5thSB", "");
         prefs.putInteger("1stB", 0);
         prefs.putInteger("2ndB", 0);
         prefs.putInteger("3rdB", 0);
@@ -113,6 +118,7 @@ public class GameMain extends Game {
         prefs.putInteger("5thB", 0);
 
         prefs.flush();
+
     }
 
     public void setEasyHighscore(int a, int score, int[] highScores) {
@@ -320,6 +326,15 @@ public class GameMain extends Game {
 
     public void setEffectsOn(boolean a) {
         prefs.putBoolean("effectsOn", a);
+        prefs.flush();
+    }
+
+    public boolean isHighscoreOn() {
+        return prefs.getBoolean("highscoreOn");
+    }
+
+    public void setHighscoreOn(boolean a) {
+        prefs.putBoolean("highscoreOn", a);
         prefs.flush();
     }
 
@@ -558,6 +573,7 @@ public class GameMain extends Game {
 	    if (!prefs.contains("firstTime")) {
 	        prefs.putBoolean("firstTime", true);
 	        setDefaultPreferences(prefs);
+	        resetHighscore(prefs);
         }
 	    batch = new SpriteBatch();
 	    shapeRenderer = new ShapeRenderer();

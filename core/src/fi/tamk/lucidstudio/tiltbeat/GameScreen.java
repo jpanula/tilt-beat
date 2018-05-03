@@ -63,6 +63,7 @@ public class GameScreen implements Screen {
 
     private char[] list;
     private int points;
+    private int pointMulti;
     private BitmapFont verySmall;
     private BitmapFont basic;
     private BitmapFont heading;
@@ -964,7 +965,7 @@ public class GameScreen implements Screen {
 
         selectNoteType();
         for (int i = 0; i < totalBeats - startOffset ; i++) {
-            int noteColor = MathUtils.random(0, 3);
+            //int noteColor = MathUtils.random(0, 3);
             //changePointTexture(noteColor);
             int randomSector = MathUtils.random(0, (playerSides-1));
             randomSector = moveNotes(randomSector);
@@ -1058,6 +1059,16 @@ public class GameScreen implements Screen {
             highScores = host.getBbScores();
         }
 
+        if (playerSides==4) {
+            pointMulti = 3;
+        } else if (playerSides==6) {
+            pointMulti = 5;
+        } else if (playerSides==8) {
+            pointMulti = 7;
+        } else {
+            pointMulti = 10;
+        }
+
         paused = false;
         useShapeRenderer = true;
     }
@@ -1102,33 +1113,6 @@ public class GameScreen implements Screen {
             return "pink";
         default:
             return "blue";
-        }
-    }
-
-    public void changePointTexture(int a) {
-        if (a==0) {
-            bluePointTexture = manager.get("Smol Blue.png");
-            blueHoldTexture = manager.get("Smol Blue Hold.png");
-            blueSlideTexture = manager.get("Smol Blue Slide.png");
-            blueTickTexture = manager.get("Smol Blue Ball.png");
-        }
-        if (a==1) {
-            bluePointTexture = manager.get("Smol Green.png");
-            blueHoldTexture = manager.get("Smol Green Hold.png");
-            blueSlideTexture = manager.get("Smol Green Slide.png");
-            blueTickTexture = manager.get("Smol Green Ball.png");
-        }
-        if (a==2) {
-            bluePointTexture = manager.get("Smol Pink.png");
-            blueHoldTexture = manager.get("Smol Pink Hold.png");
-            blueSlideTexture = manager.get("Smol Pink Slide.png");
-            blueTickTexture = manager.get("Smol Pink Ball.png");
-        }
-        if (a==3) {
-            bluePointTexture = manager.get("Smol Yellow.png");
-            blueHoldTexture = manager.get("Smol Yellow Hold.png");
-            blueSlideTexture = manager.get("Smol Yellow Slide.png");
-            blueTickTexture = manager.get("Smol Yellow Ball.png");
         }
     }
 
@@ -1353,7 +1337,7 @@ public class GameScreen implements Screen {
                 // Jos pelaajan osoitin on samalla sektorilla, poista nuotti
                 if (note.getSector() == player.getPointerSector() && !note.isHit()) {
                     note.setHit(true);
-                    points += 5;
+                    points += pointMulti;
                     soundEffect.play();
                 // Muuten FAIL
                 } else if (note.getDistance() < -0.35f || !note.isHit()){
@@ -1370,7 +1354,7 @@ public class GameScreen implements Screen {
                 if (note.getDistance() + ((Hold) note).getLength() <= 0) {
                     if (note.getSector() == player.getPointerSector()) {
                         iter.remove();
-                        points += 10;
+                        points += pointMulti*2;
                         soundEffect.play();
                     } else if (note.getDistance() < -0.35f){
                         System.out.println("FAIL!");
@@ -1379,7 +1363,7 @@ public class GameScreen implements Screen {
                 }
                 if (note.getDistance() <= 0 && !((Hold) note).isScored()) {
                     if (note.getSector() == player.getPointerSector()) {
-                        points += 10;
+                        points += pointMulti*2;
                         soundEffect.play();
                         ((Hold) note).setScored(true);
                     } else if (note.getDistance() < -0.35f){
@@ -1391,7 +1375,7 @@ public class GameScreen implements Screen {
                 for (Hold.Tick tick : ((Hold) note).getTicks()) {
                     if (tick.getDistance() <= 0 && !tick.isScored()) {
                         if (tick.getSector() == player.getPointerSector()) {
-                            points++;
+                            points += pointMulti/3;
                             soundEffect.play();
                             tick.setScored(true);
                         } else if (note.getDistance() < -0.35f){
@@ -1407,7 +1391,7 @@ public class GameScreen implements Screen {
                     Point point = slideIter.next();
                     if (point.getDistance() <= 0) {
                         if (point.getSector() == player.getPointerSector()) {
-                            points += 10;
+                            points += pointMulti*2;
                             slideIter.remove();
                             soundEffect.play();
                         } else if (point.getDistance() < -0.35f){
@@ -1480,7 +1464,7 @@ public class GameScreen implements Screen {
         //ottaa napin painalluksen vain kerran
         if (!Gdx.input.isTouched()) {touchPos.set(0, 0, 0);}
 
-        if (song.isEmpty() && addHighscore) {
+        if (song.isEmpty() && addHighscore && host.isHighscoreOn()) {
             checkHighscore();
         }
 
