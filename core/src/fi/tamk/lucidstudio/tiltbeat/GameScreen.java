@@ -41,7 +41,10 @@ public class GameScreen implements Screen {
     private ArrayList<Note> song;
     private boolean paused;
     private boolean changeSettings;
+    private boolean addHighscore;
     private boolean useShapeRenderer;
+    private String[] highscoreNames;
+    private int[] highScores;
     private Vector3 touchPos;
     //private boolean loaded;
 
@@ -809,6 +812,7 @@ public class GameScreen implements Screen {
         // Katotaan jos toimii purkkakorjauksena ettei heti alussa skippaa eteenpäi
         paused = true;
         changeSettings = false;
+        addHighscore = true;
         this.host = host;
         manager = host.getManager();
         batch = host.getBatch();
@@ -1038,6 +1042,20 @@ public class GameScreen implements Screen {
         secondSetting.setText(17, 110, "effects: on", basic);
         if (!host.isEffectOn()) {
             secondSetting.setText("effects: off");
+        }
+
+        if (host.getDifficulty().equals("easy")) {
+            highscoreNames = host.getEasyNames();
+            highScores = host.getEasyScores();
+        } else if (host.getDifficulty().equals("normal")) {
+            highscoreNames = host.getNormalNames();
+            highScores = host.getNormalScores();
+        } else if (host.getDifficulty().equals("hard")) {
+            highscoreNames = host.getHardNames();
+            highScores = host.getHardScores();
+        } else {
+            highscoreNames = host.getBbNames();
+            highScores = host.getBbScores();
         }
 
         paused = false;
@@ -1412,6 +1430,7 @@ public class GameScreen implements Screen {
             if (pauseButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
                 paused = true;
                 moveHerePauseMenuButtons();
+                Gdx.input.setOnscreenKeyboardVisible(true);
             }
             if (playButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
                 paused = false;
@@ -1461,6 +1480,63 @@ public class GameScreen implements Screen {
         //ottaa napin painalluksen vain kerran
         if (!Gdx.input.isTouched()) {touchPos.set(0, 0, 0);}
 
+        if (song.isEmpty() && addHighscore) {
+            checkHighscore();
+        }
+
+    }
+
+    public void checkHighscore() {
+        if (host.getDifficulty().equals("easy")) {
+            if (points > highScores[0]) {
+                host.setEasyHighscore(1, points, highScores);
+            } else if (points > highScores[1]) {
+                host.setEasyHighscore(2, points, highScores);
+            } else if (points > highScores[2]) {
+                host.setEasyHighscore(3, points, highScores);
+            } else if (points > highScores[3]) {
+                host.setEasyHighscore(4, points, highScores);
+            } else if (points > highScores[4]) {
+                host.setEasyHighscore(5, points, highScores);
+            }
+        } else if (host.getDifficulty().equals("normal")) {
+            if (points > highScores[0]) {
+                host.setNormalHighscore(1, points, highScores);
+            } else if (points > highScores[1]) {
+                host.setNormalHighscore(2, points, highScores);
+            } else if (points > highScores[2]) {
+                host.setNormalHighscore(3, points, highScores);
+            } else if (points > highScores[3]) {
+                host.setNormalHighscore(4, points, highScores);
+            } else if (points > highScores[4]) {
+                host.setNormalHighscore(5, points, highScores);
+            }
+        } else if (host.getDifficulty().equals("hard")) {
+            if (points > highScores[0]) {
+                host.setHardHighscore(1, points, highScores);
+            } else if (points > highScores[1]) {
+                host.setHardHighscore(2, points, highScores);
+            } else if (points > highScores[2]) {
+                host.setHardHighscore(3, points, highScores);
+            } else if (points > highScores[3]) {
+                host.setHardHighscore(4, points, highScores);
+            } else if (points > highScores[4]) {
+                host.setHardHighscore(5, points, highScores);
+            }
+        } else {
+            if (points > highScores[0]) {
+                host.setBbHighscore(1, points, highScores);
+            } else if (points > highScores[1]) {
+                host.setBbHighscore(2, points, highScores);
+            } else if (points > highScores[2]) {
+                host.setBbHighscore(3, points, highScores);
+            } else if (points > highScores[3]) {
+                host.setBbHighscore(4, points, highScores);
+            } else if (points > highScores[4]) {
+                host.setBbHighscore(5, points, highScores);
+            }
+        }
+        addHighscore=false;
     }
 
     public void drawSquareSectors() {
@@ -1544,7 +1620,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
     }
 
     @Override
