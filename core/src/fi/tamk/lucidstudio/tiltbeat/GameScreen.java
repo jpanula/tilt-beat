@@ -965,7 +965,7 @@ public class GameScreen implements Screen {
             }
             int randomNoteType = MathUtils.random(0, 7);
             if (randomNoteType < 5) {
-                song.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), "blue"));
+                song.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), randomColor()));
             } else if (randomNoteType < 7) {
                 song.add(new Hold((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), noteSpeed / (bpm / 60), "blue"));
                 i++;
@@ -1034,6 +1034,24 @@ public class GameScreen implements Screen {
 
         paused = false;
         useShapeRenderer = true;
+    }
+
+    public String randomColor() {
+        int random = MathUtils.random(0, 4);
+        switch (random) {
+        case 0:
+            return "blue";
+        case 1:
+            return "green";
+        case 2:
+            return "yellow";
+        case 3:
+            return "red";
+        case 4:
+            return "pink";
+        default:
+            return "blue";
+        }
     }
 
     public void changePointTexture(int a) {
