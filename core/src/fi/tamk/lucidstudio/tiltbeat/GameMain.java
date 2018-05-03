@@ -63,7 +63,21 @@ public class GameMain extends Game {
         prefs.putString("activeSectors", "1111111111");
         prefs.putBoolean("useAccelerometerX", false);
         prefs.putBoolean("tiltedSquare", false);
+        prefs.putString("language", "en");
         prefs.flush();
+    }
+
+    public String getLanguage() {
+	    return prefs.getString("language");
+    }
+
+    public void setLanguage(String id) {
+	    id = id.toLowerCase();
+	    if (id.equals("fi") || id.equals("en")) {
+	        prefs.putString("language", id);
+        } else {
+	        throw new IllegalArgumentException("Not a supported language");
+        }
     }
 
     public boolean isUseAccelerometerX() {
