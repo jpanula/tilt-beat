@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.ParticleEffectLoader;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -878,10 +879,16 @@ public class GameScreen implements Screen {
         blueSlideTexture = manager.get("Smol Blue Slide.png");
         blueTickTexture = manager.get("Smol Blue Ball.png");
         blueHitAnimationAtlas = manager.get("Blue sprite.atlas");
-        blueParticleEffectAtlas = manager.get("Nuotteja.atlas");
+        //blueParticleEffectAtlas = manager.get("Nuotteja.atlas");
         blueHitAnimation = new Animation<TextureRegion>(0.05f, blueHitAnimationAtlas.getRegions());
-        blueParticleEffect = new ParticleEffect();
+        ParticleEffectLoader.ParticleEffectParameter blueParticleEffectParameter = new ParticleEffectLoader.ParticleEffectParameter();
+        blueParticleEffectParameter.atlasFile = "Nuotteja.atlas";
+        manager.load("Testi", ParticleEffect.class, blueParticleEffectParameter);
+        /*blueParticleEffect = new ParticleEffect();
         blueParticleEffect.load(Gdx.files.internal("Testi"), blueParticleEffectAtlas);
+        */
+        manager.finishLoading();
+        blueParticleEffect = manager.get("Testi");
         blueParticleEffect.scaleEffect(1/80f);
 
         greenPointTexture = manager.get("Smol Green.png");
