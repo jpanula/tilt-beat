@@ -154,7 +154,7 @@ public class Settings implements Screen {
     }
 
     public void restoreSettings() {
-        //oletusasetukset tänne
+        host.setDefaultPreferences(host.getPrefs());
     }
 
     @Override
