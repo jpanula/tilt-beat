@@ -131,12 +131,6 @@ public class GameScreen implements Screen {
     private TextureAtlas pinkHitAnimationAtlas;
     private TextureAtlas redHitAnimationAtlas;
 
-    private TextureAtlas blueParticleEffectAtlas;
-    private TextureAtlas greenParticleEffectAtlas;
-    private TextureAtlas yellowParticleEffectAtlas;
-    private TextureAtlas pinkParticleEffectAtlas;
-    private TextureAtlas redParticleEffectAtlas;
-
     /**
      * Pelaajan kulmiosysteemin luokka
      */
@@ -898,7 +892,6 @@ public class GameScreen implements Screen {
         blueSlideTexture = manager.get("Smol Blue Slide.png");
         blueTickTexture = manager.get("Smol Blue Ball.png");
         blueHitAnimationAtlas = manager.get("Blue sprite.atlas");
-        //blueParticleEffectAtlas = manager.get("Nuotteja.atlas");
         blueHitAnimation = new Animation<TextureRegion>(0.05f, blueHitAnimationAtlas.getRegions());
         blueParticleEffect = manager.get("SininenEfekti");
         blueParticleEffect.scaleEffect(1/80f);
@@ -908,7 +901,6 @@ public class GameScreen implements Screen {
         greenSlideTexture = manager.get("Smol Green Slide.png");
         greenTickTexture = manager.get("Smol Green Ball.png");
         greenHitAnimationAtlas = manager.get("Green sprite.atlas");
-        greenParticleEffectAtlas = manager.get("Vihree.atlas");
         greenHitAnimation = new Animation<TextureRegion>(0.05f, greenHitAnimationAtlas.getRegions());
         greenParticleEffect = manager.get("VihreäEfekti");
         greenParticleEffect.scaleEffect(1/80f);
@@ -918,7 +910,6 @@ public class GameScreen implements Screen {
         yellowSlideTexture = manager.get("Smol Yellow Slide.png");
         yellowTickTexture = manager.get("Smol Yellow Ball.png");
         yellowHitAnimationAtlas = manager.get("Yellow sprite.atlas");
-        yellowParticleEffectAtlas = manager.get("Keltane.atlas");
         yellowHitAnimation = new Animation<TextureRegion>(0.05f, yellowHitAnimationAtlas.getRegions());
         yellowParticleEffect = manager.get("KeltainenEfekti");
         yellowParticleEffect.scaleEffect(1/80f);
@@ -928,7 +919,6 @@ public class GameScreen implements Screen {
         pinkSlideTexture = manager.get("Smol Pink Slide.png");
         pinkTickTexture = manager.get("Smol Pink Ball.png");
         pinkHitAnimationAtlas = manager.get("Pink sprite.atlas");
-        pinkParticleEffectAtlas = manager.get("Pinkki.atlas");
         pinkHitAnimation = new Animation<TextureRegion>(0.05f, pinkHitAnimationAtlas.getRegions());
         pinkParticleEffect = manager.get("PinkkiEfekti");
         pinkParticleEffect.scaleEffect(1/80f);
@@ -938,7 +928,6 @@ public class GameScreen implements Screen {
         redSlideTexture = manager.get("Smol Red Slide.png");
         redTickTexture = manager.get("Smol Red Ball.png");
         redHitAnimationAtlas = manager.get("Red sprite.atlas");
-        redParticleEffectAtlas = manager.get("Punane.atlas");
         redHitAnimation = new Animation<TextureRegion>(0.05f, redHitAnimationAtlas.getRegions());
         redParticleEffect = manager.get("PunainenEfekti");
         redParticleEffect.scaleEffect(1/80f);
