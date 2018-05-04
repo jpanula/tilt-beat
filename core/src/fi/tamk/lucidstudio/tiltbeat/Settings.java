@@ -110,7 +110,7 @@ public class Settings implements Screen {
         if (restore.contains(touchPos.x, touchPos.y)) {
             restore.setTexture(host.getButtonPressedTexture());
             if (!Gdx.input.isTouched()) {
-                restoreSettings();
+                host.setDefaultPreferences(host.getPrefs());
                 restore.setTexture(host.getButtonTexture());
             }
         }
@@ -151,10 +151,6 @@ public class Settings implements Screen {
 
         //ottaa napin painalluksen vain kerran
         if (!Gdx.input.isTouched()) {touchPos.set(0, 0, 0);}
-    }
-
-    public void restoreSettings() {
-        host.setDefaultPreferences(host.getPrefs());
     }
 
     @Override

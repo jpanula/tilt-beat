@@ -43,7 +43,7 @@ public class Mods implements Screen {
     private Button textBox;
     private Vector3 touchPos;
     private boolean tiltedSquare;
-    private boolean youTried;
+    private boolean highscoreOn;
 
     ArrayList<Polygon> sectors;
     float[] vertices;
@@ -65,7 +65,7 @@ public class Mods implements Screen {
         buttonTexture = host.getButtonTexture();
         buttonPressedTexture = host.getButtonPressedTexture();
         tiltedSquare = host.isTiltedSquare();
-        youTried = false;
+        highscoreOn = host.isHighscoreOn();
 
         button4 = new Button(1f, 5.3f, 3f, 1.2f, buttonTexture);
         button4twist = new Button(10.5f, 0.7f, 2f, 1.2f, buttonTexture);
@@ -274,9 +274,8 @@ public class Mods implements Screen {
         small.draw(batch, "click sectors to" , 885, 400);
         small.draw(batch, "activate or" , 885, 350);
         small.draw(batch, "de-activate them" , 885, 300);
-        if (youTried) {
-            small.draw(batch, "you cant turn off" , 885, 250);
-            small.draw(batch, "all sectors!!" , 885, 200);
+        if (!highscoreOn) {
+            basic.draw(batch, "highscore offline" , 870, 530);
         }
 
         //väliaikainen millä näkee onko sektorit päällä vai pois
@@ -293,12 +292,17 @@ public class Mods implements Screen {
 
         batch.end();
 
+        if (host.howManySectorsActive() < (playerSides/2)) {
+            highscoreOn = false;
+        } else { highscoreOn = true; }
+
         //nappien toiminnallisuus
         if (Gdx.input.isTouched()) {
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);
         }
         if (backButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            host.setHighscoreOn(highscoreOn);
             host.setScreen(new MainMenu(host));
         }
         if (button4.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {

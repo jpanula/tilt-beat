@@ -79,7 +79,7 @@ public class Difficulty implements Screen {
         easyButton = new Button(1.5f, .5f, 2f, 2f, easyT);
         normalButton = new Button(4.5f, .5f, 2f, 2f, normalT);
         hardButton = new Button(7.2f, .4f, 2.5f, 2.5f, hardT);
-        backBreakerButton = new Button(10.3f, .3f, 2.5f, 2.5f, bbT);
+        backBreakerButton = new Button(10.5f, .4f, 2.3f, 2.3f, bbT);
         song1Button = new Button(10f, 7f, 5f, 1.5f, buttonTexture);
         song2Button = new Button(10f, 5f, 5f, 1.5f, buttonTexture);
         song3Button = new Button(10f, 3f, 5f, 1.5f, buttonTexture);
@@ -88,7 +88,7 @@ public class Difficulty implements Screen {
         easyButton.setText(28, 110, "easy", basic);
         normalButton.setText(5, 110, "normal", basic);
         hardButton.setText(55, 120, "hard", basic);
-        backBreakerButton.setText(-25, 125, "backbreaker", basic);
+        backBreakerButton.setText(-20, 120, "backbreaker", basic);
         song1Button.setText(40, 80, "jaumpty gumpty", small);
         song2Button.setText(40, 80, "nyan cat", small);
         song3Button.setText(40, 80, "take on me", small);
@@ -107,10 +107,10 @@ public class Difficulty implements Screen {
             ringButton.setPosition(4f, 1f);
         } else if (host.getDifficulty().equals("hard")) {
             textBox.setText("fun?\nfor hc players");
-            ringButton.setPosition(7f, 1f);
+            ringButton.setPosition(6.95f, 1f);
         } else {
             textBox.setText("not fun\nyou will die");
-            ringButton.setPosition(10f, 1f);
+            ringButton.setPosition(10.1f, 1f);
         }
 
         if (host.getSongChoice().equals("song 1")) {

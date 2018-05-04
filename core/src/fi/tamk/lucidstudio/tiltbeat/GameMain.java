@@ -7,6 +7,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -28,6 +29,7 @@ public class GameMain extends Game {
 	private final float SCREEN_HEIGHT = 10;
 	private final float SCREEN_WIDTH_PIXELS = 1280;
 	private final float SCREEN_HEIGHT_PIXELS = 800;
+	private Sound soundEffect;
     private Music song1;
     private Music song2;
     private Music song3;
@@ -56,6 +58,8 @@ public class GameMain extends Game {
         prefs.putString("songChoice", "song 1");
         prefs.putString("difficulty", "normal");
         prefs.putBoolean("soundOn", true);
+        prefs.putBoolean("effectsOn", true);
+        prefs.putBoolean("highscoreOn", true);
         prefs.putFloat("zeroPointX", 0);
         prefs.putFloat("zeroPointY", 0);
         prefs.putFloat("zeroPointZ", 0);
@@ -64,6 +68,140 @@ public class GameMain extends Game {
         prefs.putBoolean("useAccelerometerX", false);
         prefs.putBoolean("tiltedSquare", false);
         prefs.putString("language", "en");
+
+        prefs.flush();
+    }
+
+    public void resetHighscore(Preferences prefs) {
+        prefs.putString("1stS", "");
+        prefs.putString("2ndS", "");
+        prefs.putString("3rdS", "");
+        prefs.putString("4thS", "");
+        prefs.putString("5thS", "");
+        prefs.putInteger("1st", 0);
+        prefs.putInteger("2nd", 0);
+        prefs.putInteger("3rd", 0);
+        prefs.putInteger("4th", 0);
+        prefs.putInteger("5th", 0);
+
+        prefs.putString("1stSN", "");
+        prefs.putString("2ndSN", "");
+        prefs.putString("3rdSN", "");
+        prefs.putString("4thSN", "");
+        prefs.putString("5thSN", "");
+        prefs.putInteger("1stN", 0);
+        prefs.putInteger("2ndN", 0);
+        prefs.putInteger("3rdN", 0);
+        prefs.putInteger("4thN", 0);
+        prefs.putInteger("5thN", 0);
+
+        prefs.putString("1stSH", "");
+        prefs.putString("2ndSH", "");
+        prefs.putString("3rdSH", "");
+        prefs.putString("4thSH", "");
+        prefs.putString("5thSH", "");
+        prefs.putInteger("1stH", 0);
+        prefs.putInteger("2ndH", 0);
+        prefs.putInteger("3rdH", 0);
+        prefs.putInteger("4thH", 0);
+        prefs.putInteger("5thH", 0);
+
+        prefs.putString("1stSB", "");
+        prefs.putString("2ndSB", "");
+        prefs.putString("3rdSB", "");
+        prefs.putString("4thSB", "");
+        prefs.putString("5thSB", "");
+        prefs.putInteger("1stB", 0);
+        prefs.putInteger("2ndB", 0);
+        prefs.putInteger("3rdB", 0);
+        prefs.putInteger("4thB", 0);
+        prefs.putInteger("5thB", 0);
+
+        prefs.flush();
+
+    }
+
+    public void setEasyHighscore(int a, int score, int[] highScores) {
+	    switch (a) {
+            case 1: prefs.putInteger("1st", score);
+                    prefs.putInteger("2nd", highScores[0]);
+                    prefs.putInteger("3rd", highScores[1]);
+                    prefs.putInteger("4th", highScores[2]);
+                    prefs.putInteger("5th", highScores[3]); break;
+            case 2: prefs.putInteger("2nd", score);
+                    prefs.putInteger("3rd", highScores[1]);
+                    prefs.putInteger("4th", highScores[2]);
+                    prefs.putInteger("5th", highScores[3]); break;
+            case 3: prefs.putInteger("3rd", score);
+                    prefs.putInteger("4th", highScores[2]);
+                    prefs.putInteger("5th", highScores[3]); break;
+            case 4: prefs.putInteger("4th", score);
+                    prefs.putInteger("5th", highScores[3]); break;
+            case 5: prefs.putInteger("5th", score); break;
+        }
+        prefs.flush();
+    }
+
+    public void setNormalHighscore(int a, int score, int[] highScores) {
+        switch (a) {
+            case 1: prefs.putInteger("1stN", score);
+                prefs.putInteger("2ndN", highScores[0]);
+                prefs.putInteger("3rdN", highScores[1]);
+                prefs.putInteger("4thN", highScores[2]);
+                prefs.putInteger("5thN", highScores[3]); break;
+            case 2: prefs.putInteger("2ndN", score);
+                prefs.putInteger("3rdN", highScores[1]);
+                prefs.putInteger("4thN", highScores[2]);
+                prefs.putInteger("5thN", highScores[3]); break;
+            case 3: prefs.putInteger("3rdN", score);
+                prefs.putInteger("4thN", highScores[2]);
+                prefs.putInteger("5thN", highScores[3]); break;
+            case 4: prefs.putInteger("4thN", score);
+                prefs.putInteger("5thN", highScores[3]); break;
+            case 5: prefs.putInteger("5thN", score); break;
+        }
+        prefs.flush();
+    }
+
+    public void setHardHighscore(int a, int score, int[] highScores) {
+        switch (a) {
+            case 1: prefs.putInteger("1stH", score);
+                prefs.putInteger("2ndH", highScores[0]);
+                prefs.putInteger("3rdH", highScores[1]);
+                prefs.putInteger("4thH", highScores[2]);
+                prefs.putInteger("5thH", highScores[3]); break;
+            case 2: prefs.putInteger("2ndH", score);
+                prefs.putInteger("3rdH", highScores[1]);
+                prefs.putInteger("4thH", highScores[2]);
+                prefs.putInteger("5thH", highScores[3]); break;
+            case 3: prefs.putInteger("3rdH", score);
+                prefs.putInteger("4thH", highScores[2]);
+                prefs.putInteger("5thH", highScores[3]); break;
+            case 4: prefs.putInteger("4thH", score);
+                prefs.putInteger("5thH", highScores[3]); break;
+            case 5: prefs.putInteger("5thH", score); break;
+        }
+        prefs.flush();
+    }
+
+    public void setBbHighscore(int a, int score, int[] highScores) {
+        switch (a) {
+            case 1: prefs.putInteger("1stB", score);
+                prefs.putInteger("2ndB", highScores[0]);
+                prefs.putInteger("3rdB", highScores[1]);
+                prefs.putInteger("4thB", highScores[2]);
+                prefs.putInteger("5thB", highScores[3]); break;
+            case 2: prefs.putInteger("2ndB", score);
+                prefs.putInteger("3rdB", highScores[1]);
+                prefs.putInteger("4thB", highScores[2]);
+                prefs.putInteger("5thB", highScores[3]); break;
+            case 3: prefs.putInteger("3rdB", score);
+                prefs.putInteger("4thB", highScores[2]);
+                prefs.putInteger("5thB", highScores[3]); break;
+            case 4: prefs.putInteger("4thB", score);
+                prefs.putInteger("5thB", highScores[3]); break;
+            case 5: prefs.putInteger("5thB", score); break;
+        }
         prefs.flush();
     }
 
@@ -177,8 +315,26 @@ public class GameMain extends Game {
         return prefs.getBoolean("soundOn");
     }
 
-    public void setSoundOn(boolean soundOn) {
-        prefs.putBoolean("soundOn", soundOn);
+    public void setSoundOn(boolean a) {
+        prefs.putBoolean("soundOn", a);
+        prefs.flush();
+    }
+
+    public boolean isEffectOn() {
+        return prefs.getBoolean("effectsOn");
+    }
+
+    public void setEffectsOn(boolean a) {
+        prefs.putBoolean("effectsOn", a);
+        prefs.flush();
+    }
+
+    public boolean isHighscoreOn() {
+        return prefs.getBoolean("highscoreOn");
+    }
+
+    public void setHighscoreOn(boolean a) {
+        prefs.putBoolean("highscoreOn", a);
         prefs.flush();
     }
 
@@ -212,6 +368,10 @@ public class GameMain extends Game {
 	    else {
 	        return song3;
 	    }
+    }
+
+    public Sound getEffect() {
+	    return soundEffect;
     }
 
 	public SpriteBatch getBatch() {
@@ -309,6 +469,86 @@ public class GameMain extends Game {
         return prefs.getFloat("zeroPointZ");
     }
 
+    public int[] getEasyScores() {
+	    int[] a = new int[5];
+	    a[0] = prefs.getInteger("1st");
+        a[1] = prefs.getInteger("2nd");
+        a[2] = prefs.getInteger("3rd");
+        a[3] = prefs.getInteger("4th");
+        a[4] = prefs.getInteger("5th");
+        return a;
+    }
+
+    public String[] getEasyNames() {
+        String[] a = new String[5];
+        a[0] = prefs.getString("1stS");
+        a[1] = prefs.getString("2ndS");
+        a[2] = prefs.getString("3rdS");
+        a[3] = prefs.getString("4thS");
+        a[4] = prefs.getString("5thS");
+        return a;
+    }
+
+    public int[] getNormalScores() {
+        int[] a = new int[5];
+        a[0] = prefs.getInteger("1stN");
+        a[1] = prefs.getInteger("2ndN");
+        a[2] = prefs.getInteger("3rdN");
+        a[3] = prefs.getInteger("4thN");
+        a[4] = prefs.getInteger("5thN");
+        return a;
+    }
+
+    public String[] getNormalNames() {
+        String[] a = new String[5];
+        a[0] = prefs.getString("1stSN");
+        a[1] = prefs.getString("2ndSN");
+        a[2] = prefs.getString("3rdSN");
+        a[3] = prefs.getString("4thSN");
+        a[4] = prefs.getString("5thSN");
+        return a;
+    }
+
+    public int[] getHardScores() {
+        int[] a = new int[5];
+        a[0] = prefs.getInteger("1stH");
+        a[1] = prefs.getInteger("2ndH");
+        a[2] = prefs.getInteger("3rdH");
+        a[3] = prefs.getInteger("4thH");
+        a[4] = prefs.getInteger("5thH");
+        return a;
+    }
+
+    public String[] getHardNames() {
+        String[] a = new String[5];
+        a[0] = prefs.getString("1stSH");
+        a[1] = prefs.getString("2ndSH");
+        a[2] = prefs.getString("3rdSH");
+        a[3] = prefs.getString("4thSH");
+        a[4] = prefs.getString("5thSH");
+        return a;
+    }
+
+    public int[] getBbScores() {
+        int[] a = new int[5];
+        a[0] = prefs.getInteger("1stB");
+        a[1] = prefs.getInteger("2ndB");
+        a[2] = prefs.getInteger("3rdB");
+        a[3] = prefs.getInteger("4thB");
+        a[4] = prefs.getInteger("5thB");
+        return a;
+    }
+
+    public String[] getBbNames() {
+        String[] a = new String[5];
+        a[0] = prefs.getString("1stSB");
+        a[1] = prefs.getString("2ndSB");
+        a[2] = prefs.getString("3rdSB");
+        a[3] = prefs.getString("4thSB");
+        a[4] = prefs.getString("5thSB");
+        return a;
+    }
+
 	public int getSmoothingSamples() {
 		return prefs.getInteger("smoothingSamples");
 	}
@@ -333,6 +573,7 @@ public class GameMain extends Game {
 	    if (!prefs.contains("firstTime")) {
 	        prefs.putBoolean("firstTime", true);
 	        setDefaultPreferences(prefs);
+	        resetHighscore(prefs);
         }
 	    batch = new SpriteBatch();
 	    shapeRenderer = new ShapeRenderer();
@@ -353,10 +594,6 @@ public class GameMain extends Game {
 		manager.load("repeat.png", Texture.class);
 		manager.load("settingsnappi.png", Texture.class);
         manager.load("folio.png", Texture.class);
-        //manager.load("easynappi.png", Texture.class);
-        //manager.load("normalnappi.png", Texture.class);
-        //manager.load("hardnappi.png", Texture.class);
-        //manager.load("bbnappi.png", Texture.class);
 
 		manager.finishLoading();
 
@@ -369,20 +606,18 @@ public class GameMain extends Game {
 		playAgainButton = manager.get("repeat.png");
         settingsButton = manager.get("settingsnappi.png");
 		textBox = manager.get("folio.png");
-		//easyTexture = manager.get("easynappi.png");
-        //normalTexture = manager.get("normalnappi.png");
-        //hardTexture = manager.get("hardnappi.png");
-        //bbTexture = manager.get("bbnappi.png");
 
         manager.load("JauntyGumption.ogg", Music.class);
         manager.load("NyanCat.mp3", Music.class);
         manager.load("takeOnMe.mp3", Music.class);
+        manager.load("soundeffect2.wav", Sound.class);
 
         manager.finishLoading();
 
 		song1 = manager.get("JauntyGumption.ogg");
         song2 = manager.get("NyanCat.mp3");
         song3 = manager.get("takeOnMe.mp3");
+        soundEffect = manager.get("soundeffect2.wav");
 
 		createFonts();
 
@@ -456,7 +691,7 @@ public class GameMain extends Game {
 	public void render () {
 	    super.render();
 	}
-	
+
 	@Override
 	public void dispose () {
 		batch.dispose();
