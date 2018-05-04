@@ -964,38 +964,47 @@ public class GameScreen implements Screen {
         song = new ArrayList<Note>();
 
         selectNoteType();
+        boolean clockwise = true;
+        boolean roomForSlide = false;
         for (int i = 0; i < totalBeats - startOffset ; i++) {
-            //int noteColor = MathUtils.random(0, 3);
-            //changePointTexture(noteColor);
             int randomSector = MathUtils.random(0, (playerSides-1));
             randomSector = moveNotes(randomSector);
             //jos ei järjestelmällinen siirtäminen toimi (koska uusi sektori myös passiivinen) niin arvotaan uusi paikka
             while (!isSectorActive(randomSector)) {
                 randomSector = MathUtils.random(0, (playerSides-1));
             }
-            int randomNoteType = MathUtils.random(0, 7);
             if ((list[i]=='s') && !(host.getPlayerSides()==4)) {
-                ArrayList<Point> slideGen = new ArrayList<Point>();
-                slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), "blue"));
-                randomSector++;
-                randomSector = moveNotes(randomSector % playerSides);
-                while (!isSectorActive(randomSector % playerSides)) {
-                    randomSector = MathUtils.random(0, (playerSides - 1));
-                }
-                slideGen.add(new Point((randomSector) % playerSides, (i + 0.5f) * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), "blue"));
-                i++;
-                if (randomSector == 0) {
-                    randomSector = host.getPlayerSides() - 1;
+                //lasketaan valmiiks vierekkäiset sektorit
+                int helperPlus = randomSector+1;
+                if (helperPlus==playerSides) { helperPlus=0; }
+                int helperMinus = randomSector-1;
+                if (helperMinus<0) { helperMinus=playerSides-1; }
+                //tehdään slide vaan jos on 2 vierekkäistä sektoria auki
+                if (isSectorActive(helperPlus)) {
+                    ArrayList<Point> slideGen = new ArrayList<Point>();
+                    slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), "blue"));
+
+                    slideGen.add(new Point((helperPlus) % playerSides, (i + 0.5f) * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), "blue"));
+                    i++;
+
+                    slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), "blue"));
+                    slideGen.get(1).flip();
+                    song.add(new Slide(0, 0, slideGen, "blue"));
+
+                } else if (isSectorActive(helperMinus)) {
+                    ArrayList<Point> slideGen = new ArrayList<Point>();
+                    slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), "blue"));
+
+                    slideGen.add(new Point((helperMinus) % playerSides, (i + 0.5f) * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), "blue"));
+                    i++;
+
+                    slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), "blue"));
+                    slideGen.get(1).flip();
+                    song.add(new Slide(0, 0, slideGen, "blue"));
+                //jos ei oo slidelle tilaa nii norminuotti
                 } else {
-                    randomSector--;
+                    song.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), randomColor()));
                 }
-                randomSector = moveNotes(randomSector % playerSides);
-                while (!isSectorActive(randomSector % playerSides)) {
-                    randomSector = MathUtils.random(0, (playerSides - 1));
-                }
-                slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), "blue"));
-                slideGen.get(1).flip();
-                song.add(new Slide(0, 0, slideGen, "blue"));
             } else if (list[i]=='h'){
                 song.add(new Hold((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), noteSpeed / (bpm / 60), "blue"));
                 i++;
@@ -1003,17 +1012,6 @@ public class GameScreen implements Screen {
                 song.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), randomColor()));
             }
         }
-            /*
-            int rand = MathUtils.random(0, 5);
-            for (int j = 0; j < 3; j++) {
-                if (rand == 0) {
-                song.add(new Point(((rand + j) % playerSides), 2.5f * i * noteSpeed + j * 0.8f * noteSpeed, bluePointTexture));
-                } else if (rand == 1) {
-                    song.add(new Point(((rand - j) % playerSides), 2.5f * i * noteSpeed + j * 0.8f * noteSpeed, bluePointTexture));
-                } else {
-                    song.add(new Point(((rand) % playerSides), 2.5f * i * noteSpeed + j * 0.5f *  noteSpeed, bluePointTexture));
-                }
-            }*/
 
         points = 0;
         verySmall = host.getVerySmallFont();
