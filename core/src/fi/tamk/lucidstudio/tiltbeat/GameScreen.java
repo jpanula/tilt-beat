@@ -833,35 +833,45 @@ public class GameScreen implements Screen {
         manager.load("Smol Blue Slide.png", Texture.class);
         manager.load("Smol Blue Ball.png", Texture.class);
         manager.load("Blue sprite.atlas", TextureAtlas.class);
-        manager.load("Nuotteja.atlas", TextureAtlas.class);
+        ParticleEffectLoader.ParticleEffectParameter blueParticleEffectParameter = new ParticleEffectLoader.ParticleEffectParameter();
+        blueParticleEffectParameter.atlasFile = "Nuotteja.atlas";
+        manager.load("SininenEfekti", ParticleEffect.class, blueParticleEffectParameter);
 
         manager.load("Smol Green.png", Texture.class);
         manager.load("Smol Green Hold.png", Texture.class);
         manager.load("Smol Green Slide.png", Texture.class);
         manager.load("Smol Green Ball.png", Texture.class);
         manager.load("Green sprite.atlas", TextureAtlas.class);
-        manager.load("Vihree.atlas", TextureAtlas.class);
+        ParticleEffectLoader.ParticleEffectParameter greenParticleEffectParameter = new ParticleEffectLoader.ParticleEffectParameter();
+        greenParticleEffectParameter.atlasFile = "Vihree.atlas";
+        manager.load("VihreäEfekti", ParticleEffect.class, greenParticleEffectParameter);
 
         manager.load("Smol Pink.png", Texture.class);
         manager.load("Smol Pink Hold.png", Texture.class);
         manager.load("Smol Pink Slide.png", Texture.class);
         manager.load("Smol Pink Ball.png", Texture.class);
         manager.load("Pink sprite.atlas", TextureAtlas.class);
-        manager.load("Pinkki.atlas", TextureAtlas.class);
+        ParticleEffectLoader.ParticleEffectParameter pinkParticleEffectParameter = new ParticleEffectLoader.ParticleEffectParameter();
+        pinkParticleEffectParameter.atlasFile = "Pinkki.atlas";
+        manager.load("PinkkiEfekti", ParticleEffect.class, pinkParticleEffectParameter);
 
         manager.load("Smol Yellow.png", Texture.class);
         manager.load("Smol Yellow Hold.png", Texture.class);
         manager.load("Smol Yellow Slide.png", Texture.class);
         manager.load("Smol Yellow Ball.png", Texture.class);
         manager.load("Yellow sprite.atlas", TextureAtlas.class);
-        manager.load("Keltane.atlas", TextureAtlas.class);
+        ParticleEffectLoader.ParticleEffectParameter yellowParticleEffectParameter = new ParticleEffectLoader.ParticleEffectParameter();
+        yellowParticleEffectParameter.atlasFile = "Keltane.atlas";
+        manager.load("KeltainenEfekti", ParticleEffect.class, yellowParticleEffectParameter);
 
         manager.load("Smol Red.png", Texture.class);
         manager.load("Smol Red Hold.png", Texture.class);
         manager.load("Smol Red Slide.png", Texture.class);
         manager.load("Smol Red Ball.png", Texture.class);
         manager.load("Red sprite.atlas", TextureAtlas.class);
-        manager.load("Punane.atlas", TextureAtlas.class);
+        ParticleEffectLoader.ParticleEffectParameter redParticleEffectParameter = new ParticleEffectLoader.ParticleEffectParameter();
+        redParticleEffectParameter.atlasFile = "Punane.atlas";
+        manager.load("PunainenEfekti", ParticleEffect.class, redParticleEffectParameter);
 
         manager.load("square.png", Texture.class);
         manager.load("tiltedSquare.png", Texture.class);
@@ -890,14 +900,7 @@ public class GameScreen implements Screen {
         blueHitAnimationAtlas = manager.get("Blue sprite.atlas");
         //blueParticleEffectAtlas = manager.get("Nuotteja.atlas");
         blueHitAnimation = new Animation<TextureRegion>(0.05f, blueHitAnimationAtlas.getRegions());
-        ParticleEffectLoader.ParticleEffectParameter blueParticleEffectParameter = new ParticleEffectLoader.ParticleEffectParameter();
-        blueParticleEffectParameter.atlasFile = "Nuotteja.atlas";
-        manager.load("Testi", ParticleEffect.class, blueParticleEffectParameter);
-        /*blueParticleEffect = new ParticleEffect();
-        blueParticleEffect.load(Gdx.files.internal("Testi"), blueParticleEffectAtlas);
-        */
-        manager.finishLoading();
-        blueParticleEffect = manager.get("Testi");
+        blueParticleEffect = manager.get("SininenEfekti");
         blueParticleEffect.scaleEffect(1/80f);
 
         greenPointTexture = manager.get("Smol Green.png");
@@ -907,8 +910,7 @@ public class GameScreen implements Screen {
         greenHitAnimationAtlas = manager.get("Green sprite.atlas");
         greenParticleEffectAtlas = manager.get("Vihree.atlas");
         greenHitAnimation = new Animation<TextureRegion>(0.05f, greenHitAnimationAtlas.getRegions());
-        greenParticleEffect = new ParticleEffect();
-        greenParticleEffect.load(Gdx.files.internal("Testi"), greenParticleEffectAtlas);
+        greenParticleEffect = manager.get("VihreäEfekti");
         greenParticleEffect.scaleEffect(1/80f);
 
         yellowPointTexture = manager.get("Smol Yellow.png");
@@ -918,8 +920,7 @@ public class GameScreen implements Screen {
         yellowHitAnimationAtlas = manager.get("Yellow sprite.atlas");
         yellowParticleEffectAtlas = manager.get("Keltane.atlas");
         yellowHitAnimation = new Animation<TextureRegion>(0.05f, yellowHitAnimationAtlas.getRegions());
-        yellowParticleEffect = new ParticleEffect();
-        yellowParticleEffect.load(Gdx.files.internal("Testi"), yellowParticleEffectAtlas);
+        yellowParticleEffect = manager.get("KeltainenEfekti");
         yellowParticleEffect.scaleEffect(1/80f);
 
         pinkPointTexture = manager.get("Smol Pink.png");
@@ -929,8 +930,7 @@ public class GameScreen implements Screen {
         pinkHitAnimationAtlas = manager.get("Pink sprite.atlas");
         pinkParticleEffectAtlas = manager.get("Pinkki.atlas");
         pinkHitAnimation = new Animation<TextureRegion>(0.05f, pinkHitAnimationAtlas.getRegions());
-        pinkParticleEffect = new ParticleEffect();
-        pinkParticleEffect.load(Gdx.files.internal("Testi"), pinkParticleEffectAtlas);
+        pinkParticleEffect = manager.get("PinkkiEfekti");
         pinkParticleEffect.scaleEffect(1/80f);
 
         redPointTexture = manager.get("Smol Red.png");
@@ -940,8 +940,7 @@ public class GameScreen implements Screen {
         redHitAnimationAtlas = manager.get("Red sprite.atlas");
         redParticleEffectAtlas = manager.get("Punane.atlas");
         redHitAnimation = new Animation<TextureRegion>(0.05f, redHitAnimationAtlas.getRegions());
-        redParticleEffect = new ParticleEffect();
-        redParticleEffect.load(Gdx.files.internal("Testi"), redParticleEffectAtlas);
+        redParticleEffect = manager.get("PunainenEfekti");
         redParticleEffect.scaleEffect(1/80f);
 
         playerSides = host.getPlayerSides();
@@ -1638,6 +1637,51 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+        manager.unload("Galaxy dark purple.png");
+        manager.unload("soundOn.png");
+        manager.unload("soundOff.png");
 
+        manager.unload("Smol Blue.png");
+        manager.unload("Smol Blue Hold.png");
+        manager.unload("Smol Blue Slide.png");
+        manager.unload("Smol Blue Ball.png");
+        manager.unload("Blue sprite.atlas");
+        manager.unload("SininenEfekti");
+
+        manager.unload("Smol Green.png");
+        manager.unload("Smol Green Hold.png");
+        manager.unload("Smol Green Slide.png");
+        manager.unload("Smol Green Ball.png");
+        manager.unload("Green sprite.atlas");
+        manager.unload("VihreäEfekti");
+
+        manager.unload("Smol Pink.png");
+        manager.unload("Smol Pink Hold.png");
+        manager.unload("Smol Pink Slide.png");
+        manager.unload("Smol Pink Ball.png");
+        manager.unload("Pink sprite.atlas");
+        manager.unload("PinkkiEfekti");
+
+        manager.unload("Smol Yellow.png");
+        manager.unload("Smol Yellow Hold.png");
+        manager.unload("Smol Yellow Slide.png");
+        manager.unload("Smol Yellow Ball.png");
+        manager.unload("Yellow sprite.atlas");
+        manager.unload("KeltainenEfekti");
+
+        manager.unload("Smol Red.png");
+        manager.unload("Smol Red Hold.png");
+        manager.unload("Smol Red Slide.png");
+        manager.unload("Smol Red Ball.png");
+        manager.unload("Red sprite.atlas");
+        manager.unload("PunainenEfekti");
+
+        manager.unload("square.png");
+        manager.unload("tiltedSquare.png");
+        manager.unload("sixside.png");
+        manager.unload("eightside.png");
+        manager.unload("tenside.png");
+        manager.unload("pointer.png");
+        
     }
 }
