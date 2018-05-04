@@ -123,7 +123,10 @@ public class GameScreen implements Screen {
     private Animation<TextureRegion> pinkHitAnimation;
     private Animation<TextureRegion> redHitAnimation;
     private Animation<TextureRegion> blueTickAnimation;
+    private Animation<TextureRegion> greenTickAnimation;
+    private Animation<TextureRegion> yellowTickAnimation;
     private Animation<TextureRegion> pinkTickAnimation;
+    private Animation<TextureRegion> redTickAnimation;
 
     private ParticleEffect blueParticleEffect;
     private ParticleEffect greenParticleEffect;
@@ -137,7 +140,10 @@ public class GameScreen implements Screen {
     private TextureAtlas pinkHitAnimationAtlas;
     private TextureAtlas redHitAnimationAtlas;
     private TextureAtlas blueTickAnimationAtlas;
+    private TextureAtlas greenTickAnimationAtlas;
+    private TextureAtlas yellowTickAnimationAtlas;
     private TextureAtlas pinkTickAnimationAtlas;
+    private TextureAtlas redTickAnimationAtlas;
 
     private TextureAtlas blueParticleEffectAtlas;
     private TextureAtlas greenParticleEffectAtlas;
@@ -432,13 +438,33 @@ public class GameScreen implements Screen {
         private Texture texture;
         private ParticleEffect effect;
         private Animation<TextureRegion> scoreAnimation;
+        private float stateTime;
+        private float animationSize;
 
         public Note(int sector, float distance, String color) {
             this.sector = sector;
             this.distance = distance;
             this.effect = new ParticleEffect();
+            this.stateTime = 0;
+            this.animationSize = 1f;
             setColor(color);
             hit = false;
+        }
+
+        public float getStateTime() {
+            return stateTime;
+        }
+
+        public void setStateTime(float stateTime) {
+            this.stateTime = stateTime;
+        }
+
+        public float getAnimationSize() {
+            return animationSize;
+        }
+
+        public void setAnimationSize(float animationSize) {
+            this.animationSize = animationSize;
         }
 
         public int getSector() {
@@ -487,6 +513,14 @@ public class GameScreen implements Screen {
             }
         }
 
+        public boolean isAnimationFinished() {
+            if (getScoreAnimation().isAnimationFinished(getStateTime()) && getEffect().isComplete()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         public void setColor(String color) {
             color = color.toLowerCase();
             if (color.equals("blue")) {
@@ -496,6 +530,9 @@ public class GameScreen implements Screen {
                     this.texture = blueHoldTexture;
                 } else if (this instanceof Hold.Tick) {
                     this.texture = blueTickTexture;
+                }
+                if (this instanceof Hold.Tick) {
+                    this.scoreAnimation = blueTickAnimation;
                 } else {
                     this.scoreAnimation = blueHitAnimation;
                 }
@@ -509,6 +546,9 @@ public class GameScreen implements Screen {
                     this.texture = greenHoldTexture;
                 } else if (this instanceof Hold.Tick) {
                     this.texture = greenTickTexture;
+                }
+                if (this instanceof Hold.Tick) {
+                    this.scoreAnimation = greenTickAnimation;
                 } else {
                     this.scoreAnimation = greenHitAnimation;
                 }
@@ -522,6 +562,9 @@ public class GameScreen implements Screen {
                     this.texture = yellowHoldTexture;
                 } else if (this instanceof Hold.Tick) {
                     this.texture = yellowTickTexture;
+                }
+                if (this instanceof Hold.Tick) {
+                    this.scoreAnimation = yellowTickAnimation;
                 } else {
                     this.scoreAnimation = yellowHitAnimation;
                 }
@@ -535,6 +578,9 @@ public class GameScreen implements Screen {
                     this.texture = redHoldTexture;
                 } else if (this instanceof Hold.Tick) {
                     this.texture = redTickTexture;
+                }
+                if (this instanceof Hold.Tick) {
+                    this.scoreAnimation = redTickAnimation;
                 } else {
                     this.scoreAnimation = redHitAnimation;
                 }
@@ -548,6 +594,9 @@ public class GameScreen implements Screen {
                     this.texture = pinkHoldTexture;
                 } else if (this instanceof Hold.Tick) {
                     this.texture = pinkTickTexture;
+                }
+                if (this instanceof Hold.Tick) {
+                    this.scoreAnimation = pinkTickAnimation;
                 } else {
                     this.scoreAnimation = pinkHitAnimation;
                 }
@@ -567,18 +616,16 @@ public class GameScreen implements Screen {
         private float width;
         private float height;
         private boolean flipped;
-        private float stateTime;
-        private float animationSize;
 
 
         public Point(int sector, float distance, String color) {
             super(sector, distance, color);
             width = 1;
             height = (float) 0.7 * width;
-            animationSize = 1.1f;
+            setAnimationSize(1.1f);
             vector = new Vector2(distance, 0);
             flipped = false;
-            stateTime = 0;
+            setStateTime(0);
         }
 
         @Override
@@ -589,13 +636,6 @@ public class GameScreen implements Screen {
             }
         }
 
-        public boolean isAnimationFinished() {
-            if (getScoreAnimation().isAnimationFinished(stateTime) && getEffect().isComplete()) {
-                return true;
-            } else {
-                return false;
-            }
-        }
 
         public Vector2 getVector() {
             vector.setLength(getDistance() + host.getPlayerInradius());
@@ -625,13 +665,13 @@ public class GameScreen implements Screen {
             if (!isHit()) {
                 batch.draw(getTexture(), host.getScreenWidth() / 2 + vector.x - width / 2, host.getScreenHeight() / 2 + vector.y - height / 2, width / 2, height / 2, width, height, 1, 1, vector.angle() - 90, 0, 0, getTexture().getWidth(), getTexture().getHeight(), flipped, false);
             } else {
-                if (!getScoreAnimation().isAnimationFinished(stateTime)) {
-                    TextureRegion keyframe = new TextureRegion(getScoreAnimation().getKeyFrame(stateTime));
-                    batch.draw(keyframe, host.getScreenWidth() / 2 + vector.x - animationSize / 2, host.getScreenHeight() / 2 + vector.y - animationSize / 2, animationSize / 2, animationSize / 2, animationSize, animationSize, animationSize, animationSize, vector.angle(), false);
+                if (!getScoreAnimation().isAnimationFinished(getStateTime())) {
+                    TextureRegion keyframe = new TextureRegion(getScoreAnimation().getKeyFrame(getStateTime()));
+                    batch.draw(keyframe, host.getScreenWidth() / 2 + vector.x - getAnimationSize() / 2, host.getScreenHeight() / 2 + vector.y - getAnimationSize() / 2, getAnimationSize() / 2, getAnimationSize() / 2, getAnimationSize(), getAnimationSize(), getAnimationSize(), getAnimationSize(), vector.angle(), false);
                 }
                 getEffect().setPosition(host.getScreenWidth() / 2 + vector.x, host.getScreenHeight() / 2 + vector.y);
                 getEffect().draw(batch, Gdx.graphics.getDeltaTime());
-                stateTime += Gdx.graphics.getDeltaTime();
+                setStateTime(getStateTime() + Gdx.graphics.getDeltaTime());
             }
 
         }
@@ -651,6 +691,7 @@ public class GameScreen implements Screen {
         private int tickAmount;
         private ArrayList<Tick> ticks;
         private boolean scored;
+        private float endPointStateTime;
 
         class Tick extends Note {
             private Vector2 vector;
@@ -679,8 +720,14 @@ public class GameScreen implements Screen {
                     vector.setAngle(vector.angle() - 45);
                     vector.setLength(getDistance() + host.getPlayerDiameter() / 2);
                 }
-                if (getDistance() > 0)
+                if (getDistance() > 0) {
                     batch.draw(getTexture(), host.getScreenWidth() / 2 + vector.x - tickDiameter / 2, host.getScreenHeight() / 2 + vector.y - tickDiameter / 2, tickDiameter, tickDiameter);
+                } else if (!getScoreAnimation().isAnimationFinished(getStateTime())) {
+                    TextureRegion keyframe = new TextureRegion(getScoreAnimation().getKeyFrame(getStateTime()));
+                    batch.draw(keyframe, host.getScreenWidth() / 2 + vector.x - getAnimationSize() / 2, host.getScreenHeight() / 2 + vector.y - getAnimationSize() / 2, getAnimationSize() / 2, getAnimationSize() / 2, getAnimationSize(), getAnimationSize(), getAnimationSize(), getAnimationSize(), vector.angle(), false);
+                    setStateTime(getStateTime() + Gdx.graphics.getDeltaTime());
+                }
+
             }
         }
 
@@ -705,7 +752,7 @@ public class GameScreen implements Screen {
             for (int i = 2; i < tickAmount - 1; i++) {
                 ticks.add(new Tick(sector, (distance + (float) i / tickAmount * length), color));
             }
-
+            endPointStateTime = 0;
         }
 
         public boolean isScored() {
@@ -739,14 +786,28 @@ public class GameScreen implements Screen {
             }
             if (getDistance() > 0) {
                 batch.draw(getTexture(), host.getScreenWidth() / 2 + startPoint.x - width / 2, host.getScreenHeight() / 2 + startPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, startPoint.angle() - 90, 0, 0, getTexture().getWidth(), getTexture().getHeight(), false, false);
-            }
+            } else if (!getScoreAnimation().isAnimationFinished(getStateTime())) {
+                    TextureRegion keyframe = new TextureRegion(getScoreAnimation().getKeyFrame(getStateTime()));
+                    batch.draw(keyframe, host.getScreenWidth() / 2 + startPoint.x - getAnimationSize() / 2, host.getScreenHeight() / 2 + startPoint.y - getAnimationSize() / 2, getAnimationSize() / 2, getAnimationSize() / 2, getAnimationSize(), getAnimationSize(), getAnimationSize(), getAnimationSize(), startPoint.angle(), false);
+                }
+                getEffect().setPosition(host.getScreenWidth() / 2 + startPoint.x, host.getScreenHeight() / 2 + startPoint.y);
+                getEffect().draw(batch, Gdx.graphics.getDeltaTime());
+                setStateTime(getStateTime() + Gdx.graphics.getDeltaTime());
             endPoint.setLength(getDistance() + length + host.getPlayerInradius());
             endPoint.setAngle(90 - (360 / host.getPlayerSides()) * getSector() - (360 / host.getPlayerSides()) / 2);
             if (!host.isTiltedSquare() && host.getPlayerSides() == 4) {
                 endPoint.setAngle(endPoint.angle() - 45);
                 endPoint.setLength(getDistance() + host.getPlayerDiameter() / 2 + length);
             }
-            batch.draw(getTexture(), host.getScreenWidth() / 2 + endPoint.x - width / 2, host.getScreenHeight() / 2 + endPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, endPoint.angle() - 90, 0, 0, getTexture().getWidth(), getTexture().getHeight(), false, true);
+            if ((getDistance() + getLength()) > 0) {
+                batch.draw(getTexture(), host.getScreenWidth() / 2 + endPoint.x - width / 2, host.getScreenHeight() / 2 + endPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, endPoint.angle() - 90, 0, 0, getTexture().getWidth(), getTexture().getHeight(), false, true);
+            } else if (!getScoreAnimation().isAnimationFinished(getStateTime())) {
+                TextureRegion keyframe = new TextureRegion(getScoreAnimation().getKeyFrame(getStateTime()));
+                batch.draw(keyframe, host.getScreenWidth() / 2 + endPoint.x - getAnimationSize() / 2, host.getScreenHeight() / 2 + endPoint.y - getAnimationSize() / 2, getAnimationSize() / 2, getAnimationSize() / 2, getAnimationSize(), getAnimationSize(), getAnimationSize(), getAnimationSize(), endPoint.angle(), false);
+            }
+            getEffect().setPosition(host.getScreenWidth() / 2 + endPoint.x, host.getScreenHeight() / 2 + endPoint.y);
+            getEffect().draw(batch, Gdx.graphics.getDeltaTime());
+            setStateTime(getStateTime() + Gdx.graphics.getDeltaTime());
         }
 
         @Override
@@ -766,6 +827,7 @@ public class GameScreen implements Screen {
             // Muutetaan annetun nuottikasan sektorit ja etäisyys koko Sliden mukaan
             for (int i = 0; i < notes.size(); i++) {
                 Point note = notes.get(i);
+                note.setColor(color);
                 setPointColor(note, color);
                 note.setSector((note.getSector() + sector) % host.getPlayerSides());
                 note.setDistance(note.getDistance() + distance);
@@ -803,10 +865,12 @@ public class GameScreen implements Screen {
             }
             for (int i = 0; i < notes.size() - 1; i++) {
                 // Piirretään ShapeRendererillä viiva Sliden sisällä olevien nuottien väliin
-                Vector2 startPoint = (notes.get(i).getVector().add(new Vector2(host.getScreenWidth() / 2, host.getScreenHeight() / 2)));
-                Vector2 endPoint = (notes.get(i + 1).getVector().add(new Vector2(host.getScreenWidth() / 2, host.getScreenHeight() / 2)));
+                if (!notes.get(i).isHit()){
+                    Vector2 startPoint = (notes.get(i).getVector().add(new Vector2(host.getScreenWidth() / 2, host.getScreenHeight() / 2)));
+                    Vector2 endPoint = (notes.get(i + 1).getVector().add(new Vector2(host.getScreenWidth() / 2, host.getScreenHeight() / 2)));
 
-                shapeRenderer.line(startPoint, endPoint);
+                    shapeRenderer.line(startPoint, endPoint);
+                }
             }
         }
 
@@ -868,6 +932,7 @@ public class GameScreen implements Screen {
         ParticleEffectLoader.ParticleEffectParameter greenParticleEffectParameter = new ParticleEffectLoader.ParticleEffectParameter();
         greenParticleEffectParameter.atlasFile = "Vihree.atlas";
         manager.load("VihreäEfekti", ParticleEffect.class, greenParticleEffectParameter);
+        manager.load("Green dot.atlas", TextureAtlas.class);
 
         manager.load("Smol Pink.png", Texture.class);
         manager.load("Smol Pink Hold.png", Texture.class);
@@ -889,6 +954,7 @@ public class GameScreen implements Screen {
         ParticleEffectLoader.ParticleEffectParameter yellowParticleEffectParameter = new ParticleEffectLoader.ParticleEffectParameter();
         yellowParticleEffectParameter.atlasFile = "Keltane.atlas";
         manager.load("KeltainenEfekti", ParticleEffect.class, yellowParticleEffectParameter);
+        manager.load("Yellow dot.atlas", TextureAtlas.class);
 
         manager.load("Smol Red.png", Texture.class);
         manager.load("Smol Red Hold.png", Texture.class);
@@ -899,6 +965,7 @@ public class GameScreen implements Screen {
         ParticleEffectLoader.ParticleEffectParameter redParticleEffectParameter = new ParticleEffectLoader.ParticleEffectParameter();
         redParticleEffectParameter.atlasFile = "Punane.atlas";
         manager.load("PunainenEfekti", ParticleEffect.class, redParticleEffectParameter);
+        manager.load("Red dot.atlas", TextureAtlas.class);
 
         manager.load("square.png", Texture.class);
         manager.load("tiltedSquare.png", Texture.class);
@@ -941,6 +1008,8 @@ public class GameScreen implements Screen {
         greenHitAnimation = new Animation<TextureRegion>(0.05f, greenHitAnimationAtlas.getRegions());
         greenParticleEffect = manager.get("VihreäEfekti");
         greenParticleEffect.scaleEffect(1/80f);
+        greenTickAnimationAtlas = manager.get("Green dot.atlas");
+        greenTickAnimation = new Animation<TextureRegion>(0.05f, greenTickAnimationAtlas.getRegions());
 
         yellowPointTexture = manager.get("Smol Yellow.png");
         yellowHoldTexture = manager.get("Smol Yellow Hold.png");
@@ -951,6 +1020,8 @@ public class GameScreen implements Screen {
         yellowHitAnimation = new Animation<TextureRegion>(0.05f, yellowHitAnimationAtlas.getRegions());
         yellowParticleEffect = manager.get("KeltainenEfekti");
         yellowParticleEffect.scaleEffect(1/80f);
+        yellowTickAnimationAtlas = manager.get("Yellow dot.atlas");
+        yellowTickAnimation = new Animation<TextureRegion>(0.05f, yellowTickAnimationAtlas.getRegions());
 
         pinkPointTexture = manager.get("Smol Pink.png");
         pinkHoldTexture = manager.get("Smol Pink Hold.png");
@@ -973,6 +1044,8 @@ public class GameScreen implements Screen {
         redHitAnimation = new Animation<TextureRegion>(0.05f, redHitAnimationAtlas.getRegions());
         redParticleEffect = manager.get("PunainenEfekti");
         redParticleEffect.scaleEffect(1/80f);
+        redTickAnimationAtlas = manager.get("Red dot.atlas");
+        redTickAnimation = new Animation<TextureRegion>(0.05f, redTickAnimationAtlas.getRegions());
 
         playerSides = host.getPlayerSides();
         playerDiameter = host.getPlayerDiameter();
@@ -1019,31 +1092,31 @@ public class GameScreen implements Screen {
                 //tehdään slide vaan jos on 2 vierekkäistä sektoria auki
                 if (isSectorActive(helperPlus)) {
                     ArrayList<Point> slideGen = new ArrayList<Point>();
-                    slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), "blue"));
+                    slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), randomColor()));
 
-                    slideGen.add(new Point((helperPlus) % playerSides, (i + 0.5f) * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), "blue"));
+                    slideGen.add(new Point((helperPlus) % playerSides, (i + 0.5f) * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), randomColor()));
                     i++;
 
-                    slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), "blue"));
+                    slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), randomColor()));
                     slideGen.get(1).flip();
-                    song.add(new Slide(0, 0, slideGen, "blue"));
+                    song.add(new Slide(0, 0, slideGen, randomColor()));
 
                 } else if (isSectorActive(helperMinus)) {
                     ArrayList<Point> slideGen = new ArrayList<Point>();
-                    slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), "blue"));
+                    slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), randomColor()));
 
-                    slideGen.add(new Point((helperMinus) % playerSides, (i + 0.5f) * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), "blue"));
+                    slideGen.add(new Point((helperMinus) % playerSides, (i + 0.5f) * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), randomColor()));
                     i++;
 
-                    slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), "blue"));
+                    slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), randomColor()));
                     slideGen.get(0).flip(); slideGen.get(2).flip();
-                    song.add(new Slide(0, 0, slideGen, "blue"));
+                    song.add(new Slide(0, 0, slideGen, randomColor()));
                 //jos ei oo slidelle tilaa nii norminuotti
                 } else {
                     song.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), randomColor()));
                 }
             } else if (list[i]=='h'){
-                song.add(new Hold((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), noteSpeed / (bpm / 60), "blue"));
+                song.add(new Hold((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), noteSpeed / (bpm / 60), randomColor()));
                 i++;
             } else  {
                 song.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), randomColor()));
@@ -1406,7 +1479,7 @@ public class GameScreen implements Screen {
                     iter.remove();
                 }
                 if (note.isHit()) {
-                    if (((Point) note).isAnimationFinished()) {
+                    if (note.isAnimationFinished()) {
                         iter.remove();
                     }
                 }
@@ -1457,15 +1530,20 @@ public class GameScreen implements Screen {
                 while (slideIter.hasNext()) {
                     Point point = slideIter.next();
                     if (point.getDistance() <= 0) {
-                        if (point.getSector() == player.getPointerSector()) {
+                        if (point.getSector() == player.getPointerSector() && !point.isHit()) {
                             points += pointMulti*2;
-                            slideIter.remove();
+                            point.setHit(true);
                             if (host.isSoundOn()) {
                                 soundEffect.play();
                             }
-                        } else if (point.getDistance() < -0.35f){
+                        } else if (point.getDistance() < -0.35f || !point.isHit()){
                             System.out.println("FAIL!");
                             slideIter.remove();
+                        }
+                        if (point.isHit()) {
+                            if (point.isAnimationFinished()) {
+                                slideIter.remove();
+                            }
                         }
                     }
                 }
