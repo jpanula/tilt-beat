@@ -131,6 +131,12 @@ public class GameScreen implements Screen {
     private TextureAtlas pinkHitAnimationAtlas;
     private TextureAtlas redHitAnimationAtlas;
 
+    private TextureAtlas blueParticleEffectAtlas;
+    private TextureAtlas greenParticleEffectAtlas;
+    private TextureAtlas yellowParticleEffectAtlas;
+    private TextureAtlas pinkParticleEffectAtlas;
+    private TextureAtlas redParticleEffectAtlas;
+
     /**
      * Pelaajan kulmiosysteemin luokka
      */
@@ -422,6 +428,7 @@ public class GameScreen implements Screen {
         public Note(int sector, float distance, String color) {
             this.sector = sector;
             this.distance = distance;
+            this.effect = new ParticleEffect();
             setColor(color);
             hit = false;
         }
@@ -481,9 +488,11 @@ public class GameScreen implements Screen {
                     this.texture = blueHoldTexture;
                 } else if (this instanceof Hold.Tick) {
                     this.texture = blueTickTexture;
+                } else {
+                    this.scoreAnimation = blueHitAnimation;
                 }
-                this.scoreAnimation = blueHitAnimation;
-                this.effect = blueParticleEffect;
+                this.effect.load(Gdx.files.internal("SininenEfekti"), blueParticleEffectAtlas);
+                this.effect.scaleEffect(1/80f);
 
             } else if (color.equals("green")) {
                 if (this instanceof  Point) {
@@ -492,9 +501,11 @@ public class GameScreen implements Screen {
                     this.texture = greenHoldTexture;
                 } else if (this instanceof Hold.Tick) {
                     this.texture = greenTickTexture;
+                } else {
+                    this.scoreAnimation = greenHitAnimation;
                 }
-                this.scoreAnimation = greenHitAnimation;
-                this.effect = greenParticleEffect;
+                this.effect.load(Gdx.files.internal("VihreäEfekti"), greenParticleEffectAtlas);
+                this.effect.scaleEffect(1/80f);
 
             } else if (color.equals("yellow")) {
                 if (this instanceof  Point) {
@@ -503,9 +514,11 @@ public class GameScreen implements Screen {
                     this.texture = yellowHoldTexture;
                 } else if (this instanceof Hold.Tick) {
                     this.texture = yellowTickTexture;
+                } else {
+                    this.scoreAnimation = yellowHitAnimation;
                 }
-                this.scoreAnimation = yellowHitAnimation;
-                this.effect = yellowParticleEffect;
+                this.effect.load(Gdx.files.internal("KeltainenEfekti"), yellowParticleEffectAtlas);
+                this.effect.scaleEffect(1/80f);
 
             } else if (color.equals("red")){
                 if (this instanceof  Point) {
@@ -514,9 +527,11 @@ public class GameScreen implements Screen {
                     this.texture = redHoldTexture;
                 } else if (this instanceof Hold.Tick) {
                     this.texture = redTickTexture;
+                } else {
+                    this.scoreAnimation = redHitAnimation;
                 }
-                this.scoreAnimation = redHitAnimation;
-                this.effect = redParticleEffect;
+                this.effect.load(Gdx.files.internal("PunainenEfekti"), redParticleEffectAtlas);
+                this.effect.scaleEffect(1/80f);
 
             } else if (color.equals("pink")) {
                 if (this instanceof  Point) {
@@ -525,9 +540,11 @@ public class GameScreen implements Screen {
                     this.texture = pinkHoldTexture;
                 } else if (this instanceof Hold.Tick) {
                     this.texture = pinkTickTexture;
+                } else {
+                    this.scoreAnimation = pinkHitAnimation;
                 }
-                this.scoreAnimation = pinkHitAnimation;
-                this.effect = pinkParticleEffect;
+                this.effect.load(Gdx.files.internal("PinkkiEfekti"), pinkParticleEffectAtlas);
+                this.effect.scaleEffect(1/80f);
 
             } else {
                 throw new IllegalArgumentException("Invalid color");
@@ -827,6 +844,7 @@ public class GameScreen implements Screen {
         manager.load("Smol Blue Slide.png", Texture.class);
         manager.load("Smol Blue Ball.png", Texture.class);
         manager.load("Blue sprite.atlas", TextureAtlas.class);
+        manager.load("Nuotteja.atlas", TextureAtlas.class);
         ParticleEffectLoader.ParticleEffectParameter blueParticleEffectParameter = new ParticleEffectLoader.ParticleEffectParameter();
         blueParticleEffectParameter.atlasFile = "Nuotteja.atlas";
         manager.load("SininenEfekti", ParticleEffect.class, blueParticleEffectParameter);
@@ -836,6 +854,7 @@ public class GameScreen implements Screen {
         manager.load("Smol Green Slide.png", Texture.class);
         manager.load("Smol Green Ball.png", Texture.class);
         manager.load("Green sprite.atlas", TextureAtlas.class);
+        manager.load("Vihree.atlas", TextureAtlas.class);
         ParticleEffectLoader.ParticleEffectParameter greenParticleEffectParameter = new ParticleEffectLoader.ParticleEffectParameter();
         greenParticleEffectParameter.atlasFile = "Vihree.atlas";
         manager.load("VihreäEfekti", ParticleEffect.class, greenParticleEffectParameter);
@@ -845,6 +864,7 @@ public class GameScreen implements Screen {
         manager.load("Smol Pink Slide.png", Texture.class);
         manager.load("Smol Pink Ball.png", Texture.class);
         manager.load("Pink sprite.atlas", TextureAtlas.class);
+        manager.load("Pinkki.atlas", TextureAtlas.class);
         ParticleEffectLoader.ParticleEffectParameter pinkParticleEffectParameter = new ParticleEffectLoader.ParticleEffectParameter();
         pinkParticleEffectParameter.atlasFile = "Pinkki.atlas";
         manager.load("PinkkiEfekti", ParticleEffect.class, pinkParticleEffectParameter);
@@ -854,6 +874,7 @@ public class GameScreen implements Screen {
         manager.load("Smol Yellow Slide.png", Texture.class);
         manager.load("Smol Yellow Ball.png", Texture.class);
         manager.load("Yellow sprite.atlas", TextureAtlas.class);
+        manager.load("Keltane.atlas", TextureAtlas.class);
         ParticleEffectLoader.ParticleEffectParameter yellowParticleEffectParameter = new ParticleEffectLoader.ParticleEffectParameter();
         yellowParticleEffectParameter.atlasFile = "Keltane.atlas";
         manager.load("KeltainenEfekti", ParticleEffect.class, yellowParticleEffectParameter);
@@ -863,6 +884,7 @@ public class GameScreen implements Screen {
         manager.load("Smol Red Slide.png", Texture.class);
         manager.load("Smol Red Ball.png", Texture.class);
         manager.load("Red sprite.atlas", TextureAtlas.class);
+        manager.load("Punane.atlas", TextureAtlas.class);
         ParticleEffectLoader.ParticleEffectParameter redParticleEffectParameter = new ParticleEffectLoader.ParticleEffectParameter();
         redParticleEffectParameter.atlasFile = "Punane.atlas";
         manager.load("PunainenEfekti", ParticleEffect.class, redParticleEffectParameter);
@@ -892,6 +914,7 @@ public class GameScreen implements Screen {
         blueSlideTexture = manager.get("Smol Blue Slide.png");
         blueTickTexture = manager.get("Smol Blue Ball.png");
         blueHitAnimationAtlas = manager.get("Blue sprite.atlas");
+        blueParticleEffectAtlas = manager.get("Nuotteja.atlas");
         blueHitAnimation = new Animation<TextureRegion>(0.05f, blueHitAnimationAtlas.getRegions());
         blueParticleEffect = manager.get("SininenEfekti");
         blueParticleEffect.scaleEffect(1/80f);
@@ -901,6 +924,7 @@ public class GameScreen implements Screen {
         greenSlideTexture = manager.get("Smol Green Slide.png");
         greenTickTexture = manager.get("Smol Green Ball.png");
         greenHitAnimationAtlas = manager.get("Green sprite.atlas");
+        greenParticleEffectAtlas = manager.get("Vihree.atlas");
         greenHitAnimation = new Animation<TextureRegion>(0.05f, greenHitAnimationAtlas.getRegions());
         greenParticleEffect = manager.get("VihreäEfekti");
         greenParticleEffect.scaleEffect(1/80f);
@@ -910,6 +934,7 @@ public class GameScreen implements Screen {
         yellowSlideTexture = manager.get("Smol Yellow Slide.png");
         yellowTickTexture = manager.get("Smol Yellow Ball.png");
         yellowHitAnimationAtlas = manager.get("Yellow sprite.atlas");
+        yellowParticleEffectAtlas = manager.get("Keltane.atlas");
         yellowHitAnimation = new Animation<TextureRegion>(0.05f, yellowHitAnimationAtlas.getRegions());
         yellowParticleEffect = manager.get("KeltainenEfekti");
         yellowParticleEffect.scaleEffect(1/80f);
@@ -919,6 +944,7 @@ public class GameScreen implements Screen {
         pinkSlideTexture = manager.get("Smol Pink Slide.png");
         pinkTickTexture = manager.get("Smol Pink Ball.png");
         pinkHitAnimationAtlas = manager.get("Pink sprite.atlas");
+        pinkParticleEffectAtlas = manager.get("Pinkki.atlas");
         pinkHitAnimation = new Animation<TextureRegion>(0.05f, pinkHitAnimationAtlas.getRegions());
         pinkParticleEffect = manager.get("PinkkiEfekti");
         pinkParticleEffect.scaleEffect(1/80f);
@@ -928,6 +954,7 @@ public class GameScreen implements Screen {
         redSlideTexture = manager.get("Smol Red Slide.png");
         redTickTexture = manager.get("Smol Red Ball.png");
         redHitAnimationAtlas = manager.get("Red sprite.atlas");
+        redParticleEffectAtlas = manager.get("Punane.atlas");
         redHitAnimation = new Animation<TextureRegion>(0.05f, redHitAnimationAtlas.getRegions());
         redParticleEffect = manager.get("PunainenEfekti");
         redParticleEffect.scaleEffect(1/80f);
