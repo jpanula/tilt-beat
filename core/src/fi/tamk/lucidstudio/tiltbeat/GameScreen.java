@@ -122,6 +122,8 @@ public class GameScreen implements Screen {
     private Animation<TextureRegion> yellowHitAnimation;
     private Animation<TextureRegion> pinkHitAnimation;
     private Animation<TextureRegion> redHitAnimation;
+    private Animation<TextureRegion> blueTickAnimation;
+    private Animation<TextureRegion> pinkTickAnimation;
 
     private ParticleEffect blueParticleEffect;
     private ParticleEffect greenParticleEffect;
@@ -134,6 +136,8 @@ public class GameScreen implements Screen {
     private TextureAtlas yellowHitAnimationAtlas;
     private TextureAtlas pinkHitAnimationAtlas;
     private TextureAtlas redHitAnimationAtlas;
+    private TextureAtlas blueTickAnimationAtlas;
+    private TextureAtlas pinkTickAnimationAtlas;
 
     private TextureAtlas blueParticleEffectAtlas;
     private TextureAtlas greenParticleEffectAtlas;
@@ -853,6 +857,7 @@ public class GameScreen implements Screen {
         ParticleEffectLoader.ParticleEffectParameter blueParticleEffectParameter = new ParticleEffectLoader.ParticleEffectParameter();
         blueParticleEffectParameter.atlasFile = "Nuotteja.atlas";
         manager.load("SininenEfekti", ParticleEffect.class, blueParticleEffectParameter);
+        manager.load("Blue dot.atlas", TextureAtlas.class);
 
         manager.load("Smol Green.png", Texture.class);
         manager.load("Smol Green Hold.png", Texture.class);
@@ -873,6 +878,7 @@ public class GameScreen implements Screen {
         ParticleEffectLoader.ParticleEffectParameter pinkParticleEffectParameter = new ParticleEffectLoader.ParticleEffectParameter();
         pinkParticleEffectParameter.atlasFile = "Pinkki.atlas";
         manager.load("PinkkiEfekti", ParticleEffect.class, pinkParticleEffectParameter);
+        manager.load("Pink dot.atlas", TextureAtlas.class);
 
         manager.load("Smol Yellow.png", Texture.class);
         manager.load("Smol Yellow Hold.png", Texture.class);
@@ -923,6 +929,8 @@ public class GameScreen implements Screen {
         blueHitAnimation = new Animation<TextureRegion>(0.05f, blueHitAnimationAtlas.getRegions());
         blueParticleEffect = manager.get("SininenEfekti");
         blueParticleEffect.scaleEffect(1/80f);
+        blueTickAnimationAtlas = manager.get("Blue dot.atlas");
+        blueTickAnimation = new Animation<TextureRegion>(0.05f, blueTickAnimationAtlas.getRegions());
 
         greenPointTexture = manager.get("Smol Green.png");
         greenHoldTexture = manager.get("Smol Green Hold.png");
@@ -953,6 +961,8 @@ public class GameScreen implements Screen {
         pinkHitAnimation = new Animation<TextureRegion>(0.05f, pinkHitAnimationAtlas.getRegions());
         pinkParticleEffect = manager.get("PinkkiEfekti");
         pinkParticleEffect.scaleEffect(1/80f);
+        pinkTickAnimationAtlas = manager.get("Pink dot.atlas");
+        pinkTickAnimation = new Animation<TextureRegion>(0.05f, pinkTickAnimationAtlas.getRegions());
 
         redPointTexture = manager.get("Smol Red.png");
         redHoldTexture = manager.get("Smol Red Hold.png");
