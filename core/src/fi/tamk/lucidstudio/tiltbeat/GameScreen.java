@@ -1037,7 +1037,7 @@ public class GameScreen implements Screen {
         settingsButton = new Button(18f, 18f, 1.5f, 1.5f, host.getSettingsButtonTexture());
         calibration = new Button(18f, 18f, 4f, 1.6f, host.getButtonTexture());
         secondSetting = new Button(18f, 18f, 4f, 1.6f, host.getButtonTexture());
-        highscoreButton = new Button(18f, 18f, 5f, 1.2f, host.getButtonTexture());
+        highscoreButton = new Button(18f, 18f, 5.6f, 1.2f, host.getButtonTexture());
         backToPauseMenu = new Button(18f, 18f, 1.5f, 1.5f, host.getBackButtonTexture());
         soundButton = new Button(18f, 18f, 2f, 2f, soundOnTexture);
         if (!host.isSoundOn()) {
@@ -1052,7 +1052,7 @@ public class GameScreen implements Screen {
         playAgainButton.setTextTwo(0, 0, " ");
         settingsButton.setText(-30, 190, "" + prefs.getString("settings"), basic);
         calibration.setText(50, 80, "" + prefs.getString("calibration"), small);
-        highscoreButton.setText(32, 70, "" + prefs.getString("seeHighscore"), basic);
+        highscoreButton.setText(62, 70, "" + prefs.getString("seeHighscore"), basic);
         backToPauseMenu.setText(10, 180, "" + prefs.getString("back"), basic);
         secondSetting.setText(30, 80, "" + prefs.getString("effectsAreOn"), small);
         if (!host.isEffectOn()) {
@@ -1173,7 +1173,7 @@ public class GameScreen implements Screen {
     public void moveHereResultMenuButtons() {
         playAgainButton.setPosition(8f, 1.8f);
         backButton.setPosition(3f, 1.8f);
-        highscoreButton.setPosition(5.6f, 3.5f);
+        highscoreButton.setPosition(5.3f, 3.5f);
     }
 
     public void destroyResultMenuButtons() {
@@ -1300,7 +1300,9 @@ public class GameScreen implements Screen {
         }
         //tulosruudun tekstit
         if (song.isEmpty()) {
-            heading.draw(batch, "" + prefs.getString("youDidIt"), 230, 620);
+            if (prefs.getString("language").equals("en")) {
+                heading.draw(batch, "" + prefs.getString("youDidIt"), 230, 620);
+            } else { heading.draw(batch, "" + prefs.getString("youDidIt"), 280, 620); }
             basic.draw(batch, "" + prefs.getString("youGot") + points + prefs.getString("youGot2"), 410, 450);
             backButton.setText(140, 90, "" + prefs.getString("mainMenu"), basic);
             playAgainButton.setText(140, 90, "" + prefs.getString("startAgain"), basic);

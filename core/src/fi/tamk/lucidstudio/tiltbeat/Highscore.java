@@ -88,7 +88,7 @@ public class Highscore implements Screen {
         button1.setText(40, 70, "" + prefs.getString("easy"), basic);
         button2.setText(40, 70, "" + prefs.getString("normal"), basic);
         button3.setText(40, 70, "" + prefs.getString("hard"), basic);
-        button4.setText(40, 70, "" + prefs.getString("bb"), basic);
+        button4.setText(40, 70, "" + prefs.getString("backbreaker"), basic);
 
     }
 
