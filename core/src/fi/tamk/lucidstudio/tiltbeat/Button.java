@@ -11,13 +11,17 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class Button extends Rectangle {
     private Texture texture;
-    private float fontX;
-    private float fontY;
+    private float fontX; //where the text is drawn
+    private float fontY; //where the text is drawn
+    private float fontXtwo;
+    private float fontYtwo;
     private String text;
+    private String textTwo;
     private BitmapFont font;
-    private float plusX;
-    private float plusY;
-
+    private float plusX; //how far from the buttons corner the text is
+    private float plusY; //how far from the buttons corner the text is
+    private float plusXtwo;
+    private float plusYtwo;
     public Button(float x, float y, float width, float height, Texture texture) {
         this.x = x;
         this.y = y;
@@ -35,6 +39,11 @@ public class Button extends Rectangle {
         font.draw(batch, text, fontX, fontY);
     }
 
+    public void drawTextTwo(SpriteBatch batch) {
+        moveTextTwo();
+        font.draw(batch, textTwo, fontXtwo, fontYtwo);
+    }
+
     public void setText(float x, float y, String a, BitmapFont font) {
         plusX = x;
         plusY = y;
@@ -42,13 +51,33 @@ public class Button extends Rectangle {
         this.font = font;
     }
 
+    public void setTextTwo(float x, float y, String a) {
+        plusXtwo = x;
+        plusYtwo = y;
+        textTwo = a;
+    }
+
     public void setText(String a) {
         text = a;
+    }
+
+    public void setTextTwo(String a) {
+        textTwo = a;
     }
 
     public void moveText() {
         fontX = calculateXPos() + plusX;
         fontY = calculateYPos() + plusY;
+    }
+
+    public void moveTextTwo() {
+        fontXtwo = calculateXPos() + plusXtwo;
+        fontYtwo = calculateYPos() + plusYtwo;
+    }
+
+    public void repositionText(float x, float y) {
+        plusX = x;
+        plusY = y;
     }
 
     public void setTexture(Texture t) {

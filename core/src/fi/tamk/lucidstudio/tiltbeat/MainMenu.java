@@ -2,6 +2,7 @@ package fi.tamk.lucidstudio.tiltbeat;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -20,6 +21,7 @@ import java.util.Scanner;
 public class MainMenu implements Screen{
     private GameMain host;
     private SpriteBatch batch;
+    private Preferences prefs;
     private OrthographicCamera camera;
     private OrthographicCamera fontCamera;
     private BitmapFont heading;
@@ -34,6 +36,7 @@ public class MainMenu implements Screen{
     private Button circle;
     private Texture background;
     private Vector3 touchPos;
+    private String[] words;
 
 
     public MainMenu(GameMain host) {
@@ -43,6 +46,7 @@ public class MainMenu implements Screen{
         camera = host.getCamera();
         fontCamera = host.getFontCamera();
         background = host.getBackgroundTexture();
+        prefs = host.getPrefs();
         Texture t = new Texture("copyright.png");
         Texture en = new Texture("uk.png");
         Texture fin = new Texture("fin.png");
@@ -96,10 +100,10 @@ public class MainMenu implements Screen{
         //piirrellään fontit
         heading.draw(batch, "TilT" , 370, 750);
         heading.draw(batch, "BeaT" , 550, 670);
-        basic.draw(batch, "play" , 320, 410);
-        basic.draw(batch, "settings" , 283, 170);
+        basic.draw(batch, "" + prefs.getString("play") , 320, 410);
+        basic.draw(batch, "" + prefs.getString("settings") , 283, 170);
+        basic.draw(batch, "" + prefs.getString("mods") , 775, 410);
         basic.draw(batch, "highscore" , 735, 170);
-        basic.draw(batch, "mods" , 775, 410);
 
         batch.end();
 
@@ -128,10 +132,12 @@ public class MainMenu implements Screen{
         }
         if (enButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setLanguage("en");
+            host.useEnglish();
             circle.setPosition(14.4f, 8.4f);
         }
         if (finButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setLanguage("fi");
+            host.useFinnish();
             circle.setPosition(13.1f, 8.4f);
         }
         //ottaa napin painalluksen vain kerran

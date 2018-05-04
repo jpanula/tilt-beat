@@ -2,6 +2,7 @@ package fi.tamk.lucidstudio.tiltbeat;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 public class Mods implements Screen {
     private GameMain host;
     private SpriteBatch batch;
+    private Preferences prefs;
     private BitmapFont heading;
     private BitmapFont basic;
     private BitmapFont small;
@@ -56,6 +58,7 @@ public class Mods implements Screen {
     public Mods(GameMain host) {
         this.host = host;
         batch = host.getBatch();
+        prefs = host.getPrefs();
         camera = host.getCamera();
         fontCamera = host.getFontCamera();
         heading = host.getSmallerHeadingFont();
@@ -75,11 +78,18 @@ public class Mods implements Screen {
         backButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, host.getBackButtonTexture());
         textBox = new Button(10.5f, 2.5f, 5.4f, 3f, host.getTextBoxTexture());
 
-        button4.setText(40, 70, "4-side", basic);
-        button6.setText(40, 70, "6-side", basic);
-        button8.setText(40, 70, "8-side", basic);
-        button10.setText(40, 70, "10-side", basic);
+        button4.setText(40, 70, "" + prefs.getString("4-side"), basic);
+        button6.setText(40, 70, "" + prefs.getString("6-side"), basic);
+        button8.setText(40, 70, "" + prefs.getString("8-side"), basic);
+        button10.setText(40, 70, "" + prefs.getString("10-side"), basic);
         button4twist.setText(30, 70, "flip", basic);
+
+        if (prefs.getString("language").equals("fi")) {
+            button4.repositionText(20f, 70f);
+            button6.repositionText(20f, 70f);
+            button8.repositionText(20f, 70f);
+            button10.repositionText(13f, 70f);
+        }
 
         playerSides = host.getPlayerSides();
         playerDiameter = host.getPlayerDiameter();
@@ -265,17 +275,17 @@ public class Mods implements Screen {
 
         batch.setProjectionMatrix(fontCamera.combined);
         //piirrellään fontit
-        heading.draw(batch, "Modifications" , 250, 680);
+        heading.draw(batch, "" + prefs.getString("modifications") , 250, 680);
         button4.drawText(batch);
         button6.drawText(batch);
         button8.drawText(batch);
         button10.drawText(batch);
         button4twist.drawText(batch);
-        small.draw(batch, "click sectors to" , 885, 400);
-        small.draw(batch, "activate or" , 885, 350);
-        small.draw(batch, "de-activate them" , 885, 300);
+        small.draw(batch, "" + prefs.getString("modsText1") , 885, 400);
+        small.draw(batch, "" + prefs.getString("modsText2") , 885, 350);
+        small.draw(batch, "" + prefs.getString("modsText3") , 885, 300);
         if (!highscoreOn) {
-            basic.draw(batch, "highscore offline" , 870, 530);
+            basic.draw(batch, "" + prefs.getString("hsOffline") , 870, 530);
         }
 
         //väliaikainen millä näkee onko sektorit päällä vai pois

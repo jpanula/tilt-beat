@@ -72,6 +72,109 @@ public class GameMain extends Game {
         prefs.flush();
     }
 
+    public void useFinnish() {
+	    prefs.putString("play", "pelaa");
+        prefs.putString("mods", "modit");
+        prefs.putString("settings", "asetukset");
+        prefs.putString("settingsBig", "Asetukset");
+        prefs.putString("easy", "helppo");
+        prefs.putString("normal", "normaali");
+        prefs.putString("hard", "vaikea");
+        prefs.putString("backbreaker", "selanrikkoja");
+        prefs.putString("easyDescription", "hauskaa! hauskaa!\naloittelijoille");
+        prefs.putString("normalDescription", "hauskaa!\nperus mode");
+        prefs.putString("hardDescription", "hauskaa?\nhc pelaajille");
+        prefs.putString("bbDescription", "ei hauskaa\net selvia hengissa");
+        prefs.putString("sound", "aanet");
+        prefs.putString("calibration", "kalibrointi");
+        prefs.putString("difficultyHead", "Vaikeus");
+        prefs.putString("default", "oletus");
+        prefs.putString("modifications", "Muokattavuus");
+        prefs.putString("hsOffline", "highscore ei tallennu");
+        prefs.putString("modsText1", "klikkaamalla saat");
+        prefs.putString("modsText2", "sektorit paalle");
+        prefs.putString("modsText3", "tai pois paalta");
+        prefs.putString("4-side", "4-kulmio");
+        prefs.putString("6-side", "6-kulmio");
+        prefs.putString("8-side", "8-kulmio");
+        prefs.putString("10-side", "10-kulmio");
+        prefs.putString("points", "pisteet");
+        prefs.putString("youGot", "sait ");
+        prefs.putString("youGot2", " pistetta!!");
+        prefs.putString("mainMenu", "paavalikko");
+        prefs.putString("mainMenu2", "paa-");
+        prefs.putString("startAgain", "uudestaan?");
+        prefs.putString("youDidIt", "teit sen!!!");
+        prefs.putString("continue", "jatka");
+        prefs.putString("retry", "yrita");
+        prefs.putString("back", "takaisin");
+        prefs.putString("seeHighscore", "katso highscoret");
+        prefs.putString("effectsAreOn", "efektit paalla");
+        prefs.putString("effectsAreOff", "efektit pois");
+        prefs.putString("pause", "TAUKO");
+        prefs.flush();
+    }
+
+    public void useEnglish() {
+        prefs.putString("play", "play");
+        prefs.putString("mods", "mods");
+        prefs.putString("settings", "settings");
+        prefs.putString("settingsBig", "Settings");
+        prefs.putString("easy", "easy");
+        prefs.putString("normal", "normal");
+        prefs.putString("hard", "hard");
+        prefs.putString("backbreaker", "backbreaker");
+        prefs.putString("easyDescription", "fun! fun! fun!\nfor beginners");
+        prefs.putString("normalDescription", "fun!\nbasic mode");
+        prefs.putString("hardDescription", "fun?\nfor hc players");
+        prefs.putString("bbDescription", "not fun\nyou will die");
+        prefs.putString("sound", "sound");
+        prefs.putString("calibration", "calibration");
+        prefs.putString("difficultyHead", "Difficulty");
+        prefs.putString("default", "default");
+        prefs.putString("modifications", "Modifications");
+        prefs.putString("hsOffline", "highscore offline");
+        prefs.putString("modsText1", "click sectors to");
+        prefs.putString("modsText2", "activate or");
+        prefs.putString("modsText3", "de-activate them");
+        prefs.putString("4-side", "4-side");
+        prefs.putString("6-side", "6-side");
+        prefs.putString("8-side", "8-side");
+        prefs.putString("10-side", "10-side");
+        prefs.putString("points", "points");
+        prefs.putString("youGot", "you got ");
+        prefs.putString("youGot2", " points!!");
+        prefs.putString("mainMenu", "main menu");
+        prefs.putString("mainMenu2", "main\nmenu");
+        prefs.putString("startAgain", "start again?");
+        prefs.putString("youDidIt", "you did it!!!");
+        prefs.putString("continue", "continue");
+        prefs.putString("retry", "retry");
+        prefs.putString("back", "back");
+        prefs.putString("seeHighscore", "see highscores");
+        prefs.putString("effectsAreOn", "effects: on");
+        prefs.putString("effectsAreOff", "effects: off");
+        prefs.putString("pause", "PAUSE");
+        prefs.flush();
+    }
+
+    public String[] getWords() {
+	    String[] a = new String[11];
+	    a[0] = prefs.getString("play");
+        a[1] = prefs.getString("mods");
+        a[2] = prefs.getString("settings");
+        a[3] = prefs.getString("easy");
+        a[4] = prefs.getString("normal");
+        a[5] = prefs.getString("hard");
+        a[6] = prefs.getString("bb");
+        a[7] = prefs.getString("sound");
+        a[8] = prefs.getString("calibration");
+        a[9] = prefs.getString("default");
+        a[10] = prefs.getString("modifications");
+        return a;
+
+    }
+
     public void resetHighscore(Preferences prefs) {
         prefs.putString("1stS", "");
         prefs.putString("2ndS", "");
