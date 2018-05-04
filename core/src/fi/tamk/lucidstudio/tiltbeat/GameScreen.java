@@ -1436,10 +1436,12 @@ public class GameScreen implements Screen {
             }
             if (playAgainButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
                 jauntyGumption.stop();
+                this.dispose();
                 host.setScreen(new GameScreen(host));
             }
             if (backButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
                 jauntyGumption.stop();
+                this.dispose();
                 host.setScreen(new MainMenu(host));
             }
             if (settingsButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
