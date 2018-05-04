@@ -1,0 +1,33 @@
+Yellow dot.png
+size: 680, 170
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Y1
+  rotate: false
+  xy: 0, 0
+  size: 170, 170
+  orig: 170, 170
+  offset: 0, 0
+  index: -1
+Y2
+  rotate: false
+  xy: 170, 0
+  size: 170, 170
+  orig: 170, 170
+  offset: 0, 0
+  index: -1
+Y3
+  rotate: false
+  xy: 340, 0
+  size: 170, 170
+  orig: 170, 170
+  offset: 0, 0
+  index: -1
+Y4
+  rotate: false
+  xy: 510, 0
+  size: 170, 170
+  orig: 170, 170
+  offset: 0, 0
+  index: -1
