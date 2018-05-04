@@ -2,6 +2,7 @@ package fi.tamk.lucidstudio.tiltbeat;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -20,6 +21,7 @@ import com.badlogic.gdx.math.Vector3;
 public class Highscore implements Screen {
     private GameMain host;
     private SpriteBatch batch;
+    private Preferences prefs;
     private BitmapFont heading;
     private BitmapFont basic;
     private BitmapFont small;
@@ -49,6 +51,7 @@ public class Highscore implements Screen {
         batch = host.getBatch();
         camera = host.getCamera();
         fontCamera = host.getFontCamera();
+        prefs = host.getPrefs();
         heading = host.getHeadingFont();
         basic = host.getBasicFont();
         small = host.getSmallFont();
@@ -56,7 +59,7 @@ public class Highscore implements Screen {
         backButtonTexture = host.getBackButtonTexture();
         textBoxTexture = host.getTextBoxTexture();
         touchPos = new Vector3();
-        difficulty = "easy";
+        difficulty = host.getDifficulty();
         easyScores = host.getEasyScores();
         easyNames = host.getEasyNames();
         normalScores = host.getNormalScores();
@@ -67,15 +70,25 @@ public class Highscore implements Screen {
         bbNames = host.getBbNames();
 
         backButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, host.getBackButtonTexture());
-        button1 = new Button(.5f, 5.6f, 4.5f, 1.2f, host.getButtonPressedTexture());
+        button1 = new Button(.5f, 5.6f, 4.5f, 1.2f, host.getButtonTexture());
         button2 = new Button(.5f, 3.9f, 4.5f, 1.2f, host.getButtonTexture());
         button3 = new Button(.5f, 2.2f, 4.5f, 1.2f, host.getButtonTexture());
         button4 = new Button(.5f, .5f, 4.5f, 1.2f, host.getButtonTexture());
 
-        button1.setText(40, 70, "easy", basic);
-        button2.setText(40, 70, "normal", basic);
-        button3.setText(40, 70, "hard", basic);
-        button4.setText(40, 70, "backbreaker", basic);
+        if (difficulty.equals("easy")) {
+            button1.setTexture(host.getButtonPressedTexture());
+        } else if (difficulty.equals("normal")) {
+            button2.setTexture(host.getButtonPressedTexture());
+        } else if (difficulty.equals("hard")) {
+            button3.setTexture(host.getButtonPressedTexture());
+        } else {
+            button4.setTexture(host.getButtonPressedTexture());
+        }
+
+        button1.setText(40, 70, "" + prefs.getString("easy"), basic);
+        button2.setText(40, 70, "" + prefs.getString("normal"), basic);
+        button3.setText(40, 70, "" + prefs.getString("hard"), basic);
+        button4.setText(40, 70, "" + prefs.getString("bb"), basic);
 
     }
 

@@ -2,6 +2,7 @@ package fi.tamk.lucidstudio.tiltbeat;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
@@ -34,6 +35,7 @@ public class GameScreen implements Screen {
     private GameMain host;
     private AssetManager manager;
     private SpriteBatch batch;
+    private Preferences prefs;
     private OrthographicCamera camera;
     private OrthographicCamera fontCamera;
     private ShapeRenderer shapeRenderer;
@@ -65,6 +67,7 @@ public class GameScreen implements Screen {
     private int points;
     private int pointMulti;
     private BitmapFont verySmall;
+    private BitmapFont small;
     private BitmapFont basic;
     private BitmapFont heading;
 
@@ -79,6 +82,7 @@ public class GameScreen implements Screen {
     private Button secondSetting;
     private Button backToPauseMenu;
     private Button soundButton;
+    private Button highscoreButton;
     private Texture soundOnTexture;
     private Texture soundOffTexture;
     private Texture square;
@@ -817,6 +821,7 @@ public class GameScreen implements Screen {
         this.host = host;
         manager = host.getManager();
         batch = host.getBatch();
+        prefs = host.getPrefs();
         camera = host.getCamera();
         fontCamera = host.getFontCamera();
         shapeRenderer = host.getShapeRenderer();
@@ -999,7 +1004,7 @@ public class GameScreen implements Screen {
                     i++;
 
                     slideGen.add(new Point((randomSector) % playerSides, i * noteSpeed / (bpm / 60) + noteSpeed * startOffset / (bpm / 60) + noteSpeed / (146 / 60), "blue"));
-                    slideGen.get(1).flip();
+                    slideGen.get(0).flip(); slideGen.get(2).flip();
                     song.add(new Slide(0, 0, slideGen, "blue"));
                 //jos ei oo slidelle tilaa nii norminuotti
                 } else {
@@ -1015,6 +1020,7 @@ public class GameScreen implements Screen {
 
         points = 0;
         verySmall = host.getVerySmallFont();
+        small = host.getSmallFont();
         basic = host.getBasicFont();
         heading = host.getHeadingFont();
 
@@ -1023,8 +1029,9 @@ public class GameScreen implements Screen {
         playAgainButton = new Button(18f, 18f, 1.5f, 1.5f, host.getPlayAgainButtonTexture());
         backButton = new Button(18f, 18f, 1.5f, 1.5f, host.getBackButtonTexture());
         settingsButton = new Button(18f, 18f, 1.5f, 1.5f, host.getSettingsButtonTexture());
-        calibration = new Button(18f, 18f, 4f, 2f, host.getButtonTexture());
-        secondSetting = new Button(18f, 18f, 4f, 2f, host.getButtonTexture());
+        calibration = new Button(18f, 18f, 4f, 1.6f, host.getButtonTexture());
+        secondSetting = new Button(18f, 18f, 4f, 1.6f, host.getButtonTexture());
+        highscoreButton = new Button(18f, 18f, 5f, 1.2f, host.getButtonTexture());
         backToPauseMenu = new Button(18f, 18f, 1.5f, 1.5f, host.getBackButtonTexture());
         soundButton = new Button(18f, 18f, 2f, 2f, soundOnTexture);
         if (!host.isSoundOn()) {
@@ -1032,15 +1039,30 @@ public class GameScreen implements Screen {
         }
         resultBox = new Button(2f, 1f, 12f, 8f, host.getTextBoxTexture());
 
-        backButton.setText(0, 260, "main\nmenu", basic);
-        playButton.setText(-30, 190, "continue", basic);
-        playAgainButton.setText(0, 190, "retry", basic);
-        settingsButton.setText(-30, 190, "settings", basic);
-        calibration.setText(30, 110, "calibration", basic);
-        backToPauseMenu.setText(10, 180, "back", basic);
-        secondSetting.setText(17, 110, "effects: on", basic);
+        backButton.setText(0, 260, "" + prefs.getString("mainMenu2"), basic);
+        backButton.setTextTwo(0, 0, " ");
+        playButton.setText(-30, 190, "" + prefs.getString("continue"), basic);
+        playAgainButton.setText(0, 190, "" + prefs.getString("retry"), basic);
+        playAgainButton.setTextTwo(0, 0, " ");
+        settingsButton.setText(-30, 190, "" + prefs.getString("settings"), basic);
+        calibration.setText(50, 80, "" + prefs.getString("calibration"), small);
+        highscoreButton.setText(32, 70, "" + prefs.getString("seeHighscore"), basic);
+        backToPauseMenu.setText(10, 180, "" + prefs.getString("back"), basic);
+        secondSetting.setText(30, 80, "" + prefs.getString("effectsAreOn"), small);
         if (!host.isEffectOn()) {
-            secondSetting.setText("effects: off");
+            secondSetting.setText("" + prefs.getString("effectsAreOff"));
+        }
+
+        if (prefs.getString("language").equals("fi")) {
+            backButton.repositionText(10f, 260f);
+            backButton.setTextTwo(-20f, 190f, "valikko");
+            playButton.repositionText(0f, 225f);
+            playAgainButton.repositionText(-10f, 260f);
+            playAgainButton.setTextTwo(-55f, 190f, "uudestaan");
+            settingsButton.repositionText(-30f, 225f);
+            highscoreButton.repositionText(30f, 70f);
+            backToPauseMenu.repositionText(-20f, 180f);
+            secondSetting.repositionText(30f, 80f);
         }
 
         if (host.getDifficulty().equals("easy")) {
@@ -1129,8 +1151,8 @@ public class GameScreen implements Screen {
     }
 
     public void moveHereSettingsButtons() {
-        calibration.setPosition(5.7f, 4f);
-        secondSetting.setPosition(5.7f, 2f);
+        calibration.setPosition(5.7f, 4.2f);
+        secondSetting.setPosition(5.7f, 2.2f);
         backToPauseMenu.setPosition(3.5f, 2f);
         soundButton.setPosition(10.5f, 3.3f);
     }
@@ -1143,8 +1165,9 @@ public class GameScreen implements Screen {
     }
 
     public void moveHereResultMenuButtons() {
-        playAgainButton.setPosition(8f, 2f);
-        backButton.setPosition(3f, 2f);
+        playAgainButton.setPosition(8f, 1.8f);
+        backButton.setPosition(3f, 1.8f);
+        highscoreButton.setPosition(5.6f, 3.5f);
     }
 
     public void destroyResultMenuButtons() {
@@ -1220,6 +1243,7 @@ public class GameScreen implements Screen {
             resultBox.draw(batch);
             backButton.draw(batch);
             playAgainButton.draw(batch);
+            highscoreButton.draw(batch);
         }
         //asetusruutu
         if (changeSettings) {
@@ -1232,7 +1256,7 @@ public class GameScreen implements Screen {
 
         batch.setProjectionMatrix(fontCamera.combined);
         //piirrellään tekstit
-        basic.draw(batch, "points: " + points, 50, 100);
+        basic.draw(batch, prefs.getString("points") + ": " + points, 50, 100);
 
         //väliaikainen millä näkee onko sektorit päällä vai pois
         //piirtää sektoreihin "on/off"
@@ -1260,24 +1284,27 @@ public class GameScreen implements Screen {
 
         //pauseruudun tekstit
         if (paused && !song.isEmpty() && !changeSettings) {
-            heading.draw(batch, "PAUSE", 400, 600);
+            heading.draw(batch, "" + prefs.getString("pause"), 400, 600);
             backButton.drawText(batch);
             playButton.drawText(batch);
             playAgainButton.drawText(batch);
             settingsButton.drawText(batch);
+            backButton.drawTextTwo(batch);
+            playAgainButton.drawTextTwo(batch);
         }
         //tulosruudun tekstit
         if (song.isEmpty()) {
-            heading.draw(batch, "you did it!!!", 230, 620);
-            basic.draw(batch, "you got " + points + " points!!", 410, 400);
-            backButton.setText(140, 90, "main menu", basic);
-            playAgainButton.setText(140, 90, "start again?", basic);
+            heading.draw(batch, "" + prefs.getString("youDidIt"), 230, 620);
+            basic.draw(batch, "" + prefs.getString("youGot") + points + prefs.getString("youGot2"), 410, 450);
+            backButton.setText(140, 90, "" + prefs.getString("mainMenu"), basic);
+            playAgainButton.setText(140, 90, "" + prefs.getString("startAgain"), basic);
             backButton.drawText(batch);
             playAgainButton.drawText(batch);
+            highscoreButton.drawText(batch);
         }
         //asetusruudun tekstit
         if (changeSettings) {
-            heading.draw(batch, "Settings", 320, 630);
+            heading.draw(batch, "" + prefs.getString("settingsBig"), 320, 630);
             calibration.drawText(batch);
             secondSetting.drawText(batch);
             backToPauseMenu.drawText(batch);
@@ -1428,6 +1455,9 @@ public class GameScreen implements Screen {
                 paused = false;
                 moveAwayPauseMenuButtons();
             }
+            if (highscoreButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+                host.setScreen(new Highscore(host));
+            }
             if (playAgainButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
                 jauntyGumption.stop();
                 host.setScreen(new GameScreen(host));
@@ -1449,10 +1479,10 @@ public class GameScreen implements Screen {
             if (secondSetting.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
                 if (host.isEffectOn()) {
                     host.setEffectsOn(false);
-                    secondSetting.setText("effects: off");
+                    secondSetting.setText("" + prefs.getString("effectsAreOff"));
                 } else {
                     host.setEffectsOn(true);
-                    secondSetting.setText("effects: on");
+                    secondSetting.setText("" + prefs.getString("effectsAreOn"));
                 }
             }
             if (soundButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {

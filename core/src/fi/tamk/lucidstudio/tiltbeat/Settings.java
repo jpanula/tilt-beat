@@ -3,6 +3,7 @@ package fi.tamk.lucidstudio.tiltbeat;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -19,6 +20,7 @@ import com.badlogic.gdx.math.Vector3;
 public class Settings implements Screen {
     GameMain host;
     SpriteBatch batch;
+    private Preferences prefs;
     private OrthographicCamera camera;
     private OrthographicCamera fontCamera;
     private Texture background;
@@ -38,6 +40,7 @@ public class Settings implements Screen {
     public Settings(GameMain host) {
         this.host = host;
         batch = host.getBatch();
+        prefs = host.getPrefs();
         camera = host.getCamera();
         background = host.getBackgroundTexture();
         fontCamera = host.getFontCamera();
@@ -51,9 +54,9 @@ public class Settings implements Screen {
         calibration = new Button(6.2f, 1.8f, 3.7f, 2f, host.getButtonTexture());
         backButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, host.getBackButtonTexture());
 
-        sound.setText(80, 106, "sound", basic);
-        calibration.setText(24, 106, "calibration", basic);
-        restore.setText(50, 136, "default\nsettings", basic);
+        sound.setText(80, 106, "" + prefs.getString("sound"), basic);
+        calibration.setText(24, 106, "" + prefs.getString("calibration"), basic);
+        restore.setText(50, 136, prefs.getString("default") + "\n" + prefs.getString("settings"), basic);
         destroySoundButton();
         touchPos = new Vector3();
     }
@@ -95,7 +98,7 @@ public class Settings implements Screen {
         restore.drawText(batch);
         sound.drawText(batch);
 
-        heading.draw(batch, "Settings", 330, 650);
+        heading.draw(batch, "" + prefs.getString("settingsBig"), 330, 650);
 
         batch.end();
 

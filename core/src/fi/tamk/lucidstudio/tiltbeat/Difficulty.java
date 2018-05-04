@@ -1,6 +1,7 @@
 package fi.tamk.lucidstudio.tiltbeat;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
@@ -19,6 +20,7 @@ public class Difficulty implements Screen {
     private GameMain host;
     private AssetManager manager;
     private SpriteBatch batch;
+    private Preferences prefs;
     private BitmapFont small;
     private BitmapFont basic;
     private BitmapFont big;
@@ -45,6 +47,7 @@ public class Difficulty implements Screen {
         this.host = host;
         manager = host.getManager();
         batch = host.getBatch();
+        prefs = host.getPrefs();
         camera = host.getCamera();
         fontCamera = host.getFontCamera();
         heading = host.getSmallerHeadingFont();
@@ -55,23 +58,18 @@ public class Difficulty implements Screen {
         buttonTexture = host.getButtonTexture();
         buttonPressedTexture = host.getButtonPressedTexture();
         touchPos = new Vector3();
-/*
+
         manager.load("easynappi.png", Texture.class);
         manager.load("normalnappi.png", Texture.class);
         manager.load("hardnappi.png", Texture.class);
         manager.load("bbnappi.png", Texture.class);
-        manager.load("ring.png", Texture.class);
+        manager.load("planet-ring.png", Texture.class);
+        manager.finishLoading();
         Texture easyT = manager.get("easynappi.png");
         Texture normalT = manager.get("normalnappi.png");
         Texture hardT = manager.get("hardnappi.png");
         Texture bbT = manager.get("bbnappi.png");
-        Texture ring = manager.get("ring.png");
-*/
-        Texture easyT = new Texture("easynappi.png");
-        Texture normalT = new Texture("normalnappi.png");
-        Texture hardT = new Texture("hardnappi.png");
-        Texture bbT = new Texture("bbnappi.png");
-        Texture ring = new Texture("planet-ring.png");
+        Texture ring = manager.get("planet-ring.png");
 
         backButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, host.getBackButtonTexture());
         playButton = new Button(14f, 0.5f, 1.5f, 1.5f, host.getPlayButtonTexture());
@@ -85,14 +83,20 @@ public class Difficulty implements Screen {
         song3Button = new Button(10f, 3f, 5f, 1.5f, buttonTexture);
         ringButton = new Button(10f, 3.5f, 3f, 1f, ring);
 
-        easyButton.setText(28, 110, "easy", basic);
-        normalButton.setText(5, 110, "normal", basic);
-        hardButton.setText(55, 120, "hard", basic);
-        backBreakerButton.setText(-20, 120, "backbreaker", basic);
+        easyButton.setText(28, 110, "" + prefs.getString("easy"), basic);
+        normalButton.setText(5, 110, "" + prefs.getString("normal"), basic);
+        hardButton.setText(55, 120, "" + prefs.getString("hard"), basic);
+        backBreakerButton.setText(-20, 120, "" + prefs.getString("backbreaker"), basic);
         song1Button.setText(40, 80, "jaumpty gumpty", small);
         song2Button.setText(40, 80, "nyan cat", small);
         song3Button.setText(40, 80, "take on me", small);
-        textBox.setText(50, 180, "fun! fun! fun!\nfor beginners", basic);
+        textBox.setText(50, 180, "" + prefs.getString("easyDescription"), basic);
+
+        if (prefs.getString("language").equals("fi")) {
+            easyButton.repositionText(10f, 110f);
+            normalButton.repositionText(-18f, 110f);
+            hardButton.repositionText(30f, 120f);
+        }
 
         changeButtonTextures();
     }
@@ -100,16 +104,16 @@ public class Difficulty implements Screen {
     public void changeButtonTextures() {
 
         if (host.getDifficulty().equals("easy")) {
-            textBox.setText("fun! fun! fun!\nfor beginners");
+            textBox.setText("" + prefs.getString("easyDescription"));
             ringButton.setPosition(1f, 1f);
         } else if (host.getDifficulty().equals("normal")) {
-            textBox.setText("fun!\nbasic mode");
+            textBox.setText("" + prefs.getString("normalDescription"));
             ringButton.setPosition(4f, 1f);
         } else if (host.getDifficulty().equals("hard")) {
-            textBox.setText("fun?\nfor hc players");
+            textBox.setText("" + prefs.getString("hardDescription"));
             ringButton.setPosition(6.95f, 1f);
         } else {
-            textBox.setText("not fun\nyou will die");
+            textBox.setText("" + prefs.getString("bbDescription"));
             ringButton.setPosition(10.1f, 1f);
         }
 
@@ -160,7 +164,7 @@ public class Difficulty implements Screen {
 
         batch.setProjectionMatrix(fontCamera.combined);
         //piirrellään fontit
-        heading.draw(batch, "Difficulty" , 180, 720);
+        heading.draw(batch, "" + prefs.getString("difficultyHead") , 180, 720);
         easyButton.drawText(batch);
         normalButton.drawText(batch);
         hardButton.drawText(batch);
@@ -169,7 +173,7 @@ public class Difficulty implements Screen {
         song2Button.drawText(batch);
         song3Button.drawText(batch);
         textBox.drawText(batch);
-        big.draw(batch, host.getDifficulty() + "" , 130, 550);
+        big.draw(batch, "" + prefs.getString(host.getDifficulty()), 130, 550);
         batch.end();
 
         //nappien toiminnallisuus
