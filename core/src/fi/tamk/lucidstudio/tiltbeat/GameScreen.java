@@ -881,15 +881,15 @@ public class GameScreen implements Screen {
         public void setLineColor(ShapeRenderer shapeRenderer, String color) {
             color = color.toLowerCase();
             if (color.equals("blue")) {
-                shapeRenderer.setColor(0, 174, 239, 0);
+                shapeRenderer.setColor(0, 174/255f, 239/255f, 0);
             } else if (color.equals("green")) {
-                shapeRenderer.setColor(0, 249, 0, 0);
+                shapeRenderer.setColor(0, 249/255f, 0, 0);
             } else if (color.equals("yellow")) {
-                shapeRenderer.setColor(255, 255, 0, 0);
+                shapeRenderer.setColor(255/255f, 255/255f, 0, 0);
             } else if (color.equals("pink")) {
-                shapeRenderer.setColor(236, 0, 140, 0);
+                shapeRenderer.setColor(236/255f, 0, 140/255f, 0);
             } else if (color.equals("red")) {
-                shapeRenderer.setColor(255, 0, 0, 0);
+                shapeRenderer.setColor(255/255f, 0, 0, 0);
             } else {
                 throw new IllegalArgumentException("Invalid color");
             }
