@@ -489,6 +489,9 @@ public class GameScreen implements Screen {
 
         public void setHit(boolean hit) {
             this.hit = hit;
+            if (hit) {
+                getEffect().start();
+            }
         }
 
         public void setTexture(Texture texture) {
@@ -628,15 +631,6 @@ public class GameScreen implements Screen {
             setStateTime(0);
         }
 
-        @Override
-        public void setHit(boolean hit) {
-            super.setHit(hit);
-            if (hit) {
-                getEffect().start();
-            }
-        }
-
-
         public Vector2 getVector() {
             vector.setLength(getDistance() + host.getPlayerInradius());
             vector.setAngle(90 - (360 / host.getPlayerSides()) * getSector() - (360 / host.getPlayerSides()) / 2);
@@ -692,6 +686,7 @@ public class GameScreen implements Screen {
         private ArrayList<Tick> ticks;
         private boolean scored;
         private float endPointStateTime;
+        private boolean startPointHit;
 
         class Tick extends Note {
             private Vector2 vector;
@@ -720,7 +715,7 @@ public class GameScreen implements Screen {
                     vector.setAngle(vector.angle() - 45);
                     vector.setLength(getDistance() + host.getPlayerDiameter() / 2);
                 }
-                if (getDistance() > 0) {
+                if (!isHit()) {
                     batch.draw(getTexture(), host.getScreenWidth() / 2 + vector.x - tickDiameter / 2, host.getScreenHeight() / 2 + vector.y - tickDiameter / 2, tickDiameter, tickDiameter);
                 } else if (!getScoreAnimation().isAnimationFinished(getStateTime())) {
                     TextureRegion keyframe = new TextureRegion(getScoreAnimation().getKeyFrame(getStateTime()));
@@ -733,7 +728,9 @@ public class GameScreen implements Screen {
 
         public Hold(int sector, float distance, float length, String color) {
             super(sector, distance, color);
+            this.startPointHit = false;
             this.length = length;
+            setAnimationSize(1.1f);
             width = 1;
             tickDiameter = 0.2f;
             height = 0.7f * width;
@@ -753,6 +750,23 @@ public class GameScreen implements Screen {
                 ticks.add(new Tick(sector, (distance + (float) i / tickAmount * length), color));
             }
             endPointStateTime = 0;
+        }
+
+        public boolean isStartPointHit() {
+            return startPointHit;
+        }
+
+        public void setStartPointHit(boolean startPointHit) {
+            this.startPointHit = startPointHit;
+        }
+
+        @Override
+        public boolean isAnimationFinished() {
+            if (getScoreAnimation().isAnimationFinished(endPointStateTime) && getEffect().isComplete()) {
+                return true;
+            } else {
+                return false;
+            }
         }
 
         public boolean isScored() {
@@ -778,43 +792,53 @@ public class GameScreen implements Screen {
             for (Tick tick : ticks) {
                 tick.draw(batch);
             }
-            startPoint.setLength(getDistance() + host.getPlayerInradius());
+            if (!isStartPointHit()) {
+                startPoint.setLength(getDistance() + host.getPlayerInradius());
+            }
             startPoint.setAngle(90 - (360 / host.getPlayerSides()) * getSector() - (360 / host.getPlayerSides()) / 2);
             if (!host.isTiltedSquare() && host.getPlayerSides() == 4) {
-                startPoint.setAngle(startPoint.angle() - 45);
+                if (!isStartPointHit()) {
+                    startPoint.setAngle(startPoint.angle() - 45);
+                }
                 startPoint.setLength(getDistance() + host.getPlayerDiameter() / 2);
             }
-            if (getDistance() > 0) {
-                batch.draw(getTexture(), host.getScreenWidth() / 2 + startPoint.x - width / 2, host.getScreenHeight() / 2 + startPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, startPoint.angle() - 90, 0, 0, getTexture().getWidth(), getTexture().getHeight(), false, false);
-            } else if (!getScoreAnimation().isAnimationFinished(getStateTime())) {
+            if (!isStartPointHit()) {
+                if (getDistance() > 0){
+                    batch.draw(getTexture(), host.getScreenWidth() / 2 + startPoint.x - width / 2, host.getScreenHeight() / 2 + startPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, startPoint.angle() - 90, 0, 0, getTexture().getWidth(), getTexture().getHeight(), false, false);
+                }
+            } else {
+                if (!getScoreAnimation().isAnimationFinished(getStateTime())) {
                     TextureRegion keyframe = new TextureRegion(getScoreAnimation().getKeyFrame(getStateTime()));
                     batch.draw(keyframe, host.getScreenWidth() / 2 + startPoint.x - getAnimationSize() / 2, host.getScreenHeight() / 2 + startPoint.y - getAnimationSize() / 2, getAnimationSize() / 2, getAnimationSize() / 2, getAnimationSize(), getAnimationSize(), getAnimationSize(), getAnimationSize(), startPoint.angle(), false);
                 }
-                getEffect().setPosition(host.getScreenWidth() / 2 + startPoint.x, host.getScreenHeight() / 2 + startPoint.y);
-                getEffect().draw(batch, Gdx.graphics.getDeltaTime());
                 setStateTime(getStateTime() + Gdx.graphics.getDeltaTime());
+            }
             endPoint.setLength(getDistance() + length + host.getPlayerInradius());
             endPoint.setAngle(90 - (360 / host.getPlayerSides()) * getSector() - (360 / host.getPlayerSides()) / 2);
             if (!host.isTiltedSquare() && host.getPlayerSides() == 4) {
                 endPoint.setAngle(endPoint.angle() - 45);
                 endPoint.setLength(getDistance() + host.getPlayerDiameter() / 2 + length);
             }
-            if ((getDistance() + getLength()) > 0) {
+            if (!isHit()) {
                 batch.draw(getTexture(), host.getScreenWidth() / 2 + endPoint.x - width / 2, host.getScreenHeight() / 2 + endPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, endPoint.angle() - 90, 0, 0, getTexture().getWidth(), getTexture().getHeight(), false, true);
-            } else if (!getScoreAnimation().isAnimationFinished(getStateTime())) {
-                TextureRegion keyframe = new TextureRegion(getScoreAnimation().getKeyFrame(getStateTime()));
+            } else {
+                if (!getScoreAnimation().isAnimationFinished(endPointStateTime)) {
+                TextureRegion keyframe = new TextureRegion(getScoreAnimation().getKeyFrame(endPointStateTime));
                 batch.draw(keyframe, host.getScreenWidth() / 2 + endPoint.x - getAnimationSize() / 2, host.getScreenHeight() / 2 + endPoint.y - getAnimationSize() / 2, getAnimationSize() / 2, getAnimationSize() / 2, getAnimationSize(), getAnimationSize(), getAnimationSize(), getAnimationSize(), endPoint.angle(), false);
+                }
+                getEffect().setPosition(host.getScreenWidth() / 2 + endPoint.x, host.getScreenHeight() / 2 + endPoint.y);
+                getEffect().draw(batch, Gdx.graphics.getDeltaTime());
+                endPointStateTime += Gdx.graphics.getDeltaTime();
             }
-            getEffect().setPosition(host.getScreenWidth() / 2 + endPoint.x, host.getScreenHeight() / 2 + endPoint.y);
-            getEffect().draw(batch, Gdx.graphics.getDeltaTime());
-            setStateTime(getStateTime() + Gdx.graphics.getDeltaTime());
         }
 
         @Override
         public void move(float noteSpeed) {
             super.move(noteSpeed);
             for (Tick tick : ticks) {
-                tick.move(noteSpeed);
+                if (!tick.isHit()) {
+                    tick.move(noteSpeed);
+                }
             }
         }
     }
@@ -1486,41 +1510,52 @@ public class GameScreen implements Screen {
             // Hold-tyyppisten nuottien tarkistus
             } else if (note instanceof  Hold) {
                 if (note.getDistance() + ((Hold) note).getLength() <= 0) {
-                    if (note.getSector() == player.getPointerSector()) {
-                        iter.remove();
+                    if (note.getSector() == player.getPointerSector() && !note.isHit()) {
+                        note.setHit(true);
                         points += pointMulti*2;
                         if (host.isSoundOn()) {
                             soundEffect.play();
                         }
-                    } else if (note.getDistance() < -0.35f){
+                    } else if (note.getDistance() + ((Hold) note).getLength() < -0.35f || !note.isHit()){
                         System.out.println("FAIL!");
                         iter.remove();
                     }
+                    if (note.isHit()) {
+                        if (note.isAnimationFinished()) {
+                            iter.remove();
+                        }
+                    }
                 }
-                if (note.getDistance() <= 0 && !((Hold) note).isScored()) {
+                if (note.getDistance() <= 0 && !((Hold) note).isStartPointHit()) {
                     if (note.getSector() == player.getPointerSector()) {
+                        ((Hold) note).setStartPointHit(true);
                         points += pointMulti*2;
                         if (host.isSoundOn()) {
                             soundEffect.play();
                         }
-                        ((Hold) note).setScored(true);
                     } else if (note.getDistance() < -0.35f){
                         System.out.println("FAIL!");
-                        ((Hold) note).setScored(true);
                     }
                 }
                 // Holdin pikkupalleroiden tarkistus
-                for (Hold.Tick tick : ((Hold) note).getTicks()) {
-                    if (tick.getDistance() <= 0 && !tick.isScored()) {
-                        if (tick.getSector() == player.getPointerSector()) {
+                Iterator<Hold.Tick> tickIter = ((Hold) note).getTicks().iterator();
+                while (tickIter.hasNext()) {
+                    Hold.Tick tick = tickIter.next();
+                    if (tick.getDistance() <= 0) {
+                        if (tick.getSector() == player.getPointerSector() && !tick.isHit()) {
+                            tick.setHit(true);
                             points += pointMulti/3;
                             if (host.isSoundOn()) {
                                 soundEffect.play();
                             }
-                            tick.setScored(true);
-                        } else if (note.getDistance() < -0.35f){
+                        } else if (tick.getDistance() < -0.35f || !tick.isHit()){
                             System.out.println("FAIL!");
-                            tick.setScored(true);
+                            tickIter.remove();
+                        }
+                        if (tick.isHit()) {
+                            if (tick.isAnimationFinished()) {
+                                tickIter.remove();
+                            }
                         }
                     }
                 }
@@ -1760,13 +1795,13 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
-        paused = true;
-        moveHerePauseMenuButtons();
+        //paused = true;
+        //moveHerePauseMenuButtons();
     }
 
     @Override
     public void resume() {
-        paused = true;
+        //paused = true;
     }
 
     @Override
