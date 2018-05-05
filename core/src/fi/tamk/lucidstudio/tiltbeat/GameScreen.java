@@ -845,9 +845,11 @@ public class GameScreen implements Screen {
 
     class Slide extends Note {
         private ArrayList<Point> notes;
+        private String color;
 
         public Slide(int sector, float distance, ArrayList<Point> notes, String color) {
             super(sector, distance, color);
+            this.color = color;
             // Muutetaan annetun nuottikasan sektorit ja etäisyys koko Sliden mukaan
             for (int i = 0; i < notes.size(); i++) {
                 Point note = notes.get(i);
@@ -875,7 +877,24 @@ public class GameScreen implements Screen {
                 throw new IllegalArgumentException("Invalid color");
             }
         }
-        
+
+        public void setLineColor(ShapeRenderer shapeRenderer, String color) {
+            color = color.toLowerCase();
+            if (color.equals("blue")) {
+                shapeRenderer.setColor(0, 174, 239, 0);
+            } else if (color.equals("green")) {
+                shapeRenderer.setColor(0, 249, 0, 0);
+            } else if (color.equals("yellow")) {
+                shapeRenderer.setColor(255, 255, 0, 0);
+            } else if (color.equals("pink")) {
+                shapeRenderer.setColor(236, 0, 140, 0);
+            } else if (color.equals("red")) {
+                shapeRenderer.setColor(255, 0, 0, 0);
+            } else {
+                throw new IllegalArgumentException("Invalid color");
+            }
+        }
+
         public ArrayList<Point> getNotes() {
             return notes;
         }
@@ -893,7 +912,9 @@ public class GameScreen implements Screen {
                     Vector2 startPoint = (notes.get(i).getVector().add(new Vector2(host.getScreenWidth() / 2, host.getScreenHeight() / 2)));
                     Vector2 endPoint = (notes.get(i + 1).getVector().add(new Vector2(host.getScreenWidth() / 2, host.getScreenHeight() / 2)));
 
+                    setLineColor(shapeRenderer, this.color);
                     shapeRenderer.line(startPoint, endPoint);
+                    shapeRenderer.setColor(1, 1, 1, 0);
                 }
             }
         }
@@ -1459,6 +1480,7 @@ public class GameScreen implements Screen {
                     }
                 }
                 //shapeRenderer.line(host.getScreenWidth() / 2, host.getScreenHeight() / 2, 0, Gdx.input.getAccelerometerY() + host.getScreenWidth() / 2, -Gdx.input.getAccelerometerX() + host.getScreenHeight() / 2, -Math.abs(Gdx.input.getAccelerometerZ()));
+
                 shapeRenderer.end();
             }
         }
