@@ -182,9 +182,11 @@ public class Difficulty implements Screen {
             camera.unproject(touchPos);
         }
         if (backButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            this.dispose();
             host.setScreen(new MainMenu(host));
         }
         if (playButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            this.dispose();
             host.setScreen(new GameScreen(host));
         }
         if (easyButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {

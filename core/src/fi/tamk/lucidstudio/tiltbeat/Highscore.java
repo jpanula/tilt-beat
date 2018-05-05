@@ -139,6 +139,7 @@ public class Highscore implements Screen {
             camera.unproject(touchPos);
         }
         if (backButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            this.dispose();
             host.setScreen(new MainMenu(host));
         }
         if (button1.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {

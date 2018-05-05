@@ -313,6 +313,7 @@ public class Mods implements Screen {
         }
         if (backButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setHighscoreOn(highscoreOn);
+            this.dispose();
             host.setScreen(new MainMenu(host));
         }
         if (button4.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {

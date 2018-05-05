@@ -30,6 +30,7 @@ public class LoadingScreen implements Screen {
     public void render(float delta) {
         // Tarkistaa onko assetit ladattu ja siirtyy takaisin Screeniin josta kutsuttiin kun valmis
         if (host.getManager().update()) {
+            this.dispose();
             host.setScreen(parent);
         }
 

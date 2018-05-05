@@ -113,21 +113,27 @@ public class MainMenu implements Screen{
             camera.unproject(touchPos);
         }
         if (playButton.contains(touchPos.x, touchPos.y)  && !Gdx.input.isTouched()) {
+            this.dispose();
             host.setScreen(new Difficulty(host));
             if (host.howManySectorsActive()==0) {
+                this.dispose();
                 host.setScreen(new SectorsOff(host));
             }
         }
         if (settingsButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            this.dispose();
             host.setScreen(new Settings(host));
         }
         if (highscoreButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            this.dispose();
             host.setScreen(new Highscore(host));
         }
         if (modsButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            this.dispose();
             host.setScreen(new Mods(host));
         }
         if (creditsButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            this.dispose();
             host.setScreen(new Credits(host));
         }
         if (enButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {

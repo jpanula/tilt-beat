@@ -69,6 +69,7 @@ public class Credits implements Screen {
             camera.unproject(touchPos);
         }
         if (backButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            this.dispose();
             host.setScreen(new MainMenu(host));
         }
 

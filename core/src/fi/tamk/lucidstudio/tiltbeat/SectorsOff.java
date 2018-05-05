@@ -68,6 +68,7 @@ public class SectorsOff implements Screen {
             camera.unproject(touchPos);
         }
         if (goToMods.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+            this.dispose();
             host.setScreen(new Mods(host));
         }
 
