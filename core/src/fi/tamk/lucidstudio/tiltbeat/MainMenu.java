@@ -173,6 +173,5 @@ public class MainMenu implements Screen{
 
     @Override
     public void dispose() {
-        heading.dispose();
     }
 }

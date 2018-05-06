@@ -285,7 +285,11 @@ public class Mods implements Screen {
         small.draw(batch, "" + prefs.getString("modsText2") , 885, 350);
         small.draw(batch, "" + prefs.getString("modsText3") , 885, 300);
         if (!highscoreOn) {
-            basic.draw(batch, "" + prefs.getString("hsOffline") , 870, 530);
+            if (prefs.getString("language").equals("en")) {
+                basic.draw(batch, "" + prefs.getString("hsOffline"), 870, 530);
+            } else if (prefs.getString("language").equals("fi")) {
+                basic.draw(batch, "" + prefs.getString("hsOffline"), 800, 530);
+            }
         }
 
         //väliaikainen millä näkee onko sektorit päällä vai pois

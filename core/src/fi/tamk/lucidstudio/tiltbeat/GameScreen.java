@@ -50,6 +50,9 @@ public class GameScreen implements Screen {
     private int[] highScores;
     private Vector3 touchPos;
     //private boolean loaded;
+    private boolean calibrating;
+    private float timer;
+    private String timeInSecs;
 
     // Musiikki ja bpm
     private Sound soundEffect;
@@ -952,6 +955,9 @@ public class GameScreen implements Screen {
         shapeRenderer = host.getShapeRenderer();
         touchPos = new Vector3();
         //loaded = false;
+        calibrating = false;
+        timer = -6; timeInSecs = "";
+
 
         manager.load("Galaxy dark purple.png", Texture.class);
         manager.load("soundOn.png", Texture.class);
@@ -1196,6 +1202,7 @@ public class GameScreen implements Screen {
         playAgainButton.setTextTwo(0, 0, " ");
         settingsButton.setText(-30, 190, "" + prefs.getString("settings"), basic);
         calibration.setText(50, 80, "" + prefs.getString("calibration"), small);
+        calibration.setTextTwo(20, 80, prefs.getString("dontMove") + "  " + timeInSecs);
         highscoreButton.setText(62, 70, "" + prefs.getString("seeHighscore"), basic);
         backToPauseMenu.setText(10, 180, "" + prefs.getString("back"), basic);
         secondSetting.setText(30, 80, "" + prefs.getString("effectsAreOn"), small);
@@ -1369,6 +1376,9 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         shapeRenderer.setProjectionMatrix(camera.combined);
 
+        timeInSecs = String.format ("%.1f", timer);
+        timer -= Gdx.graphics.getDeltaTime();
+
         batch.begin();
         batch.setProjectionMatrix(camera.combined);
 
@@ -1457,12 +1467,30 @@ public class GameScreen implements Screen {
         //asetusruudun tekstit
         if (changeSettings) {
             heading.draw(batch, "" + prefs.getString("settingsBig"), 320, 630);
-            calibration.drawText(batch);
             secondSetting.drawText(batch);
             backToPauseMenu.drawText(batch);
+
+            if(calibrating) {
+                calibration.setTextTwo(prefs.getString("dontMove") + "  " + timeInSecs);
+                calibration.setTexture(host.getButtonGreenTexture());
+                calibration.drawTextTwo(batch);
+                //basic.draw(batch, prefs.getString("stayStill") + "  " + timeInSecs, 330, 430);
+            } else if (!calibrating && timer>-4) {
+                calibration.setTextTwo("" + prefs.getString("done"));
+                calibration.drawTextTwo(batch);
+            } else {
+                calibration.drawText(batch);
+                calibration.setTexture(host.getButtonTexture());
+            }
+
         }
 
         batch.end();
+
+        if (timer<0 && calibrating) {
+            host.calibrateZeroPoint();
+            calibrating = false;
+        }
 
         //piirretään sektorit&osoitin vain kun peli päällä
         if (!song.isEmpty() && !paused) {
@@ -1611,10 +1639,11 @@ public class GameScreen implements Screen {
         }
 
         //nappien toiminnot
-        if (Gdx.input.isTouched()) {
-            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            camera.unproject(touchPos);
-        }
+        if (!calibrating) {
+            if (Gdx.input.isTouched()) {
+                touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+                camera.unproject(touchPos);
+            }
             if (pauseButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
                 paused = true;
                 moveHerePauseMenuButtons();
@@ -1643,8 +1672,10 @@ public class GameScreen implements Screen {
                 moveHereSettingsButtons();
             }
             if (calibration.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+                calibrating = true;
+                timer = 3.98f;
                 //kalibroi tässä
-                host.calibrateZeroPoint();
+                //host.calibrateZeroPoint();
                 //player.pointer.resetSmoothing();
             }
             if (secondSetting.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
@@ -1670,8 +1701,11 @@ public class GameScreen implements Screen {
                 moveAwaySettingsButtons();
                 moveHerePauseMenuButtons();
             }
-        //ottaa napin painalluksen vain kerran
-        if (!Gdx.input.isTouched()) {touchPos.set(0, 0, 0);}
+            //ottaa napin painalluksen vain kerran
+            if (!Gdx.input.isTouched()) {
+                touchPos.set(0, 0, 0);
+            }
+        }
 
         if (song.isEmpty() && addHighscore && host.isHighscoreOn()) {
             checkHighscore();

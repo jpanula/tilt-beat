@@ -36,6 +36,7 @@ public class GameMain extends Game {
     private Texture background;
     private Texture button;
     private Texture buttonPressed;
+    private Texture buttonGreen;
 	private Texture pauseButton;
 	private Texture backButton;
     private Texture playButton;
@@ -112,6 +113,9 @@ public class GameMain extends Game {
         prefs.putString("effectsAreOn", "efektit paalla");
         prefs.putString("effectsAreOff", "efektit pois");
         prefs.putString("pause", "TAUKO");
+        prefs.putString("stayStill", "pysy paikallasi");
+        prefs.putString("dontMove", " ala liiku");
+        prefs.putString("done", "    valmis!");
         prefs.flush();
     }
 
@@ -155,24 +159,10 @@ public class GameMain extends Game {
         prefs.putString("effectsAreOn", "effects: on");
         prefs.putString("effectsAreOff", "effects: off");
         prefs.putString("pause", "PAUSE");
+        prefs.putString("stayStill", "  stay still");
+        prefs.putString("dontMove", "don't move");
+        prefs.putString("done", "     done!");
         prefs.flush();
-    }
-
-    public String[] getWords() {
-	    String[] a = new String[11];
-	    a[0] = prefs.getString("play");
-        a[1] = prefs.getString("mods");
-        a[2] = prefs.getString("settings");
-        a[3] = prefs.getString("easy");
-        a[4] = prefs.getString("normal");
-        a[5] = prefs.getString("hard");
-        a[6] = prefs.getString("bb");
-        a[7] = prefs.getString("sound");
-        a[8] = prefs.getString("calibration");
-        a[9] = prefs.getString("default");
-        a[10] = prefs.getString("modifications");
-        return a;
-
     }
 
     public void resetHighscore(Preferences prefs) {
@@ -528,6 +518,8 @@ public class GameMain extends Game {
 
     public Texture getButtonPressedTexture() { return buttonPressed; }
 
+    public Texture getButtonGreenTexture() { return buttonGreen; }
+
 	public Texture getBackButtonTexture() { return backButton; }
 
 	public Texture getPauseButtonTexture() { return pauseButton; }
@@ -691,6 +683,7 @@ public class GameMain extends Game {
         manager.load("Galaxy blue.png", Texture.class);
 		manager.load("nappi1.png", Texture.class);
 		manager.load("nappi2.png", Texture.class);
+        manager.load("nappivihree.png", Texture.class);
 		manager.load("pausenappi2.png", Texture.class);
 		manager.load("backnappi.png", Texture.class);
 		manager.load("playnappi.png", Texture.class);
@@ -703,6 +696,7 @@ public class GameMain extends Game {
 		background = manager.get("Galaxy blue.png");
         button = manager.get("nappi1.png");
         buttonPressed = manager.get("nappi2.png");
+        buttonGreen = manager.get("nappivihree.png");
         pauseButton = manager.get("pausenappi2.png");
 		backButton = manager.get("backnappi.png");
 		playButton = manager.get("playnappi.png");
@@ -738,7 +732,6 @@ public class GameMain extends Game {
         verySmallFontParameter.fontParameters.size = 25;
         verySmallFontParameter.fontParameters.color = Color.WHITE;
         manager.load("verySmallFont.ttf", BitmapFont.class, verySmallFontParameter);
-
 
 		//luodaan pieni fontti
         FreetypeFontLoader.FreeTypeFontLoaderParameter smallFontParameter = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
