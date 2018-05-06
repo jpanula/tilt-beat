@@ -175,7 +175,6 @@ public class Settings implements Screen {
             if (calibration.contains(touchPos.x, touchPos.y)) {
                 calibration.setTexture(host.getButtonPressedTexture());
                 if (!Gdx.input.isTouched()) {
-                    //host.calibrateZeroPoint();
                     touchPos.setZero();
                     calibrating = true;
                     timer = 3.98f;

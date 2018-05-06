@@ -36,14 +36,7 @@ public class Highscore implements Screen {
     private Texture backButtonTexture;
     private Texture textBoxTexture;
     private Vector3 touchPos;
-    private int[] easyScores;
-    private int[] normalScores;
-    private int[] hardScores;
-    private int[] bbScores;
-    private String[] easyNames;
-    private String[] normalNames;
-    private String[] hardNames;
-    private String[] bbNames;
+    private int[] scores;
     private String difficulty;
 
     public  Highscore(GameMain host) {
@@ -60,14 +53,6 @@ public class Highscore implements Screen {
         textBoxTexture = host.getTextBoxTexture();
         touchPos = new Vector3();
         difficulty = host.getDifficulty();
-        easyScores = host.getEasyScores();
-        easyNames = host.getEasyNames();
-        normalScores = host.getNormalScores();
-        normalNames = host.getNormalNames();
-        hardScores = host.getHardScores();
-        hardNames = host.getHardNames();
-        bbScores = host.getBbScores();
-        bbNames = host.getBbNames();
 
         backButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, host.getBackButtonTexture());
         button1 = new Button(.5f, 5.6f, 4.5f, 1.2f, host.getButtonTexture());
@@ -77,12 +62,16 @@ public class Highscore implements Screen {
 
         if (difficulty.equals("easy")) {
             button1.setTexture(host.getButtonPressedTexture());
+            scores = host.getEasyScores();
         } else if (difficulty.equals("normal")) {
             button2.setTexture(host.getButtonPressedTexture());
+            scores = host.getNormalScores();
         } else if (difficulty.equals("hard")) {
             button3.setTexture(host.getButtonPressedTexture());
+            scores = host.getHardScores();
         } else {
             button4.setTexture(host.getButtonPressedTexture());
+            scores = host.getBbScores();
         }
 
         button1.setText(40, 70, "" + prefs.getString("easy"), basic);
@@ -107,7 +96,8 @@ public class Highscore implements Screen {
         batch.setProjectionMatrix(camera.combined);
         //piirrellään tausta ja napit
         batch.draw(background, 0, 0 , 16, 10);
-        batch.draw(textBoxTexture, 5.2f, 1, 10, 5);
+        //batch.draw(textBoxTexture, 5.2f, 1, 10, 5);
+        batch.draw(textBoxTexture, 7f, 0.8f, 6, 5);
         backButton.draw(batch);
         button1.draw(batch);
         button2.draw(batch);
@@ -122,14 +112,29 @@ public class Highscore implements Screen {
         button3.drawText(batch);
         button4.drawText(batch);
 
-        if (difficulty.equals("easy")) {
-            drawEasy();
-        } else if (difficulty.equals("normal")) {
-            drawNormal();
-        } else if (difficulty.equals("hard")) {
-            drawHard();
-        } else {
-            drawBb();
+        basic.draw(batch, "1:", 650, 405);
+        basic.draw(batch, "2:", 650, 345);
+        basic.draw(batch, "3:", 650, 285);
+        basic.draw(batch, "4:", 650, 225);
+        basic.draw(batch, "5:", 650, 165);
+        basic.draw(batch, "" + scores[0] , 850, 405);
+        basic.draw(batch, "" + scores[1] , 850, 345);
+        basic.draw(batch, "" + scores[2] , 850, 285);
+        basic.draw(batch, "" + scores[3] , 850, 225);
+        basic.draw(batch, "" + scores[4] , 850, 165);
+
+        if (host.getPlacement()!=0) {
+            if (host.getPlacement() == 1) {
+                basic.draw(batch, "->", 780, 405);
+            } else if (host.getPlacement() == 2) {
+                basic.draw(batch, "->", 780, 345);
+            } else if (host.getPlacement() == 3) {
+                basic.draw(batch, "->", 780, 285);
+            } else if (host.getPlacement() == 4) {
+                basic.draw(batch, "->", 780, 225);
+            } else if (host.getPlacement() == 5) {
+                basic.draw(batch, "->", 780, 165);
+            }
         }
 
         batch.end();
@@ -140,6 +145,7 @@ public class Highscore implements Screen {
         }
         if (backButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             this.dispose();
+            host.setPlacement(0);
             host.setScreen(new MainMenu(host));
         }
         if (button1.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
@@ -147,84 +153,36 @@ public class Highscore implements Screen {
             button2.setTexture(host.getButtonTexture());
             button3.setTexture(host.getButtonTexture());
             button4.setTexture(host.getButtonTexture());
-            difficulty = "easy";
+            host.setPlacement(0);
+            scores = host.getEasyScores();
         }
         if (button2.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             button1.setTexture(host.getButtonTexture());
             button2.setTexture(host.getButtonPressedTexture());
             button3.setTexture(host.getButtonTexture());
             button4.setTexture(host.getButtonTexture());
-            difficulty = "normal";
+            host.setPlacement(0);
+            scores = host.getNormalScores();
         }
         if (button3.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             button1.setTexture(host.getButtonTexture());
             button2.setTexture(host.getButtonTexture());
             button3.setTexture(host.getButtonPressedTexture());
             button4.setTexture(host.getButtonTexture());
-            difficulty = "hard";
+            host.setPlacement(0);
+            scores = host.getHardScores();
         }
         if (button4.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             button1.setTexture(host.getButtonTexture());
             button2.setTexture(host.getButtonTexture());
             button3.setTexture(host.getButtonTexture());
             button4.setTexture(host.getButtonPressedTexture());
-            difficulty = "bb";
+            host.setPlacement(0);
+            scores = host.getBbScores();
         }
         //ottaa napin painalluksen vain kerran
         if (!Gdx.input.isTouched()) {touchPos.set(0, 0, 0);}
 
-    }
-
-    public void drawEasy() {
-        basic.draw(batch, "1:  " + easyNames[0] , 500, 420);
-        basic.draw(batch, "2:  " + easyNames[1] , 500, 360);
-        basic.draw(batch, "3:  " + easyNames[2] , 500, 300);
-        basic.draw(batch, "4:  " + easyNames[3] , 500, 240);
-        basic.draw(batch, "5:  " + easyNames[4] , 500, 180);
-        basic.draw(batch, "" + easyScores[0] , 1050, 420);
-        basic.draw(batch, "" + easyScores[1] , 1050, 360);
-        basic.draw(batch, "" + easyScores[2] , 1050, 300);
-        basic.draw(batch, "" + easyScores[3] , 1050, 240);
-        basic.draw(batch, "" + easyScores[4] , 1050, 180);
-    }
-
-    public void drawNormal() {
-        basic.draw(batch, "1:  " + normalNames[0] , 500, 420);
-        basic.draw(batch, "2:  " + normalNames[1] , 500, 360);
-        basic.draw(batch, "3:  " + normalNames[2] , 500, 300);
-        basic.draw(batch, "4:  " + normalNames[3] , 500, 240);
-        basic.draw(batch, "5:  " + normalNames[4] , 500, 180);
-        basic.draw(batch, "" + normalScores[0] , 1050, 420);
-        basic.draw(batch, "" + normalScores[1] , 1050, 360);
-        basic.draw(batch, "" + normalScores[2] , 1050, 300);
-        basic.draw(batch, "" + normalScores[3] , 1050, 240);
-        basic.draw(batch, "" + normalScores[4] , 1050, 180);
-    }
-
-    public void drawHard() {
-        basic.draw(batch, "1:  " + hardNames[0] , 500, 420);
-        basic.draw(batch, "2:  " + hardNames[1] , 500, 360);
-        basic.draw(batch, "3:  " + hardNames[2] , 500, 300);
-        basic.draw(batch, "4:  " + hardNames[3] , 500, 240);
-        basic.draw(batch, "5:  " + hardNames[4] , 500, 180);
-        basic.draw(batch, "" + hardScores[0] , 1050, 420);
-        basic.draw(batch, "" + hardScores[1] , 1050, 360);
-        basic.draw(batch, "" + hardScores[2] , 1050, 300);
-        basic.draw(batch, "" + hardScores[3] , 1050, 240);
-        basic.draw(batch, "" + hardScores[4] , 1050, 180);
-    }
-
-    public void drawBb() {
-        basic.draw(batch, "1:  " + bbNames[0] , 500, 420);
-        basic.draw(batch, "2:  " + bbNames[1] , 500, 360);
-        basic.draw(batch, "3:  " + bbNames[2] , 500, 300);
-        basic.draw(batch, "4:  " + bbNames[3] , 500, 240);
-        basic.draw(batch, "5:  " + bbNames[4] , 500, 180);
-        basic.draw(batch, "" + bbScores[0] , 1050, 420);
-        basic.draw(batch, "" + bbScores[1] , 1050, 360);
-        basic.draw(batch, "" + bbScores[2] , 1050, 300);
-        basic.draw(batch, "" + bbScores[3] , 1050, 240);
-        basic.draw(batch, "" + bbScores[4] , 1050, 180);
     }
 
     @Override

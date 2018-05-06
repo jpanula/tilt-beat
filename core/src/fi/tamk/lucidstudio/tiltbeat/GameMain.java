@@ -69,6 +69,7 @@ public class GameMain extends Game {
         prefs.putBoolean("useAccelerometerX", false);
         prefs.putBoolean("tiltedSquare", false);
         prefs.putString("language", "en");
+        prefs.putInteger("placement", 0);
 
         prefs.flush();
     }
@@ -166,44 +167,24 @@ public class GameMain extends Game {
     }
 
     public void resetHighscore(Preferences prefs) {
-        prefs.putString("1stS", "");
-        prefs.putString("2ndS", "");
-        prefs.putString("3rdS", "");
-        prefs.putString("4thS", "");
-        prefs.putString("5thS", "");
         prefs.putInteger("1st", 0);
         prefs.putInteger("2nd", 0);
         prefs.putInteger("3rd", 0);
         prefs.putInteger("4th", 0);
         prefs.putInteger("5th", 0);
 
-        prefs.putString("1stSN", "");
-        prefs.putString("2ndSN", "");
-        prefs.putString("3rdSN", "");
-        prefs.putString("4thSN", "");
-        prefs.putString("5thSN", "");
         prefs.putInteger("1stN", 0);
         prefs.putInteger("2ndN", 0);
         prefs.putInteger("3rdN", 0);
         prefs.putInteger("4thN", 0);
         prefs.putInteger("5thN", 0);
 
-        prefs.putString("1stSH", "");
-        prefs.putString("2ndSH", "");
-        prefs.putString("3rdSH", "");
-        prefs.putString("4thSH", "");
-        prefs.putString("5thSH", "");
         prefs.putInteger("1stH", 0);
         prefs.putInteger("2ndH", 0);
         prefs.putInteger("3rdH", 0);
         prefs.putInteger("4thH", 0);
         prefs.putInteger("5thH", 0);
 
-        prefs.putString("1stSB", "");
-        prefs.putString("2ndSB", "");
-        prefs.putString("3rdSB", "");
-        prefs.putString("4thSB", "");
-        prefs.putString("5thSB", "");
         prefs.putInteger("1stB", 0);
         prefs.putInteger("2ndB", 0);
         prefs.putInteger("3rdB", 0);
@@ -220,17 +201,22 @@ public class GameMain extends Game {
                     prefs.putInteger("2nd", highScores[0]);
                     prefs.putInteger("3rd", highScores[1]);
                     prefs.putInteger("4th", highScores[2]);
-                    prefs.putInteger("5th", highScores[3]); break;
+                    prefs.putInteger("5th", highScores[3]);
+                    break;
             case 2: prefs.putInteger("2nd", score);
                     prefs.putInteger("3rd", highScores[1]);
                     prefs.putInteger("4th", highScores[2]);
-                    prefs.putInteger("5th", highScores[3]); break;
+                    prefs.putInteger("5th", highScores[3]);
+                    break;
             case 3: prefs.putInteger("3rd", score);
                     prefs.putInteger("4th", highScores[2]);
-                    prefs.putInteger("5th", highScores[3]); break;
+                    prefs.putInteger("5th", highScores[3]);
+                    break;
             case 4: prefs.putInteger("4th", score);
-                    prefs.putInteger("5th", highScores[3]); break;
-            case 5: prefs.putInteger("5th", score); break;
+                    prefs.putInteger("5th", highScores[3]);
+                    break;
+            case 5: prefs.putInteger("5th", score);
+                    break;
         }
         prefs.flush();
     }
@@ -241,17 +227,22 @@ public class GameMain extends Game {
                 prefs.putInteger("2ndN", highScores[0]);
                 prefs.putInteger("3rdN", highScores[1]);
                 prefs.putInteger("4thN", highScores[2]);
-                prefs.putInteger("5thN", highScores[3]); break;
+                prefs.putInteger("5thN", highScores[3]);
+                break;
             case 2: prefs.putInteger("2ndN", score);
                 prefs.putInteger("3rdN", highScores[1]);
                 prefs.putInteger("4thN", highScores[2]);
-                prefs.putInteger("5thN", highScores[3]); break;
+                prefs.putInteger("5thN", highScores[3]);
+                break;
             case 3: prefs.putInteger("3rdN", score);
                 prefs.putInteger("4thN", highScores[2]);
-                prefs.putInteger("5thN", highScores[3]); break;
+                prefs.putInteger("5thN", highScores[3]);
+                break;
             case 4: prefs.putInteger("4thN", score);
-                prefs.putInteger("5thN", highScores[3]); break;
-            case 5: prefs.putInteger("5thN", score); break;
+                prefs.putInteger("5thN", highScores[3]);
+                break;
+            case 5: prefs.putInteger("5thN", score);
+            break;
         }
         prefs.flush();
     }
@@ -262,17 +253,22 @@ public class GameMain extends Game {
                 prefs.putInteger("2ndH", highScores[0]);
                 prefs.putInteger("3rdH", highScores[1]);
                 prefs.putInteger("4thH", highScores[2]);
-                prefs.putInteger("5thH", highScores[3]); break;
+                prefs.putInteger("5thH", highScores[3]);
+                break;
             case 2: prefs.putInteger("2ndH", score);
                 prefs.putInteger("3rdH", highScores[1]);
                 prefs.putInteger("4thH", highScores[2]);
-                prefs.putInteger("5thH", highScores[3]); break;
+                prefs.putInteger("5thH", highScores[3]);
+                break;
             case 3: prefs.putInteger("3rdH", score);
                 prefs.putInteger("4thH", highScores[2]);
-                prefs.putInteger("5thH", highScores[3]); break;
+                prefs.putInteger("5thH", highScores[3]);
+                break;
             case 4: prefs.putInteger("4thH", score);
-                prefs.putInteger("5thH", highScores[3]); break;
-            case 5: prefs.putInteger("5thH", score); break;
+                prefs.putInteger("5thH", highScores[3]);
+                break;
+            case 5: prefs.putInteger("5thH", score);
+            break;
         }
         prefs.flush();
     }
@@ -283,17 +279,22 @@ public class GameMain extends Game {
                 prefs.putInteger("2ndB", highScores[0]);
                 prefs.putInteger("3rdB", highScores[1]);
                 prefs.putInteger("4thB", highScores[2]);
-                prefs.putInteger("5thB", highScores[3]); break;
+                prefs.putInteger("5thB", highScores[3]);
+                break;
             case 2: prefs.putInteger("2ndB", score);
                 prefs.putInteger("3rdB", highScores[1]);
                 prefs.putInteger("4thB", highScores[2]);
-                prefs.putInteger("5thB", highScores[3]); break;
+                prefs.putInteger("5thB", highScores[3]);
+                break;
             case 3: prefs.putInteger("3rdB", score);
                 prefs.putInteger("4thB", highScores[2]);
-                prefs.putInteger("5thB", highScores[3]); break;
+                prefs.putInteger("5thB", highScores[3]);
+                break;
             case 4: prefs.putInteger("4thB", score);
-                prefs.putInteger("5thB", highScores[3]); break;
-            case 5: prefs.putInteger("5thB", score); break;
+                prefs.putInteger("5thB", highScores[3]);
+                break;
+            case 5: prefs.putInteger("5thB", score);
+            break;
         }
         prefs.flush();
     }
@@ -314,6 +315,8 @@ public class GameMain extends Game {
     public boolean isUseAccelerometerX() {
 	    return prefs.getBoolean("useAccelerometerX");
     }
+
+    public int getPlacement() { return prefs.getInteger("placement"); }
 
     public void setUseAccelerometerX(boolean useAccelerometerX) {
 	    prefs.putBoolean("useAccelerometerX", useAccelerometerX);
@@ -428,6 +431,11 @@ public class GameMain extends Game {
 
     public void setHighscoreOn(boolean a) {
         prefs.putBoolean("highscoreOn", a);
+        prefs.flush();
+    }
+
+    public void setPlacement(int a) {
+        prefs.putInteger("placement", a);
         prefs.flush();
     }
 

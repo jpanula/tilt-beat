@@ -24,6 +24,7 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.CharArray;
+import java.util.Scanner;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -46,7 +47,6 @@ public class GameScreen implements Screen {
     private boolean changeSettings;
     private boolean addHighscore;
     private boolean useShapeRenderer;
-    private String[] highscoreNames;
     private int[] highScores;
     private Vector3 touchPos;
     //private boolean loaded;
@@ -1223,16 +1223,12 @@ public class GameScreen implements Screen {
         }
 
         if (host.getDifficulty().equals("easy")) {
-            highscoreNames = host.getEasyNames();
             highScores = host.getEasyScores();
         } else if (host.getDifficulty().equals("normal")) {
-            highscoreNames = host.getNormalNames();
             highScores = host.getNormalScores();
         } else if (host.getDifficulty().equals("hard")) {
-            highscoreNames = host.getHardNames();
             highScores = host.getHardScores();
         } else {
-            highscoreNames = host.getBbNames();
             highScores = host.getBbScores();
         }
 
@@ -1674,8 +1670,6 @@ public class GameScreen implements Screen {
             if (calibration.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
                 calibrating = true;
                 timer = 3.98f;
-                //kalibroi tässä
-                //host.calibrateZeroPoint();
                 //player.pointer.resetSmoothing();
             }
             if (secondSetting.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
@@ -1717,50 +1711,70 @@ public class GameScreen implements Screen {
         if (host.getDifficulty().equals("easy")) {
             if (points > highScores[0]) {
                 host.setEasyHighscore(1, points, highScores);
+                host.setPlacement(1);
             } else if (points > highScores[1]) {
                 host.setEasyHighscore(2, points, highScores);
+                host.setPlacement(2);
             } else if (points > highScores[2]) {
                 host.setEasyHighscore(3, points, highScores);
+                host.setPlacement(3);
             } else if (points > highScores[3]) {
                 host.setEasyHighscore(4, points, highScores);
+                host.setPlacement(4);
             } else if (points > highScores[4]) {
                 host.setEasyHighscore(5, points, highScores);
+                host.setPlacement(5);
             }
         } else if (host.getDifficulty().equals("normal")) {
             if (points > highScores[0]) {
                 host.setNormalHighscore(1, points, highScores);
+                host.setPlacement(1);
             } else if (points > highScores[1]) {
                 host.setNormalHighscore(2, points, highScores);
+                host.setPlacement(2);
             } else if (points > highScores[2]) {
                 host.setNormalHighscore(3, points, highScores);
+                host.setPlacement(3);
             } else if (points > highScores[3]) {
                 host.setNormalHighscore(4, points, highScores);
+                host.setPlacement(4);
             } else if (points > highScores[4]) {
                 host.setNormalHighscore(5, points, highScores);
+                host.setPlacement(5);
             }
         } else if (host.getDifficulty().equals("hard")) {
             if (points > highScores[0]) {
                 host.setHardHighscore(1, points, highScores);
+                host.setPlacement(1);
             } else if (points > highScores[1]) {
                 host.setHardHighscore(2, points, highScores);
+                host.setPlacement(2);
             } else if (points > highScores[2]) {
                 host.setHardHighscore(3, points, highScores);
+                host.setPlacement(3);
             } else if (points > highScores[3]) {
                 host.setHardHighscore(4, points, highScores);
+                host.setPlacement(4);
             } else if (points > highScores[4]) {
                 host.setHardHighscore(5, points, highScores);
+                host.setPlacement(5);
             }
         } else {
             if (points > highScores[0]) {
                 host.setBbHighscore(1, points, highScores);
+                host.setPlacement(1);
             } else if (points > highScores[1]) {
                 host.setBbHighscore(2, points, highScores);
+                host.setPlacement(2);
             } else if (points > highScores[2]) {
                 host.setBbHighscore(3, points, highScores);
+                host.setPlacement(3);
             } else if (points > highScores[3]) {
                 host.setBbHighscore(4, points, highScores);
+                host.setPlacement(4);
             } else if (points > highScores[4]) {
                 host.setBbHighscore(5, points, highScores);
+                host.setPlacement(5);
             }
         }
         addHighscore=false;
