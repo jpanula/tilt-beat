@@ -80,6 +80,11 @@ public class Button extends Rectangle {
         plusY = y;
     }
 
+    public void repositionTextTwo(float x, float y) {
+        plusXtwo = x;
+        plusYtwo = y;
+    }
+
     public void setTexture(Texture t) {
         texture = t;
     }

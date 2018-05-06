@@ -90,7 +90,7 @@ public class GameMain extends Game {
         prefs.putString("sound", "aanet");
         prefs.putString("calibration", "kalibrointi");
         prefs.putString("difficultyHead", "Vaikeus");
-        prefs.putString("default", "oletus");
+        prefs.putString("default", "oletus-");
         prefs.putString("modifications", "Muokattavuus");
         prefs.putString("hsOffline", "highscore ei tallennu");
         prefs.putString("modsText1", "klikkaamalla saat");
@@ -117,6 +117,7 @@ public class GameMain extends Game {
         prefs.putString("stayStill", "pysy paikallasi");
         prefs.putString("dontMove", " ala liiku");
         prefs.putString("done", "    valmis!");
+        prefs.putString("tutorial", "tutoriaali");
         prefs.flush();
     }
 
@@ -163,6 +164,7 @@ public class GameMain extends Game {
         prefs.putString("stayStill", "  stay still");
         prefs.putString("dontMove", "don't move");
         prefs.putString("done", "     done!");
+        prefs.putString("tutorial", "tutorial");
         prefs.flush();
     }
 
@@ -674,7 +676,6 @@ public class GameMain extends Game {
         manager = new AssetManager(new InternalFileHandleResolver());
 	    prefs = Gdx.app.getPreferences("default");
 	    if (!prefs.contains("firstTime")) {
-	        prefs.putBoolean("firstTime", true);
 	        setDefaultPreferences(prefs);
 	        resetHighscore(prefs);
         }
@@ -726,7 +727,12 @@ public class GameMain extends Game {
 
 		createFonts();
 
-		setScreen(new MainMenu(this));
+        if (!prefs.contains("firstTime")) {
+            prefs.putBoolean("firstTime", true);
+            setScreen(new Tutorial(this));
+        } else {
+            setScreen(new MainMenu(this));
+        }
 	}
 
 	public void createFonts() {

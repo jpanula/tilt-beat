@@ -36,6 +36,7 @@ public class Settings implements Screen {
     private Button restore;
     private Button backButton;
     private Button soundButton;
+    private Button tutorial;
     private boolean changeSound;
     private boolean calibrating;
     private Vector3 touchPos;
@@ -57,24 +58,34 @@ public class Settings implements Screen {
         soundOnTexture = new Texture("soundOn.png");
         soundOffTexture = new Texture("soundOff.png");
         soundButtonTexture = soundOnTexture;
-        sound = new Button(1.3f, 1.8f, 3.7f, 2f, host.getButtonTexture());
-        restore = new Button(11f, 1.8f, 3.7f, 2f, host.getButtonTexture());
-        calibration = new Button(6.2f, 1.8f, 3.7f, 2f, host.getButtonTexture());
-        backButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, host.getBackButtonTexture());
 
-        sound.setText(80, 106, "" + prefs.getString("sound"), basic);
-        calibration.setText(24, 106, "" + prefs.getString("calibration"), basic);
-        restore.setText(50, 136, prefs.getString("default") + "\n" + prefs.getString("settings"), basic);
+        backButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, host.getBackButtonTexture());
+        sound = new Button(8.5f, 1f, 4f, 1.7f, host.getButtonTexture());
+        restore = new Button(2.8f, 1f, 4, 1.7f, host.getButtonTexture());
+        calibration = new Button(2.8f, 4f, 4f, 1.7f, host.getButtonTexture());
+        tutorial = new Button(8.5f, 4f, 4f, 1.7f, host.getButtonTexture());
+
+        sound.setText(90, 90, "" + prefs.getString("sound"), basic);
+        calibration.setText(30, 90, "" + prefs.getString("calibration"), basic);
+        tutorial.setText(55, 90, "" + prefs.getString("tutorial"), basic);
+        restore.setText(65, 115, prefs.getString("default") + "", basic);
+        restore.setTextTwo(63, 70, "" + prefs.getString("settings"));
         destroySoundButton();
         touchPos = new Vector3();
+
+        if (prefs.getString("language").equals("fi")) {
+            restore.repositionTextTwo(40, 70);
+            tutorial.repositionText(40, 90);
+        }
     }
+
     @Override
     public void show() {
 
     }
 
     public void createSoundButton() {
-        soundButton = new Button(2f, 4f, 2f, 2f, soundOnTexture);
+        soundButton = new Button(13.2f, 0.8f, 2f, 2f, soundOnTexture);
     }
 
     public void destroySoundButton() {
@@ -98,6 +109,7 @@ public class Settings implements Screen {
         sound.draw(batch);
         restore.draw(batch);
         backButton.draw(batch);
+        tutorial.draw(batch);
 
         if(changeSound) {
             soundButton.draw(batch);
@@ -113,14 +125,16 @@ public class Settings implements Screen {
         //piirrellään fontit
         calibration.drawText(batch);
         restore.drawText(batch);
+        restore.drawTextTwo(batch);
         sound.drawText(batch);
+        tutorial.drawText(batch);
 
-        heading.draw(batch, "" + prefs.getString("settingsBig"), 330, 650);
+        heading.draw(batch, "" + prefs.getString("settingsBig"), 330, 700);
 
         if(calibrating) {
-            big.draw(batch, prefs.getString("stayStill") + "  " + timeInSecs, 330, 430);
+            big.draw(batch, prefs.getString("stayStill") + "  " + timeInSecs, 30, 315);
         } else if (!calibrating && timer>-4) {
-            big.draw(batch, "" + prefs.getString("done"), 380, 430);
+            big.draw(batch, "" + prefs.getString("done"), 80, 315); //+50, sama
         }
 
         batch.end();
@@ -149,6 +163,16 @@ public class Settings implements Screen {
             }
             if (!restore.contains(touchPos.x, touchPos.y)) {
                 restore.setTexture(host.getButtonTexture());
+            }
+            if (tutorial.contains(touchPos.x, touchPos.y)) {
+                tutorial.setTexture(host.getButtonPressedTexture());
+                if (!Gdx.input.isTouched()) {
+                    this.dispose();
+                    host.setScreen(new Tutorial(host));
+                }
+            }
+            if (!tutorial.contains(touchPos.x, touchPos.y)) {
+                tutorial.setTexture(host.getButtonTexture());
             }
             if (sound.contains(touchPos.x, touchPos.y)) {
                 sound.setTexture(host.getButtonPressedTexture());
