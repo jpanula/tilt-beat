@@ -33,7 +33,6 @@ public class MainMenu implements Screen{
     private Button circle;
     private Texture background;
     private Vector3 touchPos;
-    private String[] words;
     private AssetManager manager;
 
 

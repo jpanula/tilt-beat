@@ -128,6 +128,7 @@ public class GameMain extends Game {
         prefs.putString("dontMove", " ala liiku");
         prefs.putString("done", "    valmis!");
         prefs.putString("tutorial", "tutoriaali");
+        prefs.putString("flip", "kaanna");
         prefs.flush();
     }
 
@@ -175,6 +176,7 @@ public class GameMain extends Game {
         prefs.putString("dontMove", "don't move");
         prefs.putString("done", "     done!");
         prefs.putString("tutorial", "tutorial");
+        prefs.putString("flip", "flip");
         prefs.flush();
     }
 
@@ -416,6 +418,7 @@ public class GameMain extends Game {
      * The sector numbers go up clockwise starting from the first sector after 12 o'clock.
      * @param activeSectors boolean array determining which sectors are active
      */
+
     public void setActiveSectors(boolean[] activeSectors) {
 	    String currentPrefs = prefs.getString("activeSectors");
 	    String prefString = "";
@@ -433,7 +436,20 @@ public class GameMain extends Game {
         prefs.putString("activeSectors", prefString);
 	    prefs.flush();
     }
-
+    /**
+     * Changes the activeSectors to the right length.
+     * Sets all the sectors active in the player shape.
+     * The sector numbers go up clockwise starting from the first sector after 12 o'clock.
+     * @param sectors how many sectors in the player shape
+     */
+    public void resetActiveSectors(int sectors) {
+        String prefString = "";
+        for (int i = 0; i < sectors; i++) {
+            prefString += 1;
+        }
+        prefs.putString("activeSectors", prefString);
+        prefs.flush();
+    }
     /**
      * Sets a single sector active or inactive.
      * The sector numbers go up clockwise starting from the first sector after 12 o'clock.
@@ -839,8 +855,8 @@ public class GameMain extends Game {
 		fontCamera = new OrthographicCamera();
 		fontCamera.setToOrtho(false, getSCREEN_WIDTH_PIXELS(), getSCREEN_HEIGHT_PIXELS());
 
-		setActiveSectors(new boolean[prefs.getInteger("playerSides")]);
-		for (int i=0 ; i<prefs.getInteger("playerSides") ; i++) {setActiveSector(i, true); }
+		//setActiveSectors(new boolean[prefs.getInteger("playerSides")]);
+		//for (int i=0 ; i<prefs.getInteger("playerSides") ; i++) {setActiveSector(i, true); }
 
         manager.load("Galaxy blue.png", Texture.class);
 		manager.load("nappi1.png", Texture.class);
@@ -877,7 +893,6 @@ public class GameMain extends Game {
         song2 = manager.get("Ouroboros.ogg");
         song3 = manager.get("SnareBouncePolka.ogg");
         soundEffect = manager.get("soundeffect2.wav");
-
 
         if (!prefs.contains("firstTime")) {
             prefs.putBoolean("firstTime", true);

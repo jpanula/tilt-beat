@@ -75,7 +75,7 @@ public class Mods implements Screen {
         manager.finishLoading();
 
         button4 = new Button(1f, 5.3f, 3f, 1.2f, buttonTexture);
-        button4twist = new Button(10.5f, 0.7f, 2f, 1.2f, buttonTexture);
+        button4twist = new Button(10.6f, 0.7f, 2f, 1.2f, buttonTexture);
         button6 = new Button(1f, 3.7f, 3f, 1.2f, buttonTexture);
         button8 = new Button(1f, 2.1f, 3f, 1.2f, buttonTexture);
         button10 = new Button(1f, 0.5f, 3f, 1.2f, buttonTexture);
@@ -86,13 +86,14 @@ public class Mods implements Screen {
         button6.setText(40, 70, "" + prefs.getString("6-side"), basic);
         button8.setText(40, 70, "" + prefs.getString("8-side"), basic);
         button10.setText(40, 70, "" + prefs.getString("10-side"), basic);
-        button4twist.setText(30, 70, "flip", basic);
+        button4twist.setText(30, 70, "" + prefs.getString("flip"), basic);
 
         if (prefs.getString("language").equals("fi")) {
             button4.repositionText(20f, 70f);
             button6.repositionText(20f, 70f);
             button8.repositionText(20f, 70f);
             button10.repositionText(13f, 70f);
+            button4twist.setSize(2.7f, 1.2f);
         }
 
         playerSides = host.getPlayerSides();
@@ -101,11 +102,15 @@ public class Mods implements Screen {
         sectors = new ArrayList<Polygon>();
         touchPos = new Vector3();
 
-        if (!(playerSides==4)) { button4twist.setPosition(18f, 11f); }
+        if (!(playerSides == 4)) {
+            button4twist.setPosition(18f, 11f);
+        }
         makeButtonsAndPolygon();
 
     }
-
+    /**
+     * creates the wanted polygon and sets the right buttons texture as pressed
+     */
     public void makeButtonsAndPolygon() {
         if(playerSides==4) {
             createFourside();
@@ -122,13 +127,19 @@ public class Mods implements Screen {
         }
 
     }
-
+    /**
+     * selects the right method for creating the wanted polygon
+     */
     public void createFourside() {
         if (tiltedSquare) {
             createDiamond();
         } else {createSquare(); }
     }
-
+    /**
+     * sets the texture to a square,
+     * sets the points for creating the square,
+     * resets the active sectors
+     */
     public void createSquare() {
         texture = manager.get("squaresectors.png");
         vertices = new float[]{
@@ -138,15 +149,16 @@ public class Mods implements Screen {
                 0f, 1f
         };
         //jos kulmio&aktiiviset sektorit ovat jo olemassa, ei nollata niitä
-        if(host.getActiveSectors().length!=4) {
-            host.setActiveSectors(new boolean[4]);
-            for (int i=0 ; i<4 ; i++) {
-                host.setActiveSector(i, true);
-            }
+        if(prefs.getString("activeSectors").length()!=4) {
+            host.resetActiveSectors(prefs.getInteger("playerSides"));
         }
         createSectors(vertices);
     }
-
+    /**
+     * sets the texture to a diamond,
+     * sets the points for creating the diamond,
+     * resets the active sectors
+     */
     public void createDiamond() {
         texture = manager.get("diamondsectors.png");
         vertices = new float[]{
@@ -156,15 +168,16 @@ public class Mods implements Screen {
                 0f, 0.5f
         };
         //jos kulmio&aktiiviset sektorit ovat jo olemassa, ei nollata niitä
-        if(host.getActiveSectors().length!=4) {
-            host.setActiveSectors(new boolean[4]);
-            for (int i=0 ; i<4 ; i++) {
-                host.setActiveSector(i, true);
-            }
+        if(prefs.getString("activeSectors").length()!=4) {
+            host.resetActiveSectors(prefs.getInteger("playerSides"));
         }
         createSectors(vertices);
     }
-
+    /**
+     * sets the texture to a sixside,
+     * sets the points for creating the sixside,
+     * resets the active sectors
+     */
     public void createSixside() {
         texture = manager.get("sixsidesectors.png");
         vertices = new float[]{
@@ -176,15 +189,16 @@ public class Mods implements Screen {
                 0.067f, 0.75f
         };
         //jos kulmio&aktiiviset sektorit ovat jo olemassa, ei nollata niitä
-        if(host.getActiveSectors().length!=6) {
-            host.setActiveSectors(new boolean[6]);
-            for (int i=0 ; i<6 ; i++) {
-                host.setActiveSector(i, true);
-            }
+        if(prefs.getString("activeSectors").length()!=6) {
+            host.resetActiveSectors(prefs.getInteger("playerSides"));
         }
         createSectors(vertices);
     }
-
+    /**
+     * sets the texture to a eightside,
+     * sets the points for creating the eightside,
+     * resets the active sectors
+     */
     public void createEightside() {
         texture = manager.get("eightsidesectors.png");
         vertices = new float[]{
@@ -198,15 +212,16 @@ public class Mods implements Screen {
                 0.1445f, 0.8555f
         };
         //jos kulmio&aktiiviset sektorit ovat jo olemassa, ei nollata niitä
-        if(host.getActiveSectors().length!=8) {
-            host.setActiveSectors(new boolean[8]);
-            for (int i=0 ; i<8 ; i++) {
-                host.setActiveSector(i, true);
-            }
+        if(prefs.getString("activeSectors").length()!=8) {
+            host.resetActiveSectors(prefs.getInteger("playerSides"));
         }
         createSectors(vertices);
     }
-
+    /**
+     * sets the texture to a tenside,
+     * sets the points for creating the tenside,
+     * resets the active sectors
+     */
     public void createTenside() {
         texture = manager.get("tensidesectors.png");
         vertices = new float[]{
@@ -222,15 +237,15 @@ public class Mods implements Screen {
                 0.205f, 0.905f
         };
         //jos kulmio&aktiiviset sektorit ovat jo olemassa, ei nollata niitä
-        if(host.getActiveSectors().length!=10) {
-            host.setActiveSectors(new boolean[10]);
-            for (int i=0 ; i<10 ; i++) {
-                host.setActiveSector(i, true);
-            }
+        if(prefs.getString("activeSectors").length()!=10) {
+            host.resetActiveSectors(prefs.getInteger("playerSides"));
         }
         createSectors(vertices);
     }
-
+    /**
+     * constructor for the sector selection polygon
+     * @param vertices the points for creating the polygon
+     */
     public void createSectors(float[] vertices) {
         sectors = new ArrayList<Polygon>();
         playerSides = host.getPlayerSides();
@@ -331,7 +346,7 @@ public class Mods implements Screen {
             button6.setTexture(buttonTexture);
             button8.setTexture(buttonTexture);
             button10.setTexture(buttonTexture);
-            button4twist.setPosition(10.5f, 0.7f);
+            button4twist.setPosition(10.6f, 0.7f);
         }
         if (button4twist.contains(touchPos.x, touchPos.y)) {
             button4twist.setTexture(buttonPressedTexture);
@@ -386,7 +401,9 @@ public class Mods implements Screen {
         if (!Gdx.input.isTouched()) {touchPos.set(0, 0, 0);}
 
     }
-
+    /**
+     * draws on/off to the squares sectors
+     */
     public void drawSquareSectors() {
         if(host.getActiveSectors()[0])  //
             small.draw(batch, "on", 700, 300);
@@ -401,8 +418,9 @@ public class Mods implements Screen {
             small.draw(batch, "on", 570, 420);
         } else { small.draw(batch, "off", 570, 420); }
     }
-
-
+    /**
+     * draws on/off to the diamonds sectors
+     */
     public void drawDiamondSectors() {
         if(host.getActiveSectors()[0]) {
             small.draw(batch, "on", 630, 350);
@@ -418,7 +436,9 @@ public class Mods implements Screen {
         } else { small.draw(batch, "off", 500, 350); }
 
     }
-
+    /**
+     * draws on/off to the sixsides sectors
+     */
     public void draw6sectors() {
         if(host.getActiveSectors()[0]) {
             small.draw(batch, "on", 640, 400);
@@ -440,7 +460,9 @@ public class Mods implements Screen {
         } else { small.draw(batch, "off", 500, 400); }
 
     }
-
+    /**
+     * draws on/off to the eightsides sectors
+     */
     public void draw8sectors() {
         if(host.getActiveSectors()[0]) {
             small.draw(batch, "on", 620, 420);
@@ -468,7 +490,9 @@ public class Mods implements Screen {
         } else { small.draw(batch, "off", 520, 420); }
 
     }
-
+    /**
+     * draws on/off to the tensides sectors
+     */
     public void draw10sectors() {
         if(host.getActiveSectors()[0]) {
             small.draw(batch, "on", 620, 440);
