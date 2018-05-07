@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -46,6 +47,7 @@ public class Mods implements Screen {
     private Vector3 touchPos;
     private boolean tiltedSquare;
     private boolean highscoreOn;
+    private AssetManager manager;
 
     ArrayList<Polygon> sectors;
     float[] vertices;
@@ -57,6 +59,7 @@ public class Mods implements Screen {
 
     public Mods(GameMain host) {
         this.host = host;
+        manager = host.getManager();
         batch = host.getBatch();
         prefs = host.getPrefs();
         camera = host.getCamera();
@@ -69,6 +72,14 @@ public class Mods implements Screen {
         buttonPressedTexture = host.getButtonPressedTexture();
         tiltedSquare = host.isTiltedSquare();
         highscoreOn = host.isHighscoreOn();
+
+        manager.load("squaresectors.png", Texture.class);
+        manager.load("diamondsectors.png", Texture.class);
+        manager.load("sixsidesectors.png", Texture.class);
+        manager.load("eightsidesectors.png", Texture.class);
+        manager.load("tensidesectors.png", Texture.class);
+
+        manager.finishLoading();
 
         button4 = new Button(1f, 5.3f, 3f, 1.2f, buttonTexture);
         button4twist = new Button(10.5f, 0.7f, 2f, 1.2f, buttonTexture);
@@ -126,7 +137,7 @@ public class Mods implements Screen {
     }
 
     public void createSquare() {
-        texture = new Texture("squaresectors.png");
+        texture = manager.get("squaresectors.png");
         vertices = new float[]{
                 1f, 1f,
                 1f, 0f,
@@ -144,7 +155,7 @@ public class Mods implements Screen {
     }
 
     public void createDiamond() {
-        texture = new Texture("diamondsectors.png");
+        texture = manager.get("diamondsectors.png");
         vertices = new float[]{
                 0.5f, 1f,
                 1f, 0.5f,
@@ -162,7 +173,7 @@ public class Mods implements Screen {
     }
 
     public void createSixside() {
-        texture = new Texture("sixsidesectors.png");
+        texture = manager.get("sixsidesectors.png");
         vertices = new float[]{
                 0.5f, 1f,
                 0.933f, 0.75f,
@@ -182,7 +193,7 @@ public class Mods implements Screen {
     }
 
     public void createEightside() {
-        texture = new Texture("eightsidesectors.png");
+        texture = manager.get("eightsidesectors.png");
         vertices = new float[]{
                 0.5f, 1.0f,
                 0.8555f, 0.8555f,
@@ -204,7 +215,7 @@ public class Mods implements Screen {
     }
 
     public void createTenside() {
-        texture = new Texture("tensidesectors.png");
+        texture = manager.get("tensidesectors.png");
         vertices = new float[]{
                 0.5f, 1.0f,
                 0.795f, 0.905f,
@@ -521,6 +532,11 @@ public class Mods implements Screen {
 
     @Override
     public void dispose() {
+        manager.unload("squaresectors.png");
+        manager.unload("diamondsectors.png");
+        manager.unload("sixsidesectors.png");
+        manager.unload("eightsidesectors.png");
+        manager.unload("tensidesectors.png");
 
     }
 }
