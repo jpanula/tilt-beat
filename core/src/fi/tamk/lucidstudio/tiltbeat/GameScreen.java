@@ -1156,7 +1156,7 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * The game screen.
+     * Constructor for the game screen.
      * Uses the GameMain as a host for resources.
      * @param host the GameMain instance that is hosting the game.
      */
