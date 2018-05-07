@@ -149,6 +149,10 @@ public class Tutorial implements Screen {
 
     @Override
     public void dispose() {
+        manager.unload("Tutorial Eng1.png");
+        manager.unload("Tutorial Eng2.png");
+        manager.unload("Tutorial Fin1.png");
+        manager.unload("Tutorial Fin2.png");
 
     }
 }
