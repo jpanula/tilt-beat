@@ -51,8 +51,8 @@ public class GameMain extends Game {
     private BitmapFont smallerHeadingFont;
 
     /**
-     *
-     * @param prefs
+     * Sets the preferences to their defaults
+     * @param prefs the chosen preferences
      */
 	public void setDefaultPreferences(Preferences prefs) {
         prefs.putInteger("playerSides", 8);
@@ -319,8 +319,9 @@ public class GameMain extends Game {
     }
 
     /**
-     *
-     * @return
+     * Returns whether the accelerometer's X-axis or Z-axis is in use for vertical movement.
+     * True means X-axis is in use, false means Z-axis is in use.
+     * @return whether the X-axis is in use or not.
      */
     public boolean isUseAccelerometerX() {
 	    return prefs.getBoolean("useAccelerometerX");
@@ -329,24 +330,25 @@ public class GameMain extends Game {
     public int getPlacement() { return prefs.getInteger("placement"); }
 
     /**
-     *
-     * @param useAccelerometerX
+     * Sets whether to use the accelerometer's X-axis or Z-axis for vertical movement.
+     * True means X-axis is in use, false means Z-axis is in use.
+     * @param useAccelerometerX a boolean whether to use the X-axis or not.
      */
     public void setUseAccelerometerX(boolean useAccelerometerX) {
 	    prefs.putBoolean("useAccelerometerX", useAccelerometerX);
     }
 
     /**
-     *
-     * @return
+     * Returns if the square player shape in use is tilted (diamond-shaped) or not.
+     * @return whether the square is tilted (diamond-shaped) or not.
      */
     public boolean isTiltedSquare() {
 	    return prefs.getBoolean("tiltedSquare");
     }
 
     /**
-     *
-     * @param tilted
+     * Sets whether the square player shape is tilted (diamond-shaped) or not.
+     * @param tilted a boolean whether to set the square player shape to be tilted (diamond-shaped) or not.
      */
     public void setTiltedSquare(boolean tilted) {
 	    prefs.putBoolean("tiltedSquare", tilted);
@@ -354,23 +356,23 @@ public class GameMain extends Game {
     }
 
     /**
-     *
-     * @return
+     * Returns the AssetManager instance this class has created.
+     * @return the AssetManager instance this class has created.
      */
     public AssetManager getManager() {
         return manager;
     }
 
     /**
-     *
-     * @return
+     * Returns the Preferences instance currently in use.
+     * @return the Preferences instance currently in use.
      */
     public Preferences getPrefs() {
         return prefs;
     }
 
     /**
-     *
+     * Returns the
      * @return
      */
     public float getSCREEN_WIDTH_PIXELS() {
@@ -403,8 +405,9 @@ public class GameMain extends Game {
     }
 
     /**
-     *
-     * @param activeSectors
+     * Sets the active sectors in the player shape according to a boolean array.
+     * The sector numbers go up clockwise starting from the first sector after 12 o'clock.
+     * @param activeSectors boolean array determining which sectors are active
      */
     public void setActiveSectors(boolean[] activeSectors) {
 	    String currentPrefs = prefs.getString("activeSectors");
@@ -425,9 +428,10 @@ public class GameMain extends Game {
     }
 
     /**
-     *
-     * @param sector
-     * @param active
+     * Sets a single sector active or inactive.
+     * The sector numbers go up clockwise starting from the first sector after 12 o'clock.
+     * @param sector the number of the sector.
+     * @param active boolean whether the sector should be se to active or inactive.
      */
     public void setActiveSector(int sector, boolean active) {
         String currentSetting = prefs.getString("activeSectors");
@@ -459,16 +463,16 @@ public class GameMain extends Game {
     }
 
     /**
-     *
-     * @return
+     * Returns whether the sound effects are on or off.
+     * @return whether the sound effects are on or off.
      */
     public boolean isSoundOn() {
         return prefs.getBoolean("soundOn");
     }
 
     /**
-     *
-     * @param a
+     * Sets whether the sound effects are on or off.
+     * @param a boolean determining whether to set the sound effects on or off.
      */
     public void setSoundOn(boolean a) {
         prefs.putBoolean("soundOn", a);
@@ -499,8 +503,8 @@ public class GameMain extends Game {
     }
 
     /**
-     *
-     * @param a
+     * Sets the number of player sides. Valid values are 4, 6, 8 and 10.
+     * @param a int value to set the amount of sides to.
      */
     public void setPlayerSides(int a) {
 	    prefs.putInteger("playerSides", a);
@@ -508,8 +512,8 @@ public class GameMain extends Game {
 	}
 
     /**
-     *
-     * @param a
+     * Sets which song to use in gameplay.
+     * @param a string name of song.
      */
 	public void setSongChoice(String a) {
 	    prefs.putString("songChoice", a);
@@ -517,8 +521,8 @@ public class GameMain extends Game {
 	}
 
     /**
-     *
-     * @param a
+     * Sets which difficulty is selected for gameplay.
+     * @param a string name of difficulty.
      */
     public void setDifficulty(String a) {
 	    prefs.putString("difficulty", a);
@@ -526,8 +530,8 @@ public class GameMain extends Game {
 	}
 
     /**
-     *
-     * @param a
+     * Sets the speed of the approaching notes.
+     * @param a float value for the speed in world units per second.
      */
     public void setNoteSpeed(float a) {
 	    prefs.putFloat("noteSpeed", a);
@@ -551,80 +555,81 @@ public class GameMain extends Game {
     }
 
     /**
-     *
-     * @return
+     * Returns the SpriteBatch instance this class has created.
+     * @return the SpriteBatch instance this class has created.
      */
 	public SpriteBatch getBatch() {
 	    return batch;
     }
 
     /**
-     *
-     * @return
+     * Returns the ShapeRenderer instance this class has created.
+     * @return the ShapeRenderer instance this class has created.
      */
     public ShapeRenderer getShapeRenderer() {
 	    return shapeRenderer;
     }
 
     /**
-     *
-     * @return
+     * Returns the OrthographicCamera instance this class has created for rendering graphics.
+     * @return the OrthographicCamera instance this class has created for rendering graphics.
      */
     public OrthographicCamera getCamera() {
 	    return camera;
     }
 
     /**
-     *
-     * @return
+     * Returns the OrthographicCamera instance this class has created for rendering fonts.
+     * @return the OrthographicCamera instance this class has created for rendering fonts.
      */
 	public OrthographicCamera getFontCamera() {
 		return fontCamera;
 	}
 
     /**
-     *
-     * @return
+     * Returns screen width in world units.
+     * @return screen width in world units.
      */
     public float getScreenWidth() {
         return SCREEN_WIDTH;
     }
 
     /**
-     *
-     * @return
+     * Returns screen width in world units.
+     * @return screen width in world units.
      */
     public float getScreenHeight() {
         return SCREEN_HEIGHT;
     }
 
     /**
-     *
-     * @return
+     * Returns the number of sides in the player shape.
+     * @return the number of sides in the player shape.
      */
     public int getPlayerSides() {
 		return prefs.getInteger("playerSides");
 	}
 
     /**
-     *
-     * @return
+     * Returns the note speed value in world units per second.
+     * @return the note speed value in world units per second.
      */
 	public float getNoteSpeed() {
 		return prefs.getFloat("noteSpeed");
 	}
 
     /**
-     *
-     * @return
+     * Returns the diameter of the player shape in world units.
+     * @return the diameter of the player shape in world units.
      */
 	public float getPlayerDiameter() {
 		return prefs.getFloat("playerDiameter");
 	}
 
     /**
-     *
-     * @return
+     * Returns the player shape's inner radius in world units.
+     * The inner radius is calculated from the amount of sides in the player shape and the player shape's diameter.
+     * @return the inner radius of the player shape in world units.
      */
 	public float getPlayerInradius() {
 		float playerInradius = (float) (getPlayerDiameter() / 2 * Math.cos(Math.PI/getPlayerSides()));
@@ -632,14 +637,14 @@ public class GameMain extends Game {
 	}
 
     /**
-     *
-     * @return
+     * Returns which song has been chosen for gameplay.
+     * @return which song has been chosen for gameplay.
      */
 	public String getSongChoice() { return prefs.getString("songChoice"); }
 
     /**
-     *
-     * @return
+     * Returns which difficulty has been chosen for gameplay.
+     * @return which difficulty has been chosen for gameplay.
      */
     public String getDifficulty() { return prefs.getString("difficulty"); }
 
@@ -676,40 +681,32 @@ public class GameMain extends Game {
     public BitmapFont getSmallerHeadingFont() { return smallerHeadingFont; }
 
     /**
-     *
-     * @return
+     * Returns the deadzone value set for the accelerometer.
+     * @return the deadzone value set for the accelerometer.
      */
     public float getAccelerometerDeadzone() {
         return prefs.getFloat("accelerometerDeadzone");
     }
 
     /**
-     *
-     * @return
-     */
-    public float getAccelerometerMax() {
-        return prefs.getFloat("accelerometerMax");
-    }
-
-    /**
-     *
-     * @return
+     * Returns the calibrated zero point for the accelerometer's X-axis.
+     * @return the calibrated zero point for the accelerometer's X-axis.
      */
     public float getZeroPointX() {
         return prefs.getFloat("zeroPointX");
     }
 
     /**
-     *
-     * @return
+     * Returns the calibrated zero point for the accelerometer's Y-axis.
+     * @return the calibrated zero point for the accelerometer's Y-axis.
      */
     public float getZeroPointY() {
         return prefs.getFloat("zeroPointY");
     }
 
     /**
-     *
-     * @return
+     * Returns the calibrated zero point for the accelerometer's Z-axis.
+     * @return the calibrated zero point for the accelerometer's Z-axis.
      */
     public float getZeroPointZ() {
         return prefs.getFloat("zeroPointZ");
@@ -796,15 +793,15 @@ public class GameMain extends Game {
     }
 
     /**
-     *
-     * @return
+     * Returns the number of samples to use for the accelerometer input smoothing.
+     * @return the number of samples to use for the accelerometer input smoothing.
      */
 	public int getSmoothingSamples() {
 		return prefs.getInteger("smoothingSamples");
 	}
 
     /**
-     *
+     * Calibrates the accelerometer zero point to the current accelerometer values.
      */
 	// Kalibroi nollapistearvot nykyisiin
     public void calibrateZeroPoint() {
