@@ -812,9 +812,9 @@ public class GameMain extends Game {
         prefs.putFloat("accelerometerY", Gdx.input.getAccelerometerY());
         prefs.putFloat("accelerometerZ", Gdx.input.getAccelerometerZ());
         if (prefs.getFloat("accelerometerZ") > 7f) {
-            prefs.putBoolean("useAccelerometerX",true);
+            setUseAccelerometerX(true);
         } else {
-            prefs.putBoolean("useAccelerometerX",false);
+            setUseAccelerometerX(false);
         }
         prefs.flush();
 	}
