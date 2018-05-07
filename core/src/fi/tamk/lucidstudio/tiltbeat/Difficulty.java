@@ -246,6 +246,11 @@ public class Difficulty implements Screen {
 
     @Override
     public void dispose() {
+        manager.unload("easynappi.png");
+        manager.unload("normalnappi.png");
+        manager.unload("hardnappi.png");
+        manager.unload("bbnappi.png");
+        manager.unload("planet-ring.png");
 
     }
 }

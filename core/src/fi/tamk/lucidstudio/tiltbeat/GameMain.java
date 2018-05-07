@@ -803,7 +803,6 @@ public class GameMain extends Game {
 	public void dispose () {
 		batch.dispose();
 		manager.dispose();
-		//gameScreen.dispose();
 
 	}
 
