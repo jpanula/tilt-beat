@@ -700,32 +700,29 @@ public class GameMain extends Game {
 		manager.load("settingsnappi.png", Texture.class);
         manager.load("folio.png", Texture.class);
 
-		manager.finishLoading();
-
-		background = manager.get("Galaxy blue.png");
-        button = manager.get("nappi1.png");
-        buttonPressed = manager.get("nappi2.png");
-        buttonGreen = manager.get("nappivihree.png");
-        pauseButton = manager.get("pausenappi2.png");
-		backButton = manager.get("backnappi.png");
-		playButton = manager.get("playnappi.png");
-		playAgainButton = manager.get("repeat.png");
-        settingsButton = manager.get("settingsnappi.png");
-		textBox = manager.get("folio.png");
-
         manager.load("JauntyGumption.ogg", Music.class);
         manager.load("NyanCat.mp3", Music.class);
         manager.load("takeOnMe.mp3", Music.class);
         manager.load("soundeffect2.wav", Sound.class);
 
-        manager.finishLoading();
+		createFonts();
 
-		song1 = manager.get("JauntyGumption.ogg");
+        background = manager.get("Galaxy blue.png");
+        button = manager.get("nappi1.png");
+        buttonPressed = manager.get("nappi2.png");
+        buttonGreen = manager.get("nappivihree.png");
+        pauseButton = manager.get("pausenappi2.png");
+        backButton = manager.get("backnappi.png");
+        playButton = manager.get("playnappi.png");
+        playAgainButton = manager.get("repeat.png");
+        settingsButton = manager.get("settingsnappi.png");
+        textBox = manager.get("folio.png");
+
+        song1 = manager.get("JauntyGumption.ogg");
         song2 = manager.get("NyanCat.mp3");
         song3 = manager.get("takeOnMe.mp3");
         soundEffect = manager.get("soundeffect2.wav");
 
-		createFonts();
 
         if (!prefs.contains("firstTime")) {
             prefs.putBoolean("firstTime", true);
