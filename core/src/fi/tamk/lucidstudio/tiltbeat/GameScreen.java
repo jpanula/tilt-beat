@@ -60,7 +60,7 @@ public class GameScreen implements Screen {
     // Pituus minuuteissa
     private float musicLength;
     private int totalBeats;
-    private int startOffset;
+    private float startOffset;
 
     private int playerSides;
     private float playerDiameter;
@@ -187,7 +187,7 @@ public class GameScreen implements Screen {
             class inputSmoother implements Runnable {
                 @Override
                 public void run() {
-                    while(!paused) {
+                    while(true) {
                         xSmoother[smoothIndex % smoothingSamples] = Gdx.input.getAccelerometerY() - host.getZeroPointY();
                         if (host.isUseAccelerometerX()) {
                             ySmoother[smoothIndex % smoothingSamples] = -Gdx.input.getAccelerometerX() - host.getZeroPointX();
@@ -1316,21 +1316,37 @@ public class GameScreen implements Screen {
 
         soundEffect = host.getEffect();
         music = host.getSong();
-        bpm = 146;
+        if (prefs.getString("songChoice").equals("song 1")) {
+            bpm = 146;
+            musicLength = 1 + 59f / 60;
+            startOffset = 1f;
+        } else if (prefs.getString("songChoice").equals("song 2")){
+            bpm = 107;
+            musicLength = 2 + 42f / 60;
+            startOffset = 1f;
+        } else if (prefs.getString("songChoice").equals("song 3")) {
+            bpm = 104;
+            musicLength = 2 + 40f / 60;
+            startOffset = 1.03f;
+        } else {
+            bpm = 140f;
+            musicLength = 2f;
+            startOffset = 1;
+        }
         // Muutetaan nuottien tiheyttä vaikeusasteen mukaan
         if (host.getDifficulty().equals("easy")) {
-            bpm /= 8;
-            startOffset = 1;
+            bpm /= 16;
+            startOffset *= 1;
         } else if (host.getDifficulty().equals(("normal"))) {
-            bpm /= 4;
-            startOffset = 2;
+            bpm /= 8;
+            startOffset *= 2;
         } else if (host.getDifficulty().equals("hard")) {
-            bpm /= 2;
-            startOffset = 5;
+            bpm /= 4;
+            startOffset *= 5;
         } else {
-            startOffset = 10;
+            bpm /= 2;
+            startOffset *= 10;
         }
-        musicLength = 1 + 58f / 60;
         totalBeats = (int) (musicLength * bpm);
 
         noteSpeed = host.getNoteSpeed();
@@ -1460,7 +1476,7 @@ public class GameScreen implements Screen {
 
     public void selectNoteType() {
         int rand = 3;
-        int helper = totalBeats - startOffset;
+        int helper = totalBeats - MathUtils.ceil(startOffset);
         list = new char[helper+1];
 
         for (int i = 0; i < totalBeats - startOffset ; i++) {
@@ -1807,9 +1823,6 @@ public class GameScreen implements Screen {
                         if (tick.getSector() == player.getPointerSector() && !tick.isHit()) {
                             tick.setHit(true);
                             points += pointMulti/3;
-                            if (host.isSoundOn()) {
-                                soundEffect.play();
-                            }
                         } else if (tick.getDistance() < -0.35f || !tick.isHit()){
                             System.out.println("FAIL!");
                             tickIter.remove();
@@ -1859,7 +1872,6 @@ public class GameScreen implements Screen {
             if (pauseButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
                 paused = true;
                 moveHerePauseMenuButtons();
-                Gdx.input.setOnscreenKeyboardVisible(true);
             }
             if (playButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
                 paused = false;
@@ -1886,7 +1898,6 @@ public class GameScreen implements Screen {
             if (calibration.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
                 calibrating = true;
                 timer = 3.98f;
-                //player.pointer.resetSmoothing();
             }
             if (secondSetting.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
                 if (host.isEffectOn()) {

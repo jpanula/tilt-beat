@@ -21,6 +21,7 @@ public class Credits implements Screen {
     private Texture background;
     BitmapFont heading;
     BitmapFont basic;
+    BitmapFont small;
     private Button backButton;
     private Vector3 touchPos;
 
@@ -32,6 +33,7 @@ public class Credits implements Screen {
         fontCamera = host.getFontCamera();
         heading = host.getSmallerHeadingFont();
         basic = host.getBasicFont();
+        small = host.getSmallFont();
         backButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, host.getBackButtonTexture());
         touchPos = new Vector3();
     }
@@ -56,10 +58,12 @@ public class Credits implements Screen {
         //piirrellään fontit
 
         heading.draw(batch, "Credits", 400, 700);
-        basic.draw(batch, "Music:", 270, 500);
-        basic.draw(batch, "lallallaa", 250, 400);
-        basic.draw(batch, "lallallaa", 250, 350);
-        basic.draw(batch, "lallallaa", 250, 300);
+        basic.draw(batch, "Music:", 50, 500);
+        small.draw(batch, "Jaunty Gumption, Ouroboros and Snare Bounce Polka\n" +
+                              "by Kevin MacLeod (incompetech.com)\n" +
+                              "Licensed under Creative Commons: By Attribution 3.0 License\n" +
+                              "http://creativecommons.org/licenses/by/3.0/",
+                           50, 400);
 
         batch.end();
 

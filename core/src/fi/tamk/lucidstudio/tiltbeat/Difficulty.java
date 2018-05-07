@@ -86,9 +86,9 @@ public class Difficulty implements Screen {
         normalButton.setText(5, 110, "" + prefs.getString("normal"), basic);
         hardButton.setText(55, 120, "" + prefs.getString("hard"), basic);
         backBreakerButton.setText(-20, 120, "" + prefs.getString("backbreaker"), basic);
-        song1Button.setText(40, 80, "jaumpty gumpty", small);
-        song2Button.setText(40, 80, "nyan cat", small);
-        song3Button.setText(40, 80, "take on me", small);
+        song1Button.setText(40, 80, "Jaunty Gumption", small);
+        song2Button.setText(40, 80, "Ouroboros", small);
+        song3Button.setText(20, 80, "Snare Bounce Polka", small);
         textBox.setText(50, 180, "" + prefs.getString("easyDescription"), basic);
 
         if (prefs.getString("language").equals("fi")) {
@@ -190,7 +190,7 @@ public class Difficulty implements Screen {
         }
         if (easyButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             host.setDifficulty("easy");
-            host.setNoteSpeed(1);
+            host.setNoteSpeed(1.5f);
             changeButtonTextures();
         }
         if (normalButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {

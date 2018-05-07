@@ -79,6 +79,7 @@ public class GameMain extends Game {
         prefs.putBoolean("tiltedSquare", false);
         prefs.putString("language", "en");
         prefs.putInteger("placement", 0);
+        useEnglish();
 
         prefs.flush();
     }
@@ -829,6 +830,7 @@ public class GameMain extends Game {
 	    if (!prefs.contains("firstTime")) {
 	        setDefaultPreferences(prefs);
 	        resetHighscore(prefs);
+	        useEnglish();
         }
 	    batch = new SpriteBatch();
 	    shapeRenderer = new ShapeRenderer();
@@ -854,6 +856,8 @@ public class GameMain extends Game {
         manager.load("JauntyGumption.ogg", Music.class);
         manager.load("NyanCat.mp3", Music.class);
         manager.load("takeOnMe.mp3", Music.class);
+        manager.load("SnareBouncePolka.ogg", Music.class);
+        manager.load("Ouroboros.ogg", Music.class);
         manager.load("soundeffect2.wav", Sound.class);
 
 		createFonts();
@@ -870,8 +874,8 @@ public class GameMain extends Game {
         textBox = manager.get("folio.png");
 
         song1 = manager.get("JauntyGumption.ogg");
-        song2 = manager.get("NyanCat.mp3");
-        song3 = manager.get("takeOnMe.mp3");
+        song2 = manager.get("Ouroboros.ogg");
+        song3 = manager.get("SnareBouncePolka.ogg");
         soundEffect = manager.get("soundeffect2.wav");
 
 
