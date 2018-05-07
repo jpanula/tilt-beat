@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+/**
+ *
+ */
 public class LoadingScreen implements Screen {
     private GameMain host;
     private Screen parent;
@@ -13,6 +16,11 @@ public class LoadingScreen implements Screen {
     private OrthographicCamera camera;
     private OrthographicCamera fontCamera;
 
+    /**
+     *
+     * @param host
+     * @param parent
+     */
     public LoadingScreen(GameMain host, Screen parent) {
         this.host = host;
         this.parent = parent;
