@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * Created by Jaakko on 11.3.2018.
+ * This class is the game screen that contains the gameplay.
  */
 
 public class GameScreen implements Screen {
@@ -155,7 +155,8 @@ public class GameScreen implements Screen {
     private TextureAtlas redParticleEffectAtlas;
 
     /**
-     *
+     * This class is the player shape in the middle of the screen.
+     * It is responsible for player input.
      */
     class Player {
         Polygon hitbox;
@@ -166,7 +167,7 @@ public class GameScreen implements Screen {
         Pointer pointer;
 
         /**
-         *
+         * This class is used for determining the sector which is currently selected by the player.
          */
         // Pelaajan osoittimen luokka
         class Pointer {
@@ -180,7 +181,8 @@ public class GameScreen implements Screen {
             int smoothingSamples;
 
             /**
-             *
+             * This class is used for smoothing the input of the accelerometer.
+             * It uses it's own thread so it won't be locked to the rendering thread's refresh rate.
              */
             // Erillinen thread accelerometerin syötteen pehmennystä varten
             class inputSmoother implements Runnable {
@@ -203,7 +205,7 @@ public class GameScreen implements Screen {
             }
 
             /**
-             *
+             * Constructor for the player pointer.
              */
             public Pointer() {
                 radius = 0.4f;
@@ -218,8 +220,8 @@ public class GameScreen implements Screen {
             }
 
             /**
-             *
-             * @param batch
+             * Draws the player pointer.
+             * @param batch the SpriteBatch to do the drawing.
              */
             // Piirtometodi SpriteBatchille, käyttää kuvia
             public void draw(SpriteBatch batch) {
@@ -227,8 +229,8 @@ public class GameScreen implements Screen {
             }
 
             /**
-             *
-             * @param shapeRenderer
+             * Draws the player pointer using the ShapeRenderer.
+             * @param shapeRenderer the ShapeRenderer to do the drawing.
              */
             // Piirtometodi ShapeRendererille, käyttää pisteitä / muotoja
             public void draw(ShapeRenderer shapeRenderer) {
@@ -236,7 +238,7 @@ public class GameScreen implements Screen {
             }
 
             /**
-             *
+             * Resets the smoothing values of the input smoother to the zero point.
              */
             public void resetSmoothing() {
                 for (int i = 0; i < xSmoother.length; i++) {
@@ -252,8 +254,8 @@ public class GameScreen implements Screen {
             }
 
             /**
-             *
-             * @param camera
+             * Moves the player pointer.
+             * @param camera OrthographicCamera used in the game rendering to convert touch position to world coordinates.
              */
             public void move(OrthographicCamera camera) {
                 // Osoittimen ohjaus nuolinäppäimillä
@@ -299,10 +301,12 @@ public class GameScreen implements Screen {
             }
 
             /**
-             * Kertoo millä sektorilla pelaajan osoitin on, ensimmäisen sektorin indeksi on 0 ja numerot
-             * kasvavat myötäpäivään. Jos osoitin ei ole millään sektorilla, palautetaan -1
+             * Returns in which sector the player pointer currently is.
+             * The first sector's number is 0 and the numbers grow clockwise.
+             * The first sector is the first one after 12 o'clock.
+             * If the player pointer isn't inside any of the sectors, the return value is -1.
              *
-             * @return sektorin indeksi int-numerona
+             * @return the index number of the sector that has the player pointer.
              */
             public int getSector() {
                 for (Polygon sector : Player.this.sectors) {
@@ -315,9 +319,9 @@ public class GameScreen implements Screen {
         }
 
         /**
-         *
-         * @param playerSides
-         * @param playerDiameter
+         * Constructor for the player object.
+         * @param playerSides number of sides on the player shape.
+         * @param playerDiameter diameter of the player shape in world units.
          * @throws IllegalArgumentException
          */
         public Player(int playerSides, float playerDiameter) throws IllegalArgumentException {
@@ -408,8 +412,8 @@ public class GameScreen implements Screen {
         }
 
         /**
-         *
-         * @return
+         * Returns the positions of the vertices of the player shape in a float array in world units.
+         * @return a float array containing the vertice coordinates of the player shape in world units.
          */
         // Palauttaa kulmion pisteet
         public float[] getVertices() {
@@ -417,9 +421,9 @@ public class GameScreen implements Screen {
         }
 
         /**
-         *
-         * @param sector
-         * @return
+         * Returns the coordinates of the vertices of the given sector in world units.
+         * @param sector the sector of which you want the vertice coordinates for.
+         * @return a float array containing the coordinates of the vertices.
          */
         // Palauttaa annetun sektorin pisteet
         public float[] getSectorVertices(int sector) {
@@ -427,8 +431,8 @@ public class GameScreen implements Screen {
         }
 
         /**
-         *
-         * @return
+         * Returns the X-coordinate of the player shape in world units.
+         * @return the X-coordinate of the player shape in world units.
          */
         // Palauttaa pelaajan kulmion x-koordinaatin
         public float getX() {
@@ -436,8 +440,8 @@ public class GameScreen implements Screen {
         }
 
         /**
-         *
-         * @return
+         * Returns the Y-coordinate of the player shape in world units.
+         * @return the Y-coordinate of the player shape in world units.
          */
         // Palauttaa pelaajan kulmion y-koordinaatin
         public float getY() {
@@ -445,8 +449,8 @@ public class GameScreen implements Screen {
         }
 
         /**
-         *
-         * @return
+         * Returns the scaling value for the player shape in the X-axis.
+         * @return the scaling value for the player shape in the X-axis.
          */
         // Palauttaa pelaajan x-skaalan
         public float getScaleX() {
@@ -454,8 +458,8 @@ public class GameScreen implements Screen {
         }
 
         /**
-         *
-         * @return
+         * Returns the scaling value for the player shape in the Y-axis.
+         * @return the scaling value for the player shape in the Y-axis.
          */
         // Palauttaa pelaajan y-skaalan
         public float getScaleY() {
@@ -463,8 +467,8 @@ public class GameScreen implements Screen {
         }
 
         /**
-         *
-         * @param batch
+         * Draws the player shape.
+         * @param batch SpriteBatch to use for the drawing.
          */
         // Piirtometodi SpriteBatchille, käyttää kuvia
         public void draw(SpriteBatch batch) {
@@ -473,8 +477,8 @@ public class GameScreen implements Screen {
         }
 
         /**
-         *
-         * @param shapeRenderer
+         * Draws the player shape using a ShapeRenderer.
+         * @param shapeRenderer ShapeRenderer to use for the drawing.
          */
         // Piirtometodi ShapeRendererille, käyttää pisteitä / muotoja
         public void draw(ShapeRenderer shapeRenderer) {
@@ -487,26 +491,25 @@ public class GameScreen implements Screen {
         }
 
         /**
-         *
-         * @param camera
+         * Moves the player shape.
+         * @param camera OrthographicCamera used for converting touch position to world coordinates.
          */
         public void move(OrthographicCamera camera) {
             pointer.move(camera);
         }
 
         /**
-         *
+         * Returns in which sector the player pointer currently is.
          * @return
          */
         public int getPointerSector() {
             return pointer.getSector();
         }
 
-        //public static void setActiveSectors(int a) { activeSectors[a] ^= true; }
     }
 
     /**
-     *
+     * The base class for the notes you have to catch during the gameplay.
      */
     abstract class Note {
         private int sector;
@@ -519,10 +522,10 @@ public class GameScreen implements Screen {
         private float animationSize;
 
         /**
-         *
-         * @param sector
-         * @param distance
-         * @param color
+         * Constructor for the note.
+         * @param sector which sector the note should approach.
+         * @param distance how far from the sector is the note
+         * @param color which color is the note
          */
         public Note(int sector, float distance, String color) {
             this.sector = sector;
@@ -535,48 +538,48 @@ public class GameScreen implements Screen {
         }
 
         /**
-         *
-         * @return
+         * Returns the state time for the animation.
+         * @return the state time for the animation.
          */
         public float getStateTime() {
             return stateTime;
         }
 
         /**
-         *
-         * @param stateTime
+         * Sets the state time for the animation
+         * @param stateTime the time to set the state time to in seconds.
          */
         public void setStateTime(float stateTime) {
             this.stateTime = stateTime;
         }
 
         /**
-         *
-         * @return
+         * Returns the edge length of the animation.
+         * @return the edge length of the animation.
          */
         public float getAnimationSize() {
             return animationSize;
         }
 
         /**
-         *
-         * @param animationSize
+         * Sets the edge length of the animation.
+         * @param animationSize the length to set the edge length of the animation to.
          */
         public void setAnimationSize(float animationSize) {
             this.animationSize = animationSize;
         }
 
         /**
-         *
-         * @return
+         * Returns the note's sector.
+         * @return the note's sector.
          */
         public int getSector() {
             return sector;
         }
 
         /**
-         *
-         * @param sector
+         * Sets the note's sector.
+         * @param sector which sector to assign the note to.
          */
         public void setSector(int sector) {
             this.sector = sector;
@@ -770,7 +773,7 @@ public class GameScreen implements Screen {
     }
 
     /**
-     *
+     * The basic note.
      */
     class Point extends Note {
         private Vector2 vector;
@@ -779,7 +782,7 @@ public class GameScreen implements Screen {
         private boolean flipped;
 
         /**
-         *
+         * Constructor for the note.
          * @param sector
          * @param distance
          * @param color
@@ -795,8 +798,9 @@ public class GameScreen implements Screen {
         }
 
         /**
-         *
-         * @return
+         * Returns the vector for the note's location in the world.
+         * Location is based on the distance, sector and amount of player sides.
+         * @return the vector for the note's location in the world.
          */
         public Vector2 getVector() {
             vector.setLength(getDistance() + host.getPlayerInradius());
