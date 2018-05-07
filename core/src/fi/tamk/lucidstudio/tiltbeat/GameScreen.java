@@ -165,6 +165,9 @@ public class GameScreen implements Screen {
         float[] vertices;
         Pointer pointer;
 
+        /**
+         *
+         */
         // Pelaajan osoittimen luokka
         class Pointer {
             Texture texture;
@@ -176,6 +179,9 @@ public class GameScreen implements Screen {
             int smoothIndex;
             int smoothingSamples;
 
+            /**
+             *
+             */
             // Erillinen thread accelerometerin syötteen pehmennystä varten
             class inputSmoother implements Runnable {
                 @Override
@@ -196,6 +202,9 @@ public class GameScreen implements Screen {
                 }
             }
 
+            /**
+             *
+             */
             public Pointer() {
                 radius = 0.4f;
                 speed = 8;
@@ -208,16 +217,27 @@ public class GameScreen implements Screen {
                 (new Thread(new inputSmoother())).start();
             }
 
+            /**
+             *
+             * @param batch
+             */
             // Piirtometodi SpriteBatchille, käyttää kuvia
             public void draw(SpriteBatch batch) {
                 batch.draw(texture, hitbox.x - hitbox.radius, hitbox.y - hitbox.radius, hitbox.radius * 2, hitbox.radius * 2);
             }
 
+            /**
+             *
+             * @param shapeRenderer
+             */
             // Piirtometodi ShapeRendererille, käyttää pisteitä / muotoja
             public void draw(ShapeRenderer shapeRenderer) {
                 shapeRenderer.circle(hitbox.x, hitbox.y, hitbox.radius, 100);
             }
 
+            /**
+             *
+             */
             public void resetSmoothing() {
                 for (int i = 0; i < xSmoother.length; i++) {
                     xSmoother[i] = host.getZeroPointY();
@@ -231,6 +251,10 @@ public class GameScreen implements Screen {
                 }
             }
 
+            /**
+             *
+             * @param camera
+             */
             public void move(OrthographicCamera camera) {
                 // Osoittimen ohjaus nuolinäppäimillä
                 if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT) && hitbox.x < host.getScreenWidth() / 2 + host.getPlayerInradius() - radius * 2.5f) {
@@ -290,6 +314,12 @@ public class GameScreen implements Screen {
             }
         }
 
+        /**
+         *
+         * @param playerSides
+         * @param playerDiameter
+         * @throws IllegalArgumentException
+         */
         public Player(int playerSides, float playerDiameter) throws IllegalArgumentException {
             this.radius = playerDiameter / 2;
             pointer = new Pointer();
@@ -377,42 +407,75 @@ public class GameScreen implements Screen {
 
         }
 
+        /**
+         *
+         * @return
+         */
         // Palauttaa kulmion pisteet
         public float[] getVertices() {
             return hitbox.getTransformedVertices();
         }
 
+        /**
+         *
+         * @param sector
+         * @return
+         */
         // Palauttaa annetun sektorin pisteet
         public float[] getSectorVertices(int sector) {
             return sectors.get(sector).getTransformedVertices();
         }
 
+        /**
+         *
+         * @return
+         */
         // Palauttaa pelaajan kulmion x-koordinaatin
         public float getX() {
             return hitbox.getX();
         }
 
+        /**
+         *
+         * @return
+         */
         // Palauttaa pelaajan kulmion y-koordinaatin
         public float getY() {
             return hitbox.getY();
         }
 
+        /**
+         *
+         * @return
+         */
         // Palauttaa pelaajan x-skaalan
         public float getScaleX() {
             return hitbox.getScaleX();
         }
 
+        /**
+         *
+         * @return
+         */
         // Palauttaa pelaajan y-skaalan
         public float getScaleY() {
             return hitbox.getScaleY();
         }
 
+        /**
+         *
+         * @param batch
+         */
         // Piirtometodi SpriteBatchille, käyttää kuvia
         public void draw(SpriteBatch batch) {
             batch.draw(texture, hitbox.getX(), hitbox.getY(), hitbox.getScaleX(), hitbox.getScaleY());
             //pointer.draw(batch);
         }
 
+        /**
+         *
+         * @param shapeRenderer
+         */
         // Piirtometodi ShapeRendererille, käyttää pisteitä / muotoja
         public void draw(ShapeRenderer shapeRenderer) {
             //shapeRenderer.polygon(getVertices());
@@ -423,10 +486,18 @@ public class GameScreen implements Screen {
             //pointer.draw(shapeRenderer);
         }
 
+        /**
+         *
+         * @param camera
+         */
         public void move(OrthographicCamera camera) {
             pointer.move(camera);
         }
 
+        /**
+         *
+         * @return
+         */
         public int getPointerSector() {
             return pointer.getSector();
         }
@@ -434,6 +505,9 @@ public class GameScreen implements Screen {
         //public static void setActiveSectors(int a) { activeSectors[a] ^= true; }
     }
 
+    /**
+     *
+     */
     abstract class Note {
         private int sector;
         private float distance;
@@ -444,6 +518,12 @@ public class GameScreen implements Screen {
         private float stateTime;
         private float animationSize;
 
+        /**
+         *
+         * @param sector
+         * @param distance
+         * @param color
+         */
         public Note(int sector, float distance, String color) {
             this.sector = sector;
             this.distance = distance;
@@ -454,42 +534,82 @@ public class GameScreen implements Screen {
             hit = false;
         }
 
+        /**
+         *
+         * @return
+         */
         public float getStateTime() {
             return stateTime;
         }
 
+        /**
+         *
+         * @param stateTime
+         */
         public void setStateTime(float stateTime) {
             this.stateTime = stateTime;
         }
 
+        /**
+         *
+         * @return
+         */
         public float getAnimationSize() {
             return animationSize;
         }
 
+        /**
+         *
+         * @param animationSize
+         */
         public void setAnimationSize(float animationSize) {
             this.animationSize = animationSize;
         }
 
+        /**
+         *
+         * @return
+         */
         public int getSector() {
             return sector;
         }
 
+        /**
+         *
+         * @param sector
+         */
         public void setSector(int sector) {
             this.sector = sector;
         }
 
+        /**
+         *
+         * @return
+         */
         public float getDistance() {
             return distance;
         }
 
+        /**
+         *
+         * @param distance
+         */
         public void setDistance(float distance) {
             this.distance = distance;
         }
 
+        /**
+         *
+         * @return
+         */
         public boolean isHit() {
             return hit;
         }
 
+        /**
+         *
+         * @param hit
+         */
         public void setHit(boolean hit) {
             this.hit = hit;
             if (hit) {
@@ -497,28 +617,52 @@ public class GameScreen implements Screen {
             }
         }
 
+        /**
+         *
+         * @param texture
+         */
         public void setTexture(Texture texture) {
             this.texture = texture;
         }
 
+        /**
+         *
+         * @return
+         */
         public Texture getTexture() {
             return texture;
         }
 
+        /**
+         *
+         * @return
+         */
         public ParticleEffect getEffect() {
             return effect;
         }
 
+        /**
+         *
+         * @return
+         */
         public Animation<TextureRegion> getScoreAnimation() {
             return scoreAnimation;
         }
 
+        /**
+         *
+         * @param noteSpeed
+         */
         public void move(float noteSpeed) {
             if (!isHit()) {
                 distance -= noteSpeed * Gdx.graphics.getDeltaTime();
             }
         }
 
+        /**
+         *
+         * @return
+         */
         public boolean isAnimationFinished() {
             if (getScoreAnimation().isAnimationFinished(getStateTime()) && getEffect().isComplete()) {
                 return true;
@@ -527,6 +671,10 @@ public class GameScreen implements Screen {
             }
         }
 
+        /**
+         *
+         * @param color
+         */
         public void setColor(String color) {
             color = color.toLowerCase();
             if (color.equals("blue")) {
@@ -614,16 +762,28 @@ public class GameScreen implements Screen {
             }
         }
 
+        /**
+         *
+         * @param batch
+         */
         abstract void draw(SpriteBatch batch);
     }
 
+    /**
+     *
+     */
     class Point extends Note {
         private Vector2 vector;
         private float width;
         private float height;
         private boolean flipped;
 
-
+        /**
+         *
+         * @param sector
+         * @param distance
+         * @param color
+         */
         public Point(int sector, float distance, String color) {
             super(sector, distance, color);
             width = 1;
@@ -634,12 +794,19 @@ public class GameScreen implements Screen {
             setStateTime(0);
         }
 
+        /**
+         *
+         * @return
+         */
         public Vector2 getVector() {
             vector.setLength(getDistance() + host.getPlayerInradius());
             vector.setAngle(90 - (360 / host.getPlayerSides()) * getSector() - (360 / host.getPlayerSides()) / 2);
             return vector;
         }
 
+        /**
+         *
+         */
         // Kääntää nuotin kuvan vaakasuunnassa ympäri
         public void flip() {
             if (flipped) {
@@ -672,12 +839,11 @@ public class GameScreen implements Screen {
             }
 
         }
-        public void drawInBackground(SpriteBatch batch) {
-            vector.setLength(getDistance() + host.getPlayerInradius());
-            vector.setAngle(90 - (360 / host.getPlayerSides()) * getSector() - (360 / host.getPlayerSides()) / 2);
-        }
     }
 
+    /**
+     *
+     */
     class Hold extends Note {
         private Vector2 startPoint;
         private Vector2 endPoint;
@@ -691,10 +857,19 @@ public class GameScreen implements Screen {
         private float endPointStateTime;
         private boolean startPointHit;
 
+        /**
+         *
+         */
         class Tick extends Note {
             private Vector2 vector;
             private boolean scored;
 
+            /**
+             *
+             * @param sector
+             * @param distance
+             * @param color
+             */
             // Pikkupallerot Hold-nuottien välissä
             public Tick(int sector, float distance, String color) {
                 super(sector, distance, color);
@@ -702,10 +877,18 @@ public class GameScreen implements Screen {
                 scored = false;
             }
 
+            /**
+             *
+             * @return
+             */
             public boolean isScored() {
                 return scored;
             }
 
+            /**
+             *
+             * @param scored
+             */
             public void setScored(boolean scored) {
                 this.scored = scored;
             }
@@ -729,6 +912,13 @@ public class GameScreen implements Screen {
             }
         }
 
+        /**
+         *
+         * @param sector
+         * @param distance
+         * @param length
+         * @param color
+         */
         public Hold(int sector, float distance, float length, String color) {
             super(sector, distance, color);
             this.startPointHit = false;
@@ -755,10 +945,18 @@ public class GameScreen implements Screen {
             endPointStateTime = 0;
         }
 
+        /**
+         *
+         * @return
+         */
         public boolean isStartPointHit() {
             return startPointHit;
         }
 
+        /**
+         *
+         * @param startPointHit
+         */
         public void setStartPointHit(boolean startPointHit) {
             this.startPointHit = startPointHit;
         }
@@ -772,18 +970,34 @@ public class GameScreen implements Screen {
             }
         }
 
+        /**
+         *
+         * @return
+         */
         public boolean isScored() {
             return scored;
         }
 
+        /**
+         *
+         * @param scored
+         */
         public void setScored(boolean scored) {
             this.scored = scored;
         }
 
+        /**
+         *
+         * @return
+         */
         public float getLength() {
             return length;
         }
 
+        /**
+         *
+         * @return
+         */
         public ArrayList<Tick> getTicks() {
             return ticks;
         }
@@ -835,6 +1049,10 @@ public class GameScreen implements Screen {
             }
         }
 
+        /**
+         *
+         * @param noteSpeed
+         */
         @Override
         public void move(float noteSpeed) {
             super.move(noteSpeed);
@@ -846,10 +1064,20 @@ public class GameScreen implements Screen {
         }
     }
 
+    /**
+     *
+     */
     class Slide extends Note {
         private ArrayList<Point> notes;
         private String color;
 
+        /**
+         *
+         * @param sector
+         * @param distance
+         * @param notes
+         * @param color
+         */
         public Slide(int sector, float distance, ArrayList<Point> notes, String color) {
             super(sector, distance, color);
             this.color = color;
@@ -863,7 +1091,12 @@ public class GameScreen implements Screen {
             }
             this.notes = notes;
         }
-        
+
+        /**
+         *
+         * @param note
+         * @param color
+         */
         public void setPointColor(Point note, String color) {
             color = color.toLowerCase();
             if (color.equals("blue")) {
@@ -881,6 +1114,11 @@ public class GameScreen implements Screen {
             }
         }
 
+        /**
+         *
+         * @param shapeRenderer
+         * @param color
+         */
         public void setLineColor(ShapeRenderer shapeRenderer, String color) {
             color = color.toLowerCase();
             if (color.equals("blue")) {
@@ -898,10 +1136,18 @@ public class GameScreen implements Screen {
             }
         }
 
+        /**
+         *
+         * @return
+         */
         public ArrayList<Point> getNotes() {
             return notes;
         }
 
+        /**
+         *
+         * @param shapeRenderer
+         */
         public void draw(ShapeRenderer shapeRenderer) {
             if (!host.isTiltedSquare() && host.getPlayerSides() == 4) {
                 for (int j = 0; j < notes.size() - 1; j++) {
@@ -922,6 +1168,10 @@ public class GameScreen implements Screen {
             }
         }
 
+        /**
+         *
+         * @param batch
+         */
         public void draw(SpriteBatch batch) {
             for (int i = 0; i < notes.size(); i++) {
                 notes.get(i).draw(batch);
@@ -1271,6 +1521,10 @@ public class GameScreen implements Screen {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public String randomColor() {
         int random = MathUtils.random(0, 4);
         switch (random) {
@@ -1865,13 +2119,13 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
-        //paused = true;
-        //moveHerePauseMenuButtons();
+        paused = true;
+        moveHerePauseMenuButtons();
     }
 
     @Override
     public void resume() {
-        //paused = true;
+        paused = true;
     }
 
     @Override
