@@ -322,7 +322,7 @@ public class GameScreen implements Screen {
          * Constructor for the player object.
          * @param playerSides number of sides on the player shape.
          * @param playerDiameter diameter of the player shape in world units.
-         * @throws IllegalArgumentException
+         * @throws IllegalArgumentException if given an unsupported amount of sides.
          */
         public Player(int playerSides, float playerDiameter) throws IllegalArgumentException {
             this.radius = playerDiameter / 2;
@@ -586,32 +586,32 @@ public class GameScreen implements Screen {
         }
 
         /**
-         *
-         * @return
+         * Returns the note's distance from the player.
+         * @return the note's distance from the player.
          */
         public float getDistance() {
             return distance;
         }
 
         /**
-         *
-         * @param distance
+         * Sets the note's distance.
+         * @param distance the distance to set the note to.
          */
         public void setDistance(float distance) {
             this.distance = distance;
         }
 
         /**
-         *
-         * @return
+         * Returns whether the note has been marked as hit.
+         * @return boolean of  whether the note has been marked as hit.
          */
         public boolean isHit() {
             return hit;
         }
 
         /**
-         *
-         * @param hit
+         * Sets the note as hit or not hit.
+         * @param hit boolean whether to set the note as been hit or not hit.
          */
         public void setHit(boolean hit) {
             this.hit = hit;
@@ -621,40 +621,40 @@ public class GameScreen implements Screen {
         }
 
         /**
-         *
-         * @param texture
+         * Sets the note's texture to the given texture.
+         * @param texture the texture to set the note's texture to.
          */
         public void setTexture(Texture texture) {
             this.texture = texture;
         }
 
         /**
-         *
-         * @return
+         * Returns the texture that the note has in use currently.
+         * @return the texture that the note has in use currently.
          */
         public Texture getTexture() {
             return texture;
         }
 
         /**
-         *
-         * @return
+         * Returns the particle effect that the note has in use currently.
+         * @return the particle effect that the note has in use currently.
          */
         public ParticleEffect getEffect() {
             return effect;
         }
 
         /**
-         *
-         * @return
+         * Returns the hit animation that the note has in use currently.
+         * @return the hit animation that the note has in use currently.
          */
         public Animation<TextureRegion> getScoreAnimation() {
             return scoreAnimation;
         }
 
         /**
-         *
-         * @param noteSpeed
+         * Moves the note forward based on the given note speed.
+         * @param noteSpeed speed in world units per second to move the note at.
          */
         public void move(float noteSpeed) {
             if (!isHit()) {
@@ -663,8 +663,8 @@ public class GameScreen implements Screen {
         }
 
         /**
-         *
-         * @return
+         * Returns whether the note's animations have finished.
+         * @return whether the note's animations have finished.
          */
         public boolean isAnimationFinished() {
             if (getScoreAnimation().isAnimationFinished(getStateTime()) && getEffect().isComplete()) {
@@ -675,8 +675,8 @@ public class GameScreen implements Screen {
         }
 
         /**
-         *
-         * @param color
+         * Sets the texture, animation and effect for the note based on the given color.
+         * @param color string which color to use.
          */
         public void setColor(String color) {
             color = color.toLowerCase();
@@ -766,8 +766,8 @@ public class GameScreen implements Screen {
         }
 
         /**
-         *
-         * @param batch
+         * Draws the note.
+         * @param batch SpriteBatch to use for the drawing.
          */
         abstract void draw(SpriteBatch batch);
     }
@@ -783,9 +783,9 @@ public class GameScreen implements Screen {
 
         /**
          * Constructor for the note.
-         * @param sector
-         * @param distance
-         * @param color
+         * @param sector which sector the note will target.
+         * @param distance how far from the sector the note will be created.
+         * @param color what color the note will be.
          */
         public Point(int sector, float distance, String color) {
             super(sector, distance, color);
@@ -809,7 +809,7 @@ public class GameScreen implements Screen {
         }
 
         /**
-         *
+         * Flips the note's texture horizontally.
          */
         // Kääntää nuotin kuvan vaakasuunnassa ympäri
         public void flip() {
@@ -846,7 +846,7 @@ public class GameScreen implements Screen {
     }
 
     /**
-     *
+     * The hold-type note.
      */
     class Hold extends Note {
         private Vector2 startPoint;
@@ -862,39 +862,23 @@ public class GameScreen implements Screen {
         private boolean startPointHit;
 
         /**
-         *
+         * The small balls in the middle of hold notes.
          */
         class Tick extends Note {
             private Vector2 vector;
             private boolean scored;
 
             /**
-             *
-             * @param sector
-             * @param distance
-             * @param color
+             * Constructor for the tick.
+             * @param sector which sector the tick will target.
+             * @param distance how far from the sector the tick will be created.
+             * @param color what color the tick will be.
              */
             // Pikkupallerot Hold-nuottien välissä
             public Tick(int sector, float distance, String color) {
                 super(sector, distance, color);
                 vector = new Vector2(distance, 0);
                 scored = false;
-            }
-
-            /**
-             *
-             * @return
-             */
-            public boolean isScored() {
-                return scored;
-            }
-
-            /**
-             *
-             * @param scored
-             */
-            public void setScored(boolean scored) {
-                this.scored = scored;
             }
 
             @Override
@@ -917,11 +901,11 @@ public class GameScreen implements Screen {
         }
 
         /**
-         *
-         * @param sector
-         * @param distance
-         * @param length
-         * @param color
+         * Constructor for the note.
+         * @param sector which sector the note will target.
+         * @param distance how far from the sector the note will be created.
+         * @param length how long the hold is.
+         * @param color what color the note will be.
          */
         public Hold(int sector, float distance, float length, String color) {
             super(sector, distance, color);
@@ -950,16 +934,16 @@ public class GameScreen implements Screen {
         }
 
         /**
-         *
-         * @return
+         * Returns whether the start point of the hold note has been hit.
+         * @return whether the start point of the hold note has been hit.
          */
         public boolean isStartPointHit() {
             return startPointHit;
         }
 
         /**
-         *
-         * @param startPointHit
+         * Sets the start point of the hold note as been hit or not hit.
+         * @param startPointHit boolean whether to set the note as been hit or not hit.
          */
         public void setStartPointHit(boolean startPointHit) {
             this.startPointHit = startPointHit;
@@ -975,32 +959,16 @@ public class GameScreen implements Screen {
         }
 
         /**
-         *
-         * @return
-         */
-        public boolean isScored() {
-            return scored;
-        }
-
-        /**
-         *
-         * @param scored
-         */
-        public void setScored(boolean scored) {
-            this.scored = scored;
-        }
-
-        /**
-         *
-         * @return
+         * Returns the length of the hold note.
+         * @return the length of the hold note.
          */
         public float getLength() {
             return length;
         }
 
         /**
-         *
-         * @return
+         * Returns the ArrayList of ticks the hold has.
+         * @return the ArrayList of ticks the hold has.
          */
         public ArrayList<Tick> getTicks() {
             return ticks;
@@ -1053,10 +1021,6 @@ public class GameScreen implements Screen {
             }
         }
 
-        /**
-         *
-         * @param noteSpeed
-         */
         @Override
         public void move(float noteSpeed) {
             super.move(noteSpeed);
@@ -1069,18 +1033,18 @@ public class GameScreen implements Screen {
     }
 
     /**
-     *
+     * The slide type note.
      */
     class Slide extends Note {
         private ArrayList<Point> notes;
         private String color;
 
         /**
-         *
-         * @param sector
-         * @param distance
-         * @param notes
-         * @param color
+         * Constructor for the note.
+         * @param sector which sector the note will target.
+         * @param distance how far from the sector the note will be created.
+         * @param notes the normal notes the slide note consists of.
+         * @param color what color the note will be.
          */
         public Slide(int sector, float distance, ArrayList<Point> notes, String color) {
             super(sector, distance, color);
@@ -1097,9 +1061,9 @@ public class GameScreen implements Screen {
         }
 
         /**
-         *
-         * @param note
-         * @param color
+         * Sets the slide's  given note to the given color.
+         * @param note the note to change the color of.
+         * @param color the color to change the note to.
          */
         public void setPointColor(Point note, String color) {
             color = color.toLowerCase();
@@ -1119,9 +1083,9 @@ public class GameScreen implements Screen {
         }
 
         /**
-         *
-         * @param shapeRenderer
-         * @param color
+         * Sets the color of the line that will be drawn between the notes.
+         * @param shapeRenderer ShapeRenderer that will render the line
+         * @param color the color to change the line to.
          */
         public void setLineColor(ShapeRenderer shapeRenderer, String color) {
             color = color.toLowerCase();
@@ -1141,16 +1105,16 @@ public class GameScreen implements Screen {
         }
 
         /**
-         *
-         * @return
+         * Returns the ArrayList of notes in the slide.
+         * @return the ArrayList of notes in the slide.
          */
         public ArrayList<Point> getNotes() {
             return notes;
         }
 
         /**
-         *
-         * @param shapeRenderer
+         * Draws the slide's lines using a ShapeRenderer.
+         * @param shapeRenderer ShapeRenderer to use for the drawing.
          */
         public void draw(ShapeRenderer shapeRenderer) {
             if (!host.isTiltedSquare() && host.getPlayerSides() == 4) {
@@ -1173,8 +1137,8 @@ public class GameScreen implements Screen {
         }
 
         /**
-         *
-         * @param batch
+         * Draws the slide's notes.
+         * @param batch SpriteBatch to use for the drawing.
          */
         public void draw(SpriteBatch batch) {
             for (int i = 0; i < notes.size(); i++) {
@@ -1192,8 +1156,9 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * Peliruutu, asetukset haetaan GameMainistä, joka toimii "hostina"
-     * @param host pelin Main-metodi
+     * The game screen.
+     * Uses the GameMain as a host for resources.
+     * @param host the GameMain instance that is hosting the game.
      */
     public GameScreen(GameMain host) {
         // Katotaan jos toimii purkkakorjauksena ettei heti alussa skippaa eteenpäi
@@ -1526,8 +1491,8 @@ public class GameScreen implements Screen {
     }
 
     /**
-     *
-     * @return
+     * Returns a random valid color for note color.
+     * @return a random valid color for note color.
      */
     public String randomColor() {
         int random = MathUtils.random(0, 4);
