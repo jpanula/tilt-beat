@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -42,9 +43,11 @@ public class Settings implements Screen {
     private Vector3 touchPos;
     private float timer;
     private String timeInSecs;
+    private AssetManager manager;
 
     public Settings(GameMain host) {
         this.host = host;
+        manager = host.getManager();
         batch = host.getBatch();
         prefs = host.getPrefs();
         camera = host.getCamera();
@@ -55,10 +58,16 @@ public class Settings implements Screen {
         big = host.getBigFont();
         calibrating = false; changeSound = false;
         timer = -6; timeInSecs = "";
-        soundOnTexture = new Texture("soundOn.png");
-        soundOffTexture = new Texture("soundOff.png");
-        soundButtonTexture = soundOnTexture;
 
+        manager.load("soundOn.png", Texture.class);
+        manager.load("soundOff.png", Texture.class);
+
+        manager.finishLoading();
+
+        soundOnTexture = manager.get("soundOn.png");
+        soundOffTexture = manager.get("soundOff.png");
+
+        soundButtonTexture = soundOnTexture;
         backButton = new Button(0.2f, 8.3f, 1.5f, 1.5f, host.getBackButtonTexture());
         sound = new Button(8.5f, 1f, 4f, 1.7f, host.getButtonTexture());
         restore = new Button(2.8f, 1f, 4, 1.7f, host.getButtonTexture());
@@ -237,6 +246,7 @@ public class Settings implements Screen {
 
     @Override
     public void dispose() {
-
+        manager.unload("soundOn.png");
+        manager.unload("soundOff.png");
     }
 }
