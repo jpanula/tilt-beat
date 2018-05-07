@@ -100,6 +100,10 @@ public class Difficulty implements Screen {
         changeButtonTextures();
     }
 
+    /**
+     * changes the textures of buttons to fit what's selected
+     */
+
     public void changeButtonTextures() {
 
         if (host.getDifficulty().equals("easy")) {

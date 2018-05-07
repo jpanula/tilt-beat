@@ -90,11 +90,15 @@ public class Settings implements Screen {
     public void show() {
 
     }
-
+    /**
+     * moves the soundbutton to it's place on the screen
+     */
     public void createSoundButton() {
         soundButton = new Button(13.2f, 0.8f, 2f, 2f, soundOnTexture);
     }
-
+    /**
+     * moves the soundbutton away from the screen
+     */
     public void destroySoundButton() {
         soundButton = new Button(11f, 18f, .1f, .1f, soundOnTexture);
     }
@@ -141,7 +145,7 @@ public class Settings implements Screen {
         if(calibrating) {
             big.draw(batch, prefs.getString("stayStill") + "  " + timeInSecs, 30, 315);
         } else if (!calibrating && timer>-4) {
-            big.draw(batch, "" + prefs.getString("done"), 80, 315); //+50, sama
+            big.draw(batch, "" + prefs.getString("done"), 90, 315);
         }
 
         batch.end();

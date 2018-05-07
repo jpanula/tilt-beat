@@ -119,6 +119,7 @@ public class Highscore implements Screen {
         basic.draw(batch, "" + scores[3] , 850, 225);
         basic.draw(batch, "" + scores[4] , 850, 165);
 
+        //piirtää nuolen pistemäärän kohdalle jonka pelaaja juuri sai
         if (host.getPlacement()!=0) {
             if (host.getPlacement() == 1) {
                 basic.draw(batch, "->", 780, 405);

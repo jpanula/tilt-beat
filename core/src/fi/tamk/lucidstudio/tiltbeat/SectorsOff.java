@@ -36,6 +36,7 @@ public class SectorsOff implements Screen {
 
         goToMods.setText(30, 80, "go to mods", basic);
         touchPos = new Vector3();
+
     }
     @Override
     public void show() {

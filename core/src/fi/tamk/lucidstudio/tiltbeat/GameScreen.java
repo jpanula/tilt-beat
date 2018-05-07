@@ -1337,8 +1337,6 @@ public class GameScreen implements Screen {
         song = new ArrayList<Note>();
 
         selectNoteType();
-        boolean clockwise = true;
-        boolean roomForSlide = false;
         for (int i = 0; i < totalBeats - startOffset ; i++) {
             int randomSector = MathUtils.random(0, (playerSides-1));
             randomSector = moveNotes(randomSector);
@@ -1457,32 +1455,34 @@ public class GameScreen implements Screen {
         paused = false;
         useShapeRenderer = true;
     }
-
+    /**
+     * sets the placement of the second text on the button
+     */
     public void selectNoteType() {
         int rand = 3;
         int helper = totalBeats - startOffset;
         list = new char[helper+1];
-
+        //biisi täyteen norminuotteja
         for (int i = 0; i < totalBeats - startOffset ; i++) {
             list[i] = 'b'; //basic
         }
-
+        // 1/6 nuoteista  holdeiks
         for (int i = 0; i < helper/6 ; i++) {
             while (list[rand]!=('b')) {
                 rand = MathUtils.random(0, (helper));
             }
             list[rand] = 'h'; //hold
         }
+        // 1/6 nuoteista  slideiks
         for (int i = 0; i < helper/6 ; i++) {
             while (list[rand]!=('b')) {
                 rand = MathUtils.random(0, (helper));
             }
             if (playerSides!=4) {
-                list[rand] = 's'; //slide
+                list[rand] = 's'; //korvataan slidet holdeilla
             } else { list[rand] = 'h'; } //hold
         }
     }
-
     /**
      * Returns a random valid color for note color.
      * @return a random valid color for note color.
@@ -1504,53 +1504,68 @@ public class GameScreen implements Screen {
             return "blue";
         }
     }
-
+    /**
+     * moves the pause menu buttons to the screen
+     */
     public void moveHerePauseMenuButtons() {
         playButton.setPosition(6f, 2f);
         playAgainButton.setPosition(8.5f, 2f);
         backButton.setPosition(3.5f, 2f);
         settingsButton.setPosition(11f, 2f);
     }
-
+    /**
+     * moves the pause menu buttons away from the screen
+     */
     public void moveAwayPauseMenuButtons() {
         playButton.setPosition(11f, 18f);
         playAgainButton.setPosition(11f, 18f);
         backButton.setPosition(11f, 18f);
         settingsButton.setPosition(11f, 18f);
     }
-
+    /**
+     * moves the settings menu buttons to the screen
+     */
     public void moveHereSettingsButtons() {
         calibration.setPosition(5.7f, 4.2f);
         secondSetting.setPosition(5.7f, 2.2f);
         backToPauseMenu.setPosition(3.5f, 2f);
         soundButton.setPosition(10.5f, 3.3f);
     }
-
+    /**
+     * moves the settings menu buttons away from the screen
+     */
     public void moveAwaySettingsButtons() {
         calibration.setPosition(11f, 18f);
         secondSetting.setPosition(11f, 18f);
         backToPauseMenu.setPosition(11f, 18f);
         soundButton.setPosition(11f, 18f);
     }
-
+    /**
+     * moves the result menu buttons to the screen
+     */
     public void moveHereResultMenuButtons() {
         playAgainButton.setPosition(8f, 1.8f);
         backButton.setPosition(3f, 1.8f);
         highscoreButton.setPosition(5.3f, 3.5f);
     }
-
-    public void destroyResultMenuButtons() {
-        playButton = new Button(11f, 18f, .1f, .1f, host.getPlayButtonTexture());
-        playAgainButton = new Button(11f, 18f, .1f, .1f, host.getPlayAgainButtonTexture());
-    }
-
+    /**
+     * checks if the sector is active
+     * @param a the sector
+     * @return if active or not
+     */
     public boolean isSectorActive(int a) {
         //tarkistaa onko sektori aktiivinen
         if (host.getActiveSectors()[a]) {
             return true;
         } else { return false;}
     }
-
+    /**
+     * calculates a new sector for a note on an inactive sector.
+     * the number of consecutive sectors inactive =
+     * the number of sectors the note is moved forward
+     * @param a the sectors index number in need of checking
+     * @return the new sector for the note
+     */
     public int moveNotes(int a) {
         int b = a; int goBack=0; int continuousSectors = 0; int r;
 
@@ -1922,7 +1937,9 @@ public class GameScreen implements Screen {
         }
 
     }
-
+    /**
+     * checks if players points are enough for highscores
+     */
     public void checkHighscore() {
         if (host.getDifficulty().equals("easy")) {
             if (points > highScores[0]) {
@@ -1995,7 +2012,9 @@ public class GameScreen implements Screen {
         }
         addHighscore=false;
     }
-
+    /**
+     * draws 'off' to squares sectors that are inactive
+     */
     public void drawSquareSectors() {
         if(!host.getActiveSectors()[0]) {
             verySmall.draw(batch, "off", 690, 410); }
@@ -2006,7 +2025,9 @@ public class GameScreen implements Screen {
         if(!host.getActiveSectors()[3]) {
             verySmall.draw(batch, "off", 610, 470); }
     }
-
+    /**
+     * draws 'off' to  diamonds sectors that are inactive
+     */
     public void drawDiamondSectors() {
         if(!host.getActiveSectors()[0]) {
             verySmall.draw(batch, "off", 650, 450); }
@@ -2017,7 +2038,9 @@ public class GameScreen implements Screen {
         if(!host.getActiveSectors()[3]) {
             verySmall.draw(batch, "off", 580, 450); }
     }
-
+    /**
+     * draws 'off' to sixsides sectors that are inactive
+     */
     public void draw6sectors() {
         if(!host.getActiveSectors()[0]) {
             verySmall.draw(batch, "off", 650, 470); }
@@ -2032,7 +2055,9 @@ public class GameScreen implements Screen {
         if(!host.getActiveSectors()[5]) {
             verySmall.draw(batch, "off", 580, 470); }
     }
-
+    /**
+     * draws 'off' to eightsides sectors that are inactive
+     */
     public void draw8sectors() {
         if(!host.getActiveSectors()[0]) {
             verySmall.draw(batch, "off", 650, 480); }
@@ -2051,7 +2076,9 @@ public class GameScreen implements Screen {
         if(!host.getActiveSectors()[7]) {
             verySmall.draw(batch, "off", 590, 480); }
     }
-
+    /**
+     * draws 'off' to tensides sectors that are inactive
+     */
     public void draw10sectors() {
         if(!host.getActiveSectors()[0]) {
             verySmall.draw(batch, "off", 650, 490); }
