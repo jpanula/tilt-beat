@@ -50,6 +50,10 @@ public class GameMain extends Game {
     private BitmapFont headingFont;
     private BitmapFont smallerHeadingFont;
 
+    /**
+     *
+     * @param prefs
+     */
 	public void setDefaultPreferences(Preferences prefs) {
         prefs.putInteger("playerSides", 8);
         prefs.putFloat("noteSpeed", 2f);
@@ -314,41 +318,77 @@ public class GameMain extends Game {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isUseAccelerometerX() {
 	    return prefs.getBoolean("useAccelerometerX");
     }
 
     public int getPlacement() { return prefs.getInteger("placement"); }
 
+    /**
+     *
+     * @param useAccelerometerX
+     */
     public void setUseAccelerometerX(boolean useAccelerometerX) {
 	    prefs.putBoolean("useAccelerometerX", useAccelerometerX);
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isTiltedSquare() {
 	    return prefs.getBoolean("tiltedSquare");
     }
 
+    /**
+     *
+     * @param tilted
+     */
     public void setTiltedSquare(boolean tilted) {
 	    prefs.putBoolean("tiltedSquare", tilted);
         prefs.flush();
     }
 
+    /**
+     *
+     * @return
+     */
     public AssetManager getManager() {
         return manager;
     }
 
+    /**
+     *
+     * @return
+     */
     public Preferences getPrefs() {
         return prefs;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getSCREEN_WIDTH_PIXELS() {
         return SCREEN_WIDTH_PIXELS;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getSCREEN_HEIGHT_PIXELS() {
         return SCREEN_HEIGHT_PIXELS;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean[] getActiveSectors() {
 	    boolean[] activeSectors = new boolean[prefs.getInteger("playerSides")];
 	    String prefString = prefs.getString("activeSectors");
@@ -362,6 +402,10 @@ public class GameMain extends Game {
         return activeSectors;
     }
 
+    /**
+     *
+     * @param activeSectors
+     */
     public void setActiveSectors(boolean[] activeSectors) {
 	    String currentPrefs = prefs.getString("activeSectors");
 	    String prefString = "";
@@ -380,6 +424,11 @@ public class GameMain extends Game {
 	    prefs.flush();
     }
 
+    /**
+     *
+     * @param sector
+     * @param active
+     */
     public void setActiveSector(int sector, boolean active) {
         String currentSetting = prefs.getString("activeSectors");
         String newSetting = "";
@@ -409,10 +458,18 @@ public class GameMain extends Game {
 	    return a;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isSoundOn() {
         return prefs.getBoolean("soundOn");
     }
 
+    /**
+     *
+     * @param a
+     */
     public void setSoundOn(boolean a) {
         prefs.putBoolean("soundOn", a);
         prefs.flush();
@@ -441,21 +498,37 @@ public class GameMain extends Game {
         prefs.flush();
     }
 
+    /**
+     *
+     * @param a
+     */
     public void setPlayerSides(int a) {
 	    prefs.putInteger("playerSides", a);
 	    prefs.flush();
 	}
 
+    /**
+     *
+     * @param a
+     */
 	public void setSongChoice(String a) {
 	    prefs.putString("songChoice", a);
 	    prefs.flush();
 	}
 
+    /**
+     *
+     * @param a
+     */
     public void setDifficulty(String a) {
 	    prefs.putString("difficulty", a);
         prefs.flush();
 	}
 
+    /**
+     *
+     * @param a
+     */
     public void setNoteSpeed(float a) {
 	    prefs.putFloat("noteSpeed", a);
 	    prefs.flush();
@@ -477,49 +550,97 @@ public class GameMain extends Game {
 	    return soundEffect;
     }
 
+    /**
+     *
+     * @return
+     */
 	public SpriteBatch getBatch() {
 	    return batch;
     }
 
+    /**
+     *
+     * @return
+     */
     public ShapeRenderer getShapeRenderer() {
 	    return shapeRenderer;
     }
 
+    /**
+     *
+     * @return
+     */
     public OrthographicCamera getCamera() {
 	    return camera;
     }
 
+    /**
+     *
+     * @return
+     */
 	public OrthographicCamera getFontCamera() {
 		return fontCamera;
 	}
 
+    /**
+     *
+     * @return
+     */
     public float getScreenWidth() {
         return SCREEN_WIDTH;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getScreenHeight() {
         return SCREEN_HEIGHT;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getPlayerSides() {
 		return prefs.getInteger("playerSides");
 	}
 
+    /**
+     *
+     * @return
+     */
 	public float getNoteSpeed() {
 		return prefs.getFloat("noteSpeed");
 	}
 
+    /**
+     *
+     * @return
+     */
 	public float getPlayerDiameter() {
 		return prefs.getFloat("playerDiameter");
 	}
 
+    /**
+     *
+     * @return
+     */
 	public float getPlayerInradius() {
 		float playerInradius = (float) (getPlayerDiameter() / 2 * Math.cos(Math.PI/getPlayerSides()));
 		return playerInradius;
 	}
 
+    /**
+     *
+     * @return
+     */
 	public String getSongChoice() { return prefs.getString("songChoice"); }
 
+    /**
+     *
+     * @return
+     */
     public String getDifficulty() { return prefs.getString("difficulty"); }
 
     public Texture getBackgroundTexture() { return background; }
@@ -554,22 +675,42 @@ public class GameMain extends Game {
 
     public BitmapFont getSmallerHeadingFont() { return smallerHeadingFont; }
 
+    /**
+     *
+     * @return
+     */
     public float getAccelerometerDeadzone() {
         return prefs.getFloat("accelerometerDeadzone");
     }
 
+    /**
+     *
+     * @return
+     */
     public float getAccelerometerMax() {
         return prefs.getFloat("accelerometerMax");
     }
 
+    /**
+     *
+     * @return
+     */
     public float getZeroPointX() {
         return prefs.getFloat("zeroPointX");
     }
 
+    /**
+     *
+     * @return
+     */
     public float getZeroPointY() {
         return prefs.getFloat("zeroPointY");
     }
 
+    /**
+     *
+     * @return
+     */
     public float getZeroPointZ() {
         return prefs.getFloat("zeroPointZ");
     }
@@ -654,10 +795,17 @@ public class GameMain extends Game {
         return a;
     }
 
+    /**
+     *
+     * @return
+     */
 	public int getSmoothingSamples() {
 		return prefs.getInteger("smoothingSamples");
 	}
 
+    /**
+     *
+     */
 	// Kalibroi nollapistearvot nykyisiin
     public void calibrateZeroPoint() {
 		prefs.putFloat("accelerometerX", Gdx.input.getAccelerometerX());
