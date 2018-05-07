@@ -828,7 +828,7 @@ public class GameScreen implements Screen {
             }
             if (!isHit()) {
                 batch.draw(getTexture(), host.getScreenWidth() / 2 + vector.x - width / 2, host.getScreenHeight() / 2 + vector.y - height / 2, width / 2, height / 2, width, height, 1, 1, vector.angle() - 90, 0, 0, getTexture().getWidth(), getTexture().getHeight(), flipped, false);
-            } else {
+            } else if (host.isEffectOn()){
                 if (!getScoreAnimation().isAnimationFinished(getStateTime())) {
                     TextureRegion keyframe = new TextureRegion(getScoreAnimation().getKeyFrame(getStateTime()));
                     batch.draw(keyframe, host.getScreenWidth() / 2 + vector.x - getAnimationSize() / 2, host.getScreenHeight() / 2 + vector.y - getAnimationSize() / 2, getAnimationSize() / 2, getAnimationSize() / 2, getAnimationSize(), getAnimationSize(), getAnimationSize(), getAnimationSize(), vector.angle(), false);
@@ -903,7 +903,7 @@ public class GameScreen implements Screen {
                 }
                 if (!isHit()) {
                     batch.draw(getTexture(), host.getScreenWidth() / 2 + vector.x - tickDiameter / 2, host.getScreenHeight() / 2 + vector.y - tickDiameter / 2, tickDiameter, tickDiameter);
-                } else if (!getScoreAnimation().isAnimationFinished(getStateTime())) {
+                } else if (!getScoreAnimation().isAnimationFinished(getStateTime()) && host.isEffectOn()) {
                     TextureRegion keyframe = new TextureRegion(getScoreAnimation().getKeyFrame(getStateTime()));
                     batch.draw(keyframe, host.getScreenWidth() / 2 + vector.x - getAnimationSize() / 2, host.getScreenHeight() / 2 + vector.y - getAnimationSize() / 2, getAnimationSize() / 2, getAnimationSize() / 2, getAnimationSize(), getAnimationSize(), getAnimationSize(), getAnimationSize(), vector.angle(), false);
                     setStateTime(getStateTime() + Gdx.graphics.getDeltaTime());
@@ -1023,7 +1023,7 @@ public class GameScreen implements Screen {
                 if (getDistance() > 0){
                     batch.draw(getTexture(), host.getScreenWidth() / 2 + startPoint.x - width / 2, host.getScreenHeight() / 2 + startPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, startPoint.angle() - 90, 0, 0, getTexture().getWidth(), getTexture().getHeight(), false, false);
                 }
-            } else {
+            } else if (host.isEffectOn()){
                 if (!getScoreAnimation().isAnimationFinished(getStateTime())) {
                     TextureRegion keyframe = new TextureRegion(getScoreAnimation().getKeyFrame(getStateTime()));
                     batch.draw(keyframe, host.getScreenWidth() / 2 + startPoint.x - getAnimationSize() / 2, host.getScreenHeight() / 2 + startPoint.y - getAnimationSize() / 2, getAnimationSize() / 2, getAnimationSize() / 2, getAnimationSize(), getAnimationSize(), getAnimationSize(), getAnimationSize(), startPoint.angle(), false);
@@ -1038,7 +1038,7 @@ public class GameScreen implements Screen {
             }
             if (!isHit()) {
                 batch.draw(getTexture(), host.getScreenWidth() / 2 + endPoint.x - width / 2, host.getScreenHeight() / 2 + endPoint.y - height / 2, width / 2, height / 2, width, height, 1, 1, endPoint.angle() - 90, 0, 0, getTexture().getWidth(), getTexture().getHeight(), false, true);
-            } else {
+            } else if (host.isEffectOn()){
                 if (!getScoreAnimation().isAnimationFinished(endPointStateTime)) {
                 TextureRegion keyframe = new TextureRegion(getScoreAnimation().getKeyFrame(endPointStateTime));
                 batch.draw(keyframe, host.getScreenWidth() / 2 + endPoint.x - getAnimationSize() / 2, host.getScreenHeight() / 2 + endPoint.y - getAnimationSize() / 2, getAnimationSize() / 2, getAnimationSize() / 2, getAnimationSize(), getAnimationSize(), getAnimationSize(), getAnimationSize(), endPoint.angle(), false);
