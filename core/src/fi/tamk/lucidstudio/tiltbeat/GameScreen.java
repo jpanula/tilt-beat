@@ -55,7 +55,7 @@ public class GameScreen implements Screen {
 
     // Musiikki ja bpm
     private Sound soundEffect;
-    private Music jauntyGumption;
+    private Music music;
     private float bpm;
     // Pituus minuuteissa
     private float musicLength;
@@ -1315,7 +1315,7 @@ public class GameScreen implements Screen {
         player = new Player(playerSides, playerDiameter);
 
         soundEffect = host.getEffect();
-        jauntyGumption = host.getSong();
+        music = host.getSong();
         bpm = 146;
         // Muutetaan nuottien tiheyttä vaikeusasteen mukaan
         if (host.getDifficulty().equals("easy")) {
@@ -1727,11 +1727,11 @@ public class GameScreen implements Screen {
 
         // Musiikin toiminta pausen kanssa
         if (paused) {
-            jauntyGumption.pause();
+            music.pause();
         } else if (song.isEmpty()) {
-            jauntyGumption.stop();
-        } else if (!paused && !jauntyGumption.isPlaying() && !song.isEmpty()) {
-            jauntyGumption.play();
+            music.stop();
+        } else if (!paused && !music.isPlaying() && !song.isEmpty()) {
+            music.play();
         }
 
         // Printtaa konsoliin accelerometerin arvoja
@@ -1869,12 +1869,12 @@ public class GameScreen implements Screen {
                 host.setScreen(new Highscore(host));
             }
             if (playAgainButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
-                jauntyGumption.stop();
+                music.stop();
                 this.dispose();
                 host.setScreen(new GameScreen(host));
             }
             if (backButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
-                jauntyGumption.stop();
+                music.stop();
                 this.dispose();
                 host.setScreen(new MainMenu(host));
             }
