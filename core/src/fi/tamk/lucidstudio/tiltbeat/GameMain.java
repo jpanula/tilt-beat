@@ -18,6 +18,11 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+/**
+ * This class is the main class for the game.
+ * It acts as a host for the different screens and handles the preferences and assets of the game.
+ * It also owns the classes used for rendering the game.
+ */
 public class GameMain extends Game {
     private AssetManager manager;
 	private Preferences prefs;

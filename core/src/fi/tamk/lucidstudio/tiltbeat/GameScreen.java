@@ -155,7 +155,7 @@ public class GameScreen implements Screen {
     private TextureAtlas redParticleEffectAtlas;
 
     /**
-     * Pelaajan kulmiosysteemin luokka
+     *
      */
     class Player {
         Polygon hitbox;
