@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -37,20 +38,29 @@ public class MainMenu implements Screen{
     private Texture background;
     private Vector3 touchPos;
     private String[] words;
+    private AssetManager manager;
 
 
     public MainMenu(GameMain host) {
         this.host = host;
-        host.setScreen(new LoadingScreen(host, this));
+        manager = host.getManager();
         batch = host.getBatch();
         camera = host.getCamera();
         fontCamera = host.getFontCamera();
         background = host.getBackgroundTexture();
         prefs = host.getPrefs();
-        Texture t = new Texture("copyright.png");
-        Texture en = new Texture("uk.png");
-        Texture fin = new Texture("fin.png");
-        Texture c = new Texture("circle.png");
+
+        manager.load("copyright.png", Texture.class);
+        manager.load("uk.png", Texture.class);
+        manager.load("fin.png", Texture.class);
+        manager.load("circle.png", Texture.class);
+
+        manager.finishLoading();
+
+        Texture t = manager.get("copyright.png");
+        Texture en = manager.get("uk.png");
+        Texture fin = manager.get("fin.png");
+        Texture c = manager.get("circle.png");
 
         playButton = new Button(2.8f, 4f, 4f, 1.7f, host.getButtonTexture());
         modsButton = new Button(8.5f, 4f, 4f, 1.7f, host.getButtonTexture());
@@ -173,5 +183,9 @@ public class MainMenu implements Screen{
 
     @Override
     public void dispose() {
+        manager.unload("copyright.png");
+        manager.unload("uk.png");
+        manager.unload("fin.png");
+        manager.unload("circle.png");
     }
 }
