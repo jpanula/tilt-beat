@@ -377,24 +377,25 @@ public class GameMain extends Game {
     }
 
     /**
-     * Returns the
-     * @return
+     * Returns the target screen width in pixels.
+     * @return the target screen width in pixels.
      */
     public float getSCREEN_WIDTH_PIXELS() {
         return SCREEN_WIDTH_PIXELS;
     }
 
     /**
-     *
-     * @return
+     * Returns the target screen height in pixels.
+     * @return the target screen height in pixels.
      */
     public float getSCREEN_HEIGHT_PIXELS() {
         return SCREEN_HEIGHT_PIXELS;
     }
 
     /**
-     *
-     * @return
+     * Returns a boolean array of which sectors are active.
+     * The sector numbers go up clockwise starting from the first sector after 12 o'clock.
+     * @return a boolean array of which sectors are active.
      */
     public boolean[] getActiveSectors() {
 	    boolean[] activeSectors = new boolean[prefs.getInteger("playerSides")];

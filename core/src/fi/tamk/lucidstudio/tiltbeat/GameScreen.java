@@ -23,8 +23,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.CharArray;
-import java.util.Scanner;
+
+import java.util.Locale;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -49,7 +49,6 @@ public class GameScreen implements Screen {
     private boolean useShapeRenderer;
     private int[] highScores;
     private Vector3 touchPos;
-    //private boolean loaded;
     private boolean calibrating;
     private float timer;
     private String timeInSecs;
@@ -188,7 +187,7 @@ public class GameScreen implements Screen {
             class inputSmoother implements Runnable {
                 @Override
                 public void run() {
-                    while(true) {
+                    while(!paused) {
                         xSmoother[smoothIndex % smoothingSamples] = Gdx.input.getAccelerometerY() - host.getZeroPointY();
                         if (host.isUseAccelerometerX()) {
                             ySmoother[smoothIndex % smoothingSamples] = -Gdx.input.getAccelerometerX() - host.getZeroPointX();
@@ -500,7 +499,7 @@ public class GameScreen implements Screen {
 
         /**
          * Returns in which sector the player pointer currently is.
-         * @return
+         * @return in which sector the player pointer currently is.
          */
         public int getPointerSector() {
             return pointer.getSector();
@@ -857,7 +856,6 @@ public class GameScreen implements Screen {
         private float tickDiameter;
         private int tickAmount;
         private ArrayList<Tick> ticks;
-        private boolean scored;
         private float endPointStateTime;
         private boolean startPointHit;
 
@@ -866,7 +864,6 @@ public class GameScreen implements Screen {
          */
         class Tick extends Note {
             private Vector2 vector;
-            private boolean scored;
 
             /**
              * Constructor for the tick.
@@ -878,7 +875,6 @@ public class GameScreen implements Screen {
             public Tick(int sector, float distance, String color) {
                 super(sector, distance, color);
                 vector = new Vector2(distance, 0);
-                scored = false;
             }
 
             @Override
@@ -1161,7 +1157,6 @@ public class GameScreen implements Screen {
      * @param host the GameMain instance that is hosting the game.
      */
     public GameScreen(GameMain host) {
-        // Katotaan jos toimii purkkakorjauksena ettei heti alussa skippaa eteenpäi
         paused = true;
         changeSettings = false;
         addHighscore = true;
@@ -1173,7 +1168,6 @@ public class GameScreen implements Screen {
         fontCamera = host.getFontCamera();
         shapeRenderer = host.getShapeRenderer();
         touchPos = new Vector3();
-        //loaded = false;
         calibrating = false;
         timer = -6; timeInSecs = "";
 
@@ -1245,7 +1239,6 @@ public class GameScreen implements Screen {
         manager.load("pointer.png", Texture.class);
 
         manager.finishLoading();
-        //host.setScreen(new LoadingScreen(host, this));
 
         background = manager.get("Galaxy dark purple.png");
         soundOnTexture = manager.get("soundOn.png");
@@ -1595,7 +1588,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         shapeRenderer.setProjectionMatrix(camera.combined);
 
-        timeInSecs = String.format ("%.1f", timer);
+        timeInSecs = String.format(Locale.ENGLISH, "%.1f", timer);
         timer -= Gdx.graphics.getDeltaTime();
 
         batch.begin();
