@@ -84,6 +84,9 @@ public class GameMain extends Game {
         prefs.flush();
     }
 
+    /**
+     * Change the text in the game to the Finnish text.
+     */
     public void useFinnish() {
 	    prefs.putString("play", "pelaa");
         prefs.putString("mods", "modit");
@@ -132,6 +135,9 @@ public class GameMain extends Game {
         prefs.flush();
     }
 
+    /**
+     * Change the text in the game to the English text.
+     */
     public void useEnglish() {
         prefs.putString("play", "play");
         prefs.putString("mods", "mods");
@@ -180,6 +186,10 @@ public class GameMain extends Game {
         prefs.flush();
     }
 
+    /**
+     * Reset high scores
+     * @param prefs which prefs to use.
+     */
     public void resetHighscore(Preferences prefs) {
         prefs.putInteger("1st", 0);
         prefs.putInteger("2nd", 0);
@@ -209,6 +219,12 @@ public class GameMain extends Game {
 
     }
 
+    /**
+     * Set an easy high score.
+     * @param a which high score to set.
+     * @param score the score that was achieved.
+     * @param highScores
+     */
     public void setEasyHighscore(int a, int score, int[] highScores) {
 	    switch (a) {
             case 1: prefs.putInteger("1st", score);
@@ -235,6 +251,12 @@ public class GameMain extends Game {
         prefs.flush();
     }
 
+    /**
+     * Set a normal high score.
+     * @param a which high score to set.
+     * @param score the score that was achieved.
+     * @param highScores
+     */
     public void setNormalHighscore(int a, int score, int[] highScores) {
         switch (a) {
             case 1: prefs.putInteger("1stN", score);
@@ -260,7 +282,12 @@ public class GameMain extends Game {
         }
         prefs.flush();
     }
-
+    /**
+     * Set a hard high score.
+     * @param a which high score to set.
+     * @param score the score that was achieved.
+     * @param highScores
+     */
     public void setHardHighscore(int a, int score, int[] highScores) {
         switch (a) {
             case 1: prefs.putInteger("1stH", score);
@@ -287,6 +314,12 @@ public class GameMain extends Game {
         prefs.flush();
     }
 
+    /**
+     * Set a backbreaker high score.
+     * @param a which high score to set.
+     * @param score the score that was achieved.
+     * @param highScores
+     */
     public void setBbHighscore(int a, int score, int[] highScores) {
         switch (a) {
             case 1: prefs.putInteger("1stB", score);
@@ -313,10 +346,18 @@ public class GameMain extends Game {
         prefs.flush();
     }
 
+    /**
+     * Returns which language is in use.
+     * @return which language is in use.
+     */
     public String getLanguage() {
 	    return prefs.getString("language");
     }
 
+    /**
+     * Sets which language to use.
+     * @param id a string id of the language.
+     */
     public void setLanguage(String id) {
 	    id = id.toLowerCase();
 	    if (id.equals("fi") || id.equals("en")) {
@@ -474,6 +515,10 @@ public class GameMain extends Game {
         prefs.flush();
     }
 
+    /**
+     * Returns how many sectors are active currently.
+     * @return how many sectors are active currently.
+     */
     public int howManySectorsActive() {
 	    int a = 0;
         String prefString = prefs.getString("activeSectors");
@@ -502,14 +547,23 @@ public class GameMain extends Game {
         prefs.flush();
     }
 
+    /**
+     * Returns whether the visual effects are on.
+     * @return whether the visual effects are on.
+     */
     public boolean isEffectOn() {
         return prefs.getBoolean("effectsOn");
     }
 
+    /**
+     * Sets whether the visual effects are on.
+     * @param a boolean whether to enable or disable the visual effects.
+     */
     public void setEffectsOn(boolean a) {
         prefs.putBoolean("effectsOn", a);
         prefs.flush();
     }
+
 
     public boolean isHighscoreOn() {
         return prefs.getBoolean("highscoreOn");
@@ -561,6 +615,10 @@ public class GameMain extends Game {
 	    prefs.flush();
 	}
 
+    /**
+     * Returns which song is currently selected.
+     * @return which song is currently selected.
+     */
 	public Music getSong() {
 	    if (getSongChoice().equals("song 1")) {
 	        return song1;
