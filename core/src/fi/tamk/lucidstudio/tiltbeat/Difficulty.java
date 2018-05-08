@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 
 /**
- * Created by Anna on 27/03/2018.
+ * This class is the difficulty and song selection screen.
  */
 
 public class Difficulty implements Screen {
@@ -42,6 +42,10 @@ public class Difficulty implements Screen {
     private Texture buttonPressedTexture;
     private Vector3 touchPos;
 
+    /**
+     * Constructor for the screen
+     * @param host the GameMain that uses this screen.
+     */
     public Difficulty(GameMain host) {
         this.host = host;
         manager = host.getManager();
