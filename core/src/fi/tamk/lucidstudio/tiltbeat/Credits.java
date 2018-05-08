@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 
 /**
- * Created by Anna on 03/05/2018.
+ * This class is the credits screen.
  */
 
 public class Credits implements Screen {
@@ -25,6 +25,10 @@ public class Credits implements Screen {
     private Button backButton;
     private Vector3 touchPos;
 
+    /**
+     * Constructor for the screen
+     * @param host the GameMain that is using this screen.
+     */
     public Credits(GameMain host) {
         this.host = host;
         batch = host.getBatch();
