@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 
 /**
- * Created by Anna on 26/04/2018.
+ * This class is the warning screen for when on sectors are active
  */
 
 public class SectorsOff implements Screen {

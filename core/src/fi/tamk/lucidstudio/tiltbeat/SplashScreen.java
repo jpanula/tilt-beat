@@ -8,6 +8,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+/**
+ * This class is the splash screen.
+ */
 public class SplashScreen implements Screen {
     private GameMain host;
     private SpriteBatch batch;

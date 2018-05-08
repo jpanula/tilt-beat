@@ -14,7 +14,7 @@ import com.badlogic.gdx.math.Vector3;
 import java.util.Locale;
 
 /**
- * Created by Anna on 26/03/2018.
+ * This class is the settings screen.
  */
 
 public class Settings implements Screen {

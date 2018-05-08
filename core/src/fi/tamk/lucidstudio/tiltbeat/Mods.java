@@ -15,7 +15,7 @@ import com.badlogic.gdx.math.Vector3;
 import java.util.ArrayList;
 
 /**
- * Created by Anna on 27/03/2018.
+ * This class is the mods screen.
  */
 
 public class Mods implements Screen {
