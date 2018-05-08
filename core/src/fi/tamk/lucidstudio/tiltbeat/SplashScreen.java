@@ -42,38 +42,38 @@ public class SplashScreen implements Screen {
         batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
-        if (timer <= 3) {
+        if (timer <= 5) {
             if (Gdx.input.justTouched()) {
-                timer = 3;
+                timer = 5;
             }
             if (timer < 1) {
                 batch.setColor(1, 1, 1, timer);
-            } else if (timer > 2) {
-                batch.setColor(1, 1, 1, 3 - timer);
+            } else if (timer > 4) {
+                batch.setColor(1, 1, 1, 5 - timer);
             } else {
                 batch.setColor(1, 1, 1, 1);
             }
             batch.draw(lucid, 0, 0, 16, 10);
-        } else if (timer <= 6) {
+        } else if (timer <= 8) {
             if (Gdx.input.justTouched()) {
-                timer = 6;
+                timer = 8;
             }
-            if (timer <= 4f) {
-                batch.setColor(1, 1, 1, timer - 3);
-            } else if (timer >= 5f) {
-                batch.setColor(1, 1, 1, 6 - timer);
+            if (timer <= 6f) {
+                batch.setColor(1, 1, 1, timer - 5);
+            } else if (timer >= 7f) {
+                batch.setColor(1, 1, 1, 8 - timer);
             } else {
                 batch.setColor(1, 1, 1, 1);
             }
             batch.draw(tamk, 0, 0, 16, 10);
-        } else if (timer <= 9) {
+        } else if (timer <= 11) {
             if (Gdx.input.justTouched()) {
-                timer = 9;
+                timer = 11;
             }
-            if (timer <= 7) {
-                batch.setColor(1, 1, 1, timer - 6);
-            } else if (timer >= 8) {
-                batch.setColor(1, 1, 1, 9 - timer);
+            if (timer <= 9) {
+                batch.setColor(1, 1, 1, timer - 8);
+            } else if (timer >= 10) {
+                batch.setColor(1, 1, 1, 11 - timer);
             } else {
                 batch.setColor(1, 1, 1, 1);
             }
