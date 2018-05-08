@@ -878,6 +878,15 @@ public class GameMain extends Game {
 
 		createFonts();
 
+		manager.finishLoading();
+
+        verySmallFont = manager.get("verySmallFont.ttf", BitmapFont.class);
+        smallFont = manager.get("smallFont.ttf", BitmapFont.class);
+        basicFont = manager.get("basicFont.ttf", BitmapFont.class);
+        bigFont = manager.get("bigFont.ttf", BitmapFont.class);
+        headingFont = manager.get("headingFont.ttf", BitmapFont.class);
+        smallerHeadingFont = manager.get("smallerHeadingFont.ttf", BitmapFont.class);
+
         background = manager.get("Galaxy blue.png");
         button = manager.get("nappi1.png");
         buttonPressed = manager.get("nappi2.png");
@@ -894,12 +903,7 @@ public class GameMain extends Game {
         song3 = manager.get("SnareBouncePolka.ogg");
         soundEffect = manager.get("soundeffect2.wav");
 
-        if (!prefs.contains("firstTime")) {
-            prefs.putBoolean("firstTime", true);
-            setScreen(new Tutorial(this));
-        } else {
-            setScreen(new MainMenu(this));
-        }
+        setScreen(new SplashScreen(this));
 	}
 
 	public void createFonts() {
@@ -953,15 +957,6 @@ public class GameMain extends Game {
         smallerHeadingFontParameter.fontParameters.borderColor = Color.BLACK;
         smallerHeadingFontParameter.fontParameters.borderWidth = 3;
         manager.load("smallerHeadingFont.ttf", BitmapFont.class, smallerHeadingFontParameter);
-
-        manager.finishLoading();
-
-        verySmallFont = manager.get("verySmallFont.ttf", BitmapFont.class);
-        smallFont = manager.get("smallFont.ttf", BitmapFont.class);
-        basicFont = manager.get("basicFont.ttf", BitmapFont.class);
-        bigFont = manager.get("bigFont.ttf", BitmapFont.class);
-        headingFont = manager.get("headingFont.ttf", BitmapFont.class);
-        smallerHeadingFont = manager.get("smallerHeadingFont.ttf", BitmapFont.class);
 	}
 
 	@Override
