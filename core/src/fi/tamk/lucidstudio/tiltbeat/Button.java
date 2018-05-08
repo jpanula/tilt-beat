@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
 /**
- * Created by Anna on 16/04/2018.
+ * This class is the buttons used in the application.
  */
 
 public class Button extends Rectangle {
@@ -23,6 +23,14 @@ public class Button extends Rectangle {
     private float plusXtwo;
     private float plusYtwo;
 
+    /**
+     * Constructor for the button
+     * @param x the horizontal origin position for the button in world units.
+     * @param y the horizontal origin position for the button in world units.
+     * @param width the width of the button in world units.
+     * @param height the height of the button in world units.
+     * @param texture the texture of the button.
+     */
     public Button(float x, float y, float width, float height, Texture texture) {
         this.x = x;
         this.y = y;
@@ -31,6 +39,10 @@ public class Button extends Rectangle {
         this.texture = texture;
     }
 
+    /**
+     * Draws the button.
+     * @param batch SpriteBatch to use for drawing the button.
+     */
     public void draw(SpriteBatch batch) {
         batch.draw( texture, x, y, width, height);
     }
