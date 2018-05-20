@@ -900,6 +900,7 @@ public class GameMain extends Game {
     @Override
 	public void create () {
         manager = new AssetManager(new InternalFileHandleResolver());
+        Gdx.input.setCatchBackKey(true);
 	    prefs = Gdx.app.getPreferences("default");
 	    if (!prefs.contains("firstTime")) {
 	        setDefaultPreferences(prefs);
