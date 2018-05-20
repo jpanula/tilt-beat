@@ -1,6 +1,7 @@
 package fi.tamk.lucidstudio.tiltbeat;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -140,7 +141,7 @@ public class Highscore implements Screen {
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);
         }
-        if (backButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+        if ((backButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) || Gdx.input.isKeyPressed(Input.Keys.BACK)) {
             this.dispose();
             host.setPlacement(0);
             host.setScreen(new MainMenu(host));
