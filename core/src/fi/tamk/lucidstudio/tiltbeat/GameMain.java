@@ -886,9 +886,9 @@ public class GameMain extends Game {
      */
 	// Kalibroi nollapistearvot nykyisiin
     public void calibrateZeroPoint() {
-		prefs.putFloat("accelerometerX", Gdx.input.getAccelerometerX());
-        prefs.putFloat("accelerometerY", Gdx.input.getAccelerometerY());
-        prefs.putFloat("accelerometerZ", Gdx.input.getAccelerometerZ());
+		prefs.putFloat("zeroPointX", Gdx.input.getAccelerometerX());
+        prefs.putFloat("zeroPointY", Gdx.input.getAccelerometerY());
+        prefs.putFloat("zeroPointZ", Gdx.input.getAccelerometerZ());
         if (prefs.getFloat("accelerometerZ") > 7f) {
             setUseAccelerometerX(true);
         } else {
