@@ -118,12 +118,11 @@ public class MainMenu implements Screen{
             camera.unproject(touchPos);
         }
         if (playButton.contains(touchPos.x, touchPos.y)  && !Gdx.input.isTouched()) {
-            this.dispose();
             host.setScreen(new Difficulty(host));
             if (host.howManySectorsActive()==0) {
-                this.dispose();
                 host.setScreen(new SectorsOff(host));
             }
+            this.dispose();
         }
         if (settingsButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
             this.dispose();
