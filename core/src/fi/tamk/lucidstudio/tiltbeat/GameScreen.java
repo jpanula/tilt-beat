@@ -1884,9 +1884,22 @@ public class GameScreen implements Screen {
                 touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
                 camera.unproject(touchPos);
             }
-            if (pauseButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+
+            if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
                 paused = true;
                 moveHerePauseMenuButtons();
+            }
+
+            if (pauseButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
+                if (!paused) {
+                    paused = true;
+                    moveHerePauseMenuButtons();
+                } else {
+                    paused = false;
+                    changeSettings = false;
+                    moveAwayPauseMenuButtons();
+                    moveAwaySettingsButtons();
+                }
             }
             if (playButton.contains(touchPos.x, touchPos.y) && !Gdx.input.isTouched()) {
                 paused = false;
